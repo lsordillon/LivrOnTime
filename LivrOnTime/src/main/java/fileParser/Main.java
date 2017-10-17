@@ -1,8 +1,8 @@
 package fileParser;
 
-import Plan.Intersection;
-import Plan.Plan;
-import Plan.Troncon;
+import Intersection;
+import Plan;
+import Troncon;
 
 public class Main {
 

@@ -1,9 +1,10 @@
-package Plan;
+import java.util.ArrayList;
 
 public class Intersection {
-	public long id;
-	public int x;
-	public int y;
+	private long id;
+	private int x;
+	private int y;
+	private ArrayList<Troncon> tronconsVersVoisins;
 	
 
 	public Intersection(long id, int x, int y) {

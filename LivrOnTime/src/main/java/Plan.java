@@ -1,4 +1,4 @@
-package Plan;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,13 +6,19 @@ import java.util.HashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class Plan {
-	public static HashMap<long[],Intersection> Intersections = new HashMap();
-	public static ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
+	
 	
 
-        
-        
+
+public class Plan {
+	
+	private ArrayList <Livraison> solution;
+	private ArrayList <Chemin> analyse;
+	private GrapheComplet Graphe;	
+	
+	private static HashMap<long[],Intersection> Intersections = new HashMap();
+	private static ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
+	
 	
 public void CreerIntersections(NodeList noeuds) {
 	  final int nbNoeuds = noeuds.getLength();
