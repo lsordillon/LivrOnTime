@@ -1,9 +1,12 @@
-package Models;
+package model;
+
+import java.util.ArrayList;
 
 public class Intersection {
 	private long id;
 	private int x;
 	private int y;
+	private ArrayList<Troncon> tronconsVersVoisins;
 	
 
 	public Intersection(long id, int x, int y) {

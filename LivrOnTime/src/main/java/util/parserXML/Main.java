@@ -1,8 +1,8 @@
-package fileParser;
+package util.parserXML;
 
-import Models.Intersection;
-import Models.Plan;
-import Models.Troncon;
+import model.Intersection;
+import model.Plan;
+import model.Troncon;
 
 public class Main {
 
@@ -16,7 +16,7 @@ public class Main {
 		plan.CreerIntersections(XmlParser.noeuds);
 		plan.CreerTroncons(XmlParser.troncons);
 		
-		// Affichage des tronçons
+		// Affichage des troncons
 		for ( Troncon i : Plan.getTroncons()){
 			System.out.println(i.toString());
 		}
