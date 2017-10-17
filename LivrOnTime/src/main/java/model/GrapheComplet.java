@@ -2,8 +2,6 @@ package model;
 import java.util.HashMap;
 import java.util.Map;
 
-import Plan.Intersection;
-
 public class GrapheComplet {
 	public int [] duree;
 	public int [][] cout;
