@@ -1,5 +1,4 @@
 package util.parserXML;
-import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -9,11 +8,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-public class XmlParser {
+public class XmlParserLivraison {
 	
 	static Document doc;
-	public static NodeList noeuds;
-	public static NodeList troncons;
+	public static NodeList entrepot;
+	public static NodeList livraisons;
 	
 	
 	    public Document Reader(String file_name){
@@ -36,9 +35,9 @@ public class XmlParser {
 	        			}
 	            
 	        final Element racine = document.getDocumentElement();
-	        noeuds = racine.getElementsByTagName("noeud");
+	        entrepot = racine.getElementsByTagName("entrepot");
 	      
-	        troncons = racine.getElementsByTagName("troncon");
+	        livraisons = racine.getElementsByTagName("livraison");
 	    
 	        
 	        
