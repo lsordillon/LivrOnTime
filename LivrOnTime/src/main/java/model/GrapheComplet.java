@@ -6,7 +6,6 @@ import java.util.Map;
 public class GrapheComplet {
 	public int [] duree;
 	public int [][] cout;
-	public int []equivalent;
 	
 	public GrapheComplet () {
 		
