@@ -11,8 +11,19 @@ public class DemandeLivraison {
 	
 	private Date heureDepart;
 	private Intersection adresseEntrepot;
-	private ArrayList<Livraison> listeLivraisons;
-	private ArrayList <Livraison> livraisons;
+	private ArrayList <Livraison> listeLivraisons;
+	
+	public Date getHeureDepart() {
+		return this.heureDepart;
+	}
+	
+	public Intersection getAdresseEntrepot(){
+		return this.adresseEntrepot;
+	}
+	
+	public ArrayList<Livraison> getLivraisons() {
+		return this.listeLivraisons;
+	}
 	
 	public DemandeLivraison(NodeList livraisons, NodeList entrepot) {
 		
@@ -39,7 +50,7 @@ public class DemandeLivraison {
 		
 		
 		final int nbNoeuds = livraisons.getLength();
-		
+		listeLivraisons =  new ArrayList();
 	    for(int i = 0; i<nbNoeuds; i++) {
 	    	
 	    	boolean debut = false;
@@ -53,6 +64,7 @@ public class DemandeLivraison {
 	        int duree = Integer.parseInt((String) noeud.getAttribute("duree"));
 	        
 	        if (noeud.getAttributeNode("debutPlage")!=null){
+	        	
 	        	debut = true;
 	        	heure = noeud.getAttribute("debutPlage");
 	            items = heure.split(":");
@@ -60,7 +72,6 @@ public class DemandeLivraison {
 	            heureDebutPlage.setMinutes(Integer.parseInt(items[1]));
 	            heureDebutPlage.setSeconds(Integer.parseInt(items[2]));
 	        }
-	        
 	        if (noeud.getAttributeNode("finPlage")!=null){
 	        	fin = true;
 	        	heure = noeud.getAttribute("finPlage");
@@ -69,21 +80,23 @@ public class DemandeLivraison {
 	            heureFinPlage.setMinutes(Integer.parseInt(items[1]));
 	            heureFinPlage.setSeconds(Integer.parseInt(items[2]));
 	        }
-	        
 	        Livraison aLivrer = null;
 	        if(debut && fin) {
-	        	aLivrer = new Livraison (duree, heureDebutPlage, heureFinPlage, intersection);
+	        	aLivrer = new Livraison (duree, intersection, heureDebutPlage, heureFinPlage);
 	        }
 	        else if (debut && !fin) {
-	        	aLivrer = new Livraison (duree, heureDebutPlage, null, intersection);
+	        	aLivrer = new Livraison (duree, intersection, heureDebutPlage, null);
 	        }
 	        else if (!debut && fin) {
-	        	aLivrer = new Livraison (duree, null, heureFinPlage, intersection);
+	        	aLivrer = new Livraison (duree, intersection, null, heureFinPlage);
 	        }
 	        else {
-	        	aLivrer = new Livraison (duree, null, null, intersection);
+	        	aLivrer = new Livraison (duree,intersection);
 	        }
-	        this.livraisons.add(aLivrer);
+	        
+	        this.listeLivraisons.add(aLivrer);
+	        System.out.println(aLivrer);
+	        
 	    }  
 	}
 }
