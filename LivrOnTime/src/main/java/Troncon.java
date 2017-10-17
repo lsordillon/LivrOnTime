@@ -1,4 +1,4 @@
-package Plan;
+
 
 public class Troncon {
 	Intersection destination;
