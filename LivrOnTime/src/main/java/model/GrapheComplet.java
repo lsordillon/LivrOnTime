@@ -1,13 +1,20 @@
 package model;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class GrapheComplet {
-	public int [] duree;
-	public int [][] cout;
+	private int [] duree;
+	private int [][] cout;
+	private int[] equivalent;
 	
-	public GrapheComplet () {
+	public GrapheComplet (ArrayList<Livraison> listeLivraisons) {
+		equivalent= new int [listeLivraisons.size()];
+		for(int i=0;i<listeLivraisons.size();i++) {
+			duree[i]=listeLivraisons.get(i).getDuree();
+		}
+		
 		
 	}
 	

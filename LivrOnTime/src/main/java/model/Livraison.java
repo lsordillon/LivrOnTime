@@ -9,4 +9,8 @@ public class Livraison {
 	private Date finPlageHoraire;
 	private Intersection destination;
 	
+	public int getDuree() {
+		return duree;
+	}
+	
 }
