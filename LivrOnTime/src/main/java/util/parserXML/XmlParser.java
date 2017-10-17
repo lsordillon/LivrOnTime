@@ -43,9 +43,6 @@ public class XmlParser {
 	        
 	        
 	         return doc;
-	    
-		
-		
-		
+	    	
 	}
 }

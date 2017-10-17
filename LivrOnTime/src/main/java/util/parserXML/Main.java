@@ -11,7 +11,7 @@ public class Main {
 		XmlParser parser = new XmlParser();
 		Plan plan = new Plan();
 		
-		parser.Reader("planLyonMoyen.xml");
+		parser.Reader("src/main/java/resources/planLyonMoyen.xml");
 		
 		plan.CreerIntersections(XmlParser.noeuds);
 		plan.CreerTroncons(XmlParser.troncons);
