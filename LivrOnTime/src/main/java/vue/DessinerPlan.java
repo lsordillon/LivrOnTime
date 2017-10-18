@@ -187,19 +187,20 @@ class SceneGestures {
  * An application with a zoomable and pannable canvas.
  */
 public class DessinerPlan {
+	public static final int divX = 40;
+	public static final int minus =1300;
 	
 	Pane overlay = new Pane();
 	PannableCanvas canvas = new PannableCanvas();
-	HashMap<Long,Intersection> dessiné = new HashMap<Long,Intersection>();
-	ArrayList<Intersection> dessine = new ArrayList<Intersection>();
+	HashMap<Long,Circle> dessiné = new HashMap<Long,Circle>();
+
 
     // Méthode qui dessine les tronçons
     public void dessinerTroncon(Intersection D, Intersection O) {
-    	int x,y,divX,minus;
-    	divX = 40;      // Déviser les cordonées X et Y sur divX
-    	minus = 1300;   // Soustraire minus des X et Y
+    	int x,y;
+    	   
     	
-    	Circle circle1 = new Circle(3);
+    	Circle circle1 = new Circle(4);
     	 circle1.setStroke(Color.BLACK);
          circle1.setFill(Color.BLACK);
          x= D.getX() / divX - minus;
@@ -208,20 +209,20 @@ public class DessinerPlan {
          
          x= O.getX() / divX -minus;
          y=O.getY() / divX - minus;
-    	Circle circle2 = new Circle(3);
+    	Circle circle2 = new Circle(4);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
         circle2.relocate(x , y);
     	
     	if (!dessiné.containsKey(D.getId())){
     		canvas.getChildren().add(circle1);
-    		dessiné.put(D.getId(), D);
+    		dessiné.put(D.getId(), circle1);
     	}
     	
             
         if (!dessiné.containsKey(O.getId())){
         	canvas.getChildren().add(circle2);
-        	dessiné.put(O.getId(), O);
+        	dessiné.put(O.getId(), circle2);
         }
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         line.setStrokeWidth(2);
@@ -233,19 +234,7 @@ public class DessinerPlan {
 		
 
     }
-    /* Dessiner Livraison Essaie
-    public void dessinerLivraison(ArrayList<Livraison> listeLivraison){
-    	for (Livraison l : listeLivraison){
-    		Circle circle = new Circle(3);
-            circle.setStroke(Color.RED);
-            circle.setFill(Color.RED);
-            
-            circle.relocate(l.getDestination().getX()/ 40 - 500 , l.getDestination().getY()/ 40 - 500);
-            canvas.getChildren().addAll(circle);
-    	}
-    	
-        
-    }*/
+
 
    
     public Group Dessiner(Plan plan) {
@@ -272,6 +261,23 @@ public class DessinerPlan {
         
 
     }
+    
+    public Group Dessiner(ArrayList<Livraison> livraisons) {
+    	
+    	Group group = new Group();
+        canvas.setTranslateX(1000);
+        canvas.setTranslateY(1000);
+        for (Livraison livraison : livraisons){
+        	Circle circle = dessiné.get(livraison.getDestination().getId());
+        	canvas.getChildren().remove(circle);
+        	circle.setStroke(Color.BLUE);
+        	circle.setFill(Color.BLUE);
+            canvas.getChildren().add(circle);
+        }
+        group.getChildren().add(canvas);
+        return group;
+		
+	}
     
     public void PannableScene(Scene scene) {
     	
