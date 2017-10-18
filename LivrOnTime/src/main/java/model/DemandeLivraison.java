@@ -26,10 +26,10 @@ public class DemandeLivraison {
 		return this.listeLivraisons;
 	}
 	
-	public DemandeLivraison(NodeList livraisons, NodeList entrepot) {
+	public DemandeLivraison(NodeList livraisons, NodeList entrepot,Plan plan) {
 		
 		
-		HashMap<Long, Intersection> intersections =  Plan.getIntersections();
+		HashMap<Long, Intersection> intersections =  plan.getIntersections();
 		
 		final Element noeudEntrepot = (Element) entrepot.item(0);
 		long j = Long.parseLong((String) noeudEntrepot.getAttribute("adresse"));

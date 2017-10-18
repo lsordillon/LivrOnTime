@@ -12,8 +12,8 @@ public class Plan {
 	private ArrayList <Livraison> solution;
 	private ArrayList <Chemin> analyse;
 	private GrapheComplet Graphe;
-	private static HashMap<Long,Intersection> Intersections = new HashMap();
-	private static ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
+	private HashMap<Long,Intersection> Intersections = new HashMap();
+	private ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
 	
 
         
@@ -33,24 +33,24 @@ public void CreerTroncons(NodeList troncons) {
   for(int j = 0; j<nbTroncons; j++) {
       final Element troncon = (Element) troncons.item(j);
       Long k = Long.parseLong(troncon.getAttribute("destination"));
-      Intersection intersectionD = Plan.Intersections.get(k);
+      Intersection intersectionD = this.Intersections.get(k);
       k = Long.parseLong(troncon.getAttribute("origine"));
-      Intersection intersectionO = Plan.Intersections.get(k); 
+      Intersection intersectionO = this.Intersections.get(k); 
       Troncons.add(new Troncon(intersectionD, Double.parseDouble(troncon.getAttribute("longueur")), troncon.getAttribute("nomRue") , intersectionO));
   
   }
 
 }
-public static HashMap<Long, Intersection> getIntersections() {
+public HashMap<Long, Intersection> getIntersections() {
 	return Intersections;
 }
-public static void setIntersections(HashMap<Long, Intersection> intersections) {
+public void setIntersections(HashMap<Long, Intersection> intersections) {
 	Intersections = intersections;
 }
-public static ArrayList<Troncon> getTroncons() {
+public ArrayList<Troncon> getTroncons() {
 	return Troncons;
 }
-public static void setTroncons(ArrayList<Troncon> troncons) {
+public void setTroncons(ArrayList<Troncon> troncons) {
 	Troncons = troncons;
 }
 

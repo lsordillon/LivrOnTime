@@ -2,6 +2,7 @@ package vue;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.sun.org.apache.xpath.internal.operations.Minus;
 
@@ -185,38 +186,47 @@ class SceneGestures {
 /**
  * An application with a zoomable and pannable canvas.
  */
-public class DessinerPlan extends Application {
+public class DessinerPlan {
 	
 	Pane overlay = new Pane();
 	PannableCanvas canvas = new PannableCanvas();
-	
-    public static void main(String[] args) {
-        launch(args);
-    }
+	HashMap<Long,Intersection> dessiné = new HashMap<Long,Intersection>();
+	ArrayList<Intersection> dessine = new ArrayList<Intersection>();
+
     // Méthode qui dessine les tronçons
     public void dessinerTroncon(Intersection D, Intersection O) {
     	int x,y,divX,minus;
     	divX = 40;      // Déviser les cordonées X et Y sur divX
-    	minus = 500;   // Soustraire minus des X et Y 
+    	minus = 1300;   // Soustraire minus des X et Y
     	
-        Circle circle1 = new Circle(3);
-        circle1.setStroke(Color.BLACK);
-        circle1.setFill(Color.BLACK);
-        x= D.getX() / divX - minus;
-        y=D.getY() / divX - minus;
-        
-        circle1.relocate(x , y);
-        x= O.getX() / divX -minus;
-        y=O.getY() / divX - minus;
-        Circle circle2 = new Circle(3);
+    	Circle circle1 = new Circle(3);
+    	 circle1.setStroke(Color.BLACK);
+         circle1.setFill(Color.BLACK);
+         x= D.getX() / divX - minus;
+         y=D.getY() / divX - minus;
+         circle1.relocate(x , y);
+         
+         x= O.getX() / divX -minus;
+         y=O.getY() / divX - minus;
+    	Circle circle2 = new Circle(3);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
         circle2.relocate(x , y);
-
+    	
+    	if (!dessiné.containsKey(D.getId())){
+    		canvas.getChildren().add(circle1);
+    		dessiné.put(D.getId(), D);
+    	}
+    	
+            
+        if (!dessiné.containsKey(O.getId())){
+        	canvas.getChildren().add(circle2);
+        	dessiné.put(O.getId(), O);
+        }
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         line.setStrokeWidth(2);
 
-        canvas.getChildren().addAll(circle1,circle2,line);
+        canvas.getChildren().add(line);
         
 
         
@@ -237,18 +247,19 @@ public class DessinerPlan extends Application {
         
     }*/
 
-    @Override
-    public void start(Stage stage) {
+   
+    public Group Dessiner(Plan plan) {
 
-        Group group = new Group();
-
-        canvas.setTranslateX(100);
-        canvas.setTranslateY(100);
+       
+    	Group group = new Group();
+        canvas.setTranslateX(1000);
+        canvas.setTranslateY(1000);
+     
 
         // create sample nodes which can be dragged
         
         
-        for (Troncon T: Plan.getTroncons()){
+        for (Troncon T: plan.getTroncons()){
         	
         	dessinerTroncon(T.getDestination(), T.getOrigine());
         }
@@ -256,19 +267,20 @@ public class DessinerPlan extends Application {
        
 
         group.getChildren().add(canvas);
-
-        // create scene which can be dragged and zoomed
-        Scene scene = new Scene(group, 1024, 768);
-
-        SceneGestures sceneGestures = new SceneGestures(canvas);
-        scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
-        scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-        scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-
-        stage.setScene(scene);
-        stage.show();
-
-  
+        return group;
+       
+        
 
     }
+    
+    public void PannableScene(Scene scene) {
+    	
+    	   SceneGestures sceneGestures = new SceneGestures(canvas);
+           scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
+           scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
+           scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
+		
+	}
+    
+   
 }
