@@ -1,5 +1,6 @@
 package model;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,10 +40,16 @@ public class DemandeLivraison {
 
         Date heureDebutPlage = new Date();
         Date heureFinPlage = new Date();
-        Date heureD = new Date();
-        heureD.setHours(Integer.parseInt(items[0]));
-        heureD.setMinutes(Integer.parseInt(items[1]));
-        heureD.setSeconds(Integer.parseInt(items[2]));
+       
+        
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(items[0]));
+        cal.set(Calendar.MINUTE, Integer.parseInt(items[1]));
+        cal.set(Calendar.SECOND, Integer.parseInt(items[2]));
+        
+        Date heureD = cal.getTime();
+      
         
 
 		this.heureDepart = heureD;
@@ -68,17 +75,25 @@ public class DemandeLivraison {
 	        	debut = true;
 	        	heure = noeud.getAttribute("debutPlage");
 	            items = heure.split(":");
-	            heureDebutPlage.setHours(Integer.parseInt(items[0]));
-	            heureDebutPlage.setMinutes(Integer.parseInt(items[1]));
-	            heureDebutPlage.setSeconds(Integer.parseInt(items[2]));
+	            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(items[0]));
+	            cal.set(Calendar.MINUTE, Integer.parseInt(items[1]));
+	            cal.set(Calendar.SECOND, Integer.parseInt(items[2]));
+	            
+	            heureDebutPlage = cal.getTime();
+	            
 	        }
 	        if (noeud.getAttributeNode("finPlage")!=null){
 	        	fin = true;
 	        	heure = noeud.getAttribute("finPlage");
 	            items = heure.split(":");
-	            heureFinPlage.setHours(Integer.parseInt(items[0]));
-	            heureFinPlage.setMinutes(Integer.parseInt(items[1]));
-	            heureFinPlage.setSeconds(Integer.parseInt(items[2]));
+	            
+	            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(items[0]));
+	            cal.set(Calendar.MINUTE, Integer.parseInt(items[1]));
+	            cal.set(Calendar.SECOND, Integer.parseInt(items[2]));
+	            
+	            heureFinPlage = cal.getTime();
+	            
+	           
 	        }
 	        Livraison aLivrer = null;
 	        if(debut && fin) {
@@ -95,7 +110,7 @@ public class DemandeLivraison {
 	        }
 	        
 	        this.listeLivraisons.add(aLivrer);
-	        System.out.println(aLivrer);
+	       
 	        
 	    }  
 	}

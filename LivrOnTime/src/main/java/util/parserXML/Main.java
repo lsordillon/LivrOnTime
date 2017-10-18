@@ -3,10 +3,8 @@ package util.parserXML;
 import java.util.ArrayList;
 
 import model.DemandeLivraison;
-import model.Intersection;
 import model.Livraison;
 import model.Plan;
-import model.Troncon;
 
 public class Main {
 
@@ -31,9 +29,11 @@ public class Main {
 		XmlParserLivraison parserLivraison = new XmlParserLivraison();
 		parserLivraison.Reader("src/main/java/resources/DLmoyen5TW4.xml");
 		DemandeLivraison dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot);
+		
 		ArrayList<Livraison> liste = dl.getLivraisons();
-		for(int i =0; i<liste.size();i++) {
-			System.out.println(liste.get(i));
+		
+		for(Livraison i : liste) {
+			System.out.println(i);
 		}
 		System.out.println(dl.getHeureDepart());
 	}
