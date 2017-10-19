@@ -13,6 +13,16 @@ public class Intersection {
 		this.id = id;
 		this.x = x;
 		this.y = y;
+		tronconsVersVoisins = new ArrayList<Troncon>();
+	}
+	
+	public ArrayList<Troncon> getTronconsVersVoisins() {
+		return this.tronconsVersVoisins;
+	}
+	
+	public ArrayList<Troncon> setTronconsVersVoisins(Troncon troncon) {
+		tronconsVersVoisins.add(troncon);
+		return this.tronconsVersVoisins;
 	}
 
 
