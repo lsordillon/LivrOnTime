@@ -192,7 +192,7 @@ public class DessinerPlan {
 	
 	Pane overlay = new Pane();
 	PannableCanvas canvas = new PannableCanvas();
-	HashMap<Long,Circle> dessiné = new HashMap<Long,Circle>();
+	HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
 
 
     // Méthode qui dessine les tronçons
@@ -214,15 +214,15 @@ public class DessinerPlan {
         circle2.setFill(Color.BLACK);
         circle2.relocate(x , y);
     	
-    	if (!dessiné.containsKey(D.getId())){
+    	if (!dessine.containsKey(D.getId())){
     		canvas.getChildren().add(circle1);
-    		dessiné.put(D.getId(), circle1);
+    		dessine.put(D.getId(), circle1);
     	}
     	
             
-        if (!dessiné.containsKey(O.getId())){
+        if (!dessine.containsKey(O.getId())){
         	canvas.getChildren().add(circle2);
-        	dessiné.put(O.getId(), circle2);
+        	dessine.put(O.getId(), circle2);
         }
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         line.setStrokeWidth(2);
@@ -262,13 +262,21 @@ public class DessinerPlan {
 
     }
     
-    public Group Dessiner(ArrayList<Livraison> livraisons) {
-    	
+    public Group Dessiner(DemandeLivraison dl) {
+    	ArrayList<Livraison> livraisons = dl.getLivraisons();
     	Group group = new Group();
         canvas.setTranslateX(1000);
         canvas.setTranslateY(1000);
+        
+        Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
+        canvas.getChildren().remove(circle);
+    	circle.setStroke(Color.RED);
+    	circle.setFill(Color.RED);
+    	circle.setRadius(15);
+    	 canvas.getChildren().add(circle);
+        
         for (Livraison livraison : livraisons){
-        	Circle circle = dessiné.get(livraison.getDestination().getId());
+        	circle = dessine.get(livraison.getDestination().getId());
         	canvas.getChildren().remove(circle);
         	circle.setStroke(Color.BLUE);
         	circle.setFill(Color.BLUE);
@@ -277,7 +285,9 @@ public class DessinerPlan {
         }
         group.getChildren().add(canvas);
         return group;
-		
+		     
+        
+        
 	}
     
     public void PannableScene(Scene scene) {
