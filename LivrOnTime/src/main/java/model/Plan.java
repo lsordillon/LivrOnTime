@@ -15,7 +15,7 @@ public class Plan {
 	
 
 	private ArrayList <Livraison> solution;
-	private ArrayList <Chemin> analyse;
+	private Chemin[][] chemin;
 	
 	private GrapheComplet graphe_complet;
 	private static HashMap<Long,Intersection> Intersections = new HashMap();
@@ -124,7 +124,7 @@ public void calculDijkstra(DemandeLivraison DL){
 		ArrayList<Intersection> IntersectionsDL=RemplirIntersectionsDL(DL);
 		int N_IntersectionsDL=IntersectionsDL.size();
 		double cout[][] = null;
-	Chemin chemin[][]=null;
+	chemin=null;
 	Date HeureD=DL.getHeureDepart();
 	Date HeureA;
 	
@@ -180,14 +180,21 @@ public static void setTroncons(ArrayList<Troncon> troncons) {
 
 public void calculerLaTournee(DemandeLivraison dl) {
 	int tpLimite = 10;
-	calculDijkstra(dl);
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size();
+	ArrayList <Chemin> itineraire = new ArrayList ();
+	
+	calculDijkstra(dl);
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
+	
 	for(int i=0; i<nbSommet;i++) {
 		System.out.print(etape2.getMeilleureSolution(i)+";");
 	}
 	System.out.println(" ");
+	
+	Tournee tournee = new Tournee();
+	
+	
 }
 
 }
