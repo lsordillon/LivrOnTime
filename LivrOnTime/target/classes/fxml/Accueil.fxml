@@ -12,7 +12,9 @@
          <children>
             <Button fx:id="ChargerButoon" layoutX="144.0" layoutY="195.0" mnemonicParsing="false" onAction="#ChargerFichier" prefHeight="25.0" prefWidth="111.0" text="Charger Plan" />
             <Label fx:id="AccueilLabel" layoutX="180.0" layoutY="89.0" text="Accueil" />
-            <Button fx:id="ChargerLivraison" disable="true" layoutX="144.0" layoutY="240.0" mnemonicParsing="false" onAction="#ChargerLivraison" prefHeight="25.0" prefWidth="111.0" text="Charger Livraison" />
+            <Button fx:id="ChargerLivraison" disable="true" layoutX="144.0" layoutY="240.0" mnemonicParsing="false" onAction="#ChargerLivraison" prefHeight="25.0" prefWidth="111.0" text="Charger Livraison" />     
+            <Button fx:id="CalculTournee" disable="true" layoutX="144.0" layoutY="340.0" mnemonicParsing="false" onAction="#CalculTournee" prefHeight="25.0" prefWidth="111.0" text="calcultourneebitch" />
+         
          </children></AnchorPane>
   </items>
   
