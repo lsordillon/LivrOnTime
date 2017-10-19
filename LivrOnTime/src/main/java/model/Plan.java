@@ -8,6 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import DijikstraCalcul.Graph;
+import util.tsp.TSP;
+import util.tsp.TSP1;
 
 public class Plan {
 	
@@ -15,7 +17,7 @@ public class Plan {
 	private ArrayList <Livraison> solution;
 	private ArrayList <Chemin> analyse;
 	
-	//private GrapheComplet graphe_complet=new GrapheComplet(Livraisons);
+	private GrapheComplet graphe_complet;
 	private static HashMap<Long,Intersection> Intersections = new HashMap();
 	private static ArrayList<Long> id_intersections=new ArrayList<Long>();
 	private static int N_intersections;;
@@ -65,14 +67,6 @@ public void CreerTroncons(NodeList troncons) {
 
 }
 
-public int conversion(Intersection inter){
-	return  id_intersections.indexOf(inter.getId());
-	
-}
-public Intersection retroConversion(int i){
-	return Intersections.get(id_intersections.get(i));
-}
-
 //le graphe qui contient tt les point de plan
 public Graph SuperGraphe(){
 	Graph g=new Graph(N_intersections);
@@ -83,6 +77,18 @@ public Graph SuperGraphe(){
 	}
 	return g;
 }
+
+// ------------- Calcul Itinéraire
+
+// L'intersection est lié à son numéro de placement dans la liste
+public int conversion(Intersection inter){
+	return  id_intersections.indexOf(inter.getId());	
+}
+public Intersection retroConversion(int i){
+	return Intersections.get(id_intersections.get(i));
+}
+
+
 
 
 
@@ -104,7 +110,7 @@ public Troncon trouverTroncon(Intersection origine, Intersection distination){
 	 return Troncons.get(i);
 }
 
-public void m(DemandeLivraison DL){
+public void calculDijkstra(DemandeLivraison DL){
 		Intersection entropot=DL.getAdresseEntrepot();
 		ArrayList<Livraison> Livraisons=DL.getLivraisons();
 		ArrayList<Intersection> IntersectionsDL=RemplirIntersectionsDL(DL);
@@ -113,6 +119,7 @@ public void m(DemandeLivraison DL){
 	Chemin chemin[][]=null;
 	Date HeureD=DL.getHeureDepart();
 	Date HeureA;
+	
 	for(int i=0;i<N_IntersectionsDL;i++){
 		CalculPCC(IntersectionsDL.get(i));
 		   for(int j=0; j<N_IntersectionsDL;j++){
@@ -138,6 +145,8 @@ public void m(DemandeLivraison DL){
 		   }
 	}
 	
+	graphe_complet=new GrapheComplet(Livraisons,cout);
+	
 }
 
 
@@ -158,6 +167,19 @@ public static ArrayList<Troncon> getTroncons() {
 }
 public static void setTroncons(ArrayList<Troncon> troncons) {
 	Troncons = troncons;
+}
+
+
+public void calculerLaTournee(DemandeLivraison dl) {
+	int tpLimite = 10;
+	calculDijkstra(dl);
+	TSP etape2 = new TSP1 ();
+	int nbSommet=dl.getLivraisons().size();
+	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
+	for(int i=0; i<nbSommet;i++) {
+		System.out.print(etape2.getMeilleureSolution(i)+";");
+	}
+	System.out.println(" ");
 }
 
 }

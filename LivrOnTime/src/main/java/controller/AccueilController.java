@@ -29,8 +29,9 @@ public class AccueilController implements Initializable {
 	public Button ChargerButoon;
 	public Button ChargerLivraison;
 	public Label AccueilLabel;
-	Plan plan;
+	private Plan plan;
 	static DessinerPlan dessinerPlan;
+	private DemandeLivraison dl;
 	
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -73,7 +74,7 @@ public class AccueilController implements Initializable {
 		if (selectedFile != null) {
 			XmlParserLivraison parserLivraison = new XmlParserLivraison();
 			parserLivraison.Reader(selectedFile.getAbsolutePath());
-			DemandeLivraison dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
+			dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 			
 			
 			VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));

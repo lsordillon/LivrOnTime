@@ -9,12 +9,15 @@ public class GrapheComplet {
 	private double [][] cout;
 
 	
-	public GrapheComplet (ArrayList<Livraison> listeLivraisons,ArrayList <Chemin> analyse) {
+	public GrapheComplet (ArrayList<Livraison> listeLivraisons,double [][] coutI) {
 		int taille = listeLivraisons.size();
 		duree= new int [taille];
 		cout= new double [taille][taille];
 		
 		for(int i=0;i<taille;i++) {
+			for(int j=0;j<taille; j++) {
+				cout[i][j]=coutI[i][j];
+			}
 			duree[i]=listeLivraisons.get(i).getDuree();
 		}
 		
