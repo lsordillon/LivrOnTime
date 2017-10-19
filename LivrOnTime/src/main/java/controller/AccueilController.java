@@ -85,6 +85,7 @@ public class AccueilController implements Initializable {
 		}
 		
 	}
+
 	
 	public void CalculTournee(ActionEvent actionEvent) {
 		plan.calculerLaTournee(dl);
@@ -97,6 +98,7 @@ public class AccueilController implements Initializable {
 		parser.Reader(chemin);
 		plan.CreerIntersections(XmlParserPlan.noeuds);
 		plan.CreerTroncons(XmlParserPlan.troncons);
+		plan.TronconsVoisins();
 		return plan;
 
 	}
