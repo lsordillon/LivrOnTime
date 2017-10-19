@@ -67,6 +67,14 @@ public void CreerTroncons(NodeList troncons) {
 
 }
 
+public void TronconsVoisins() {
+	
+	for(int i =0; i< Troncons.size();i++) {
+		Troncons.get(i).getOrigine().setTronconsVersVoisins(Troncons.get(i));
+		System.out.println(Troncons.get(i).getOrigine().getTronconsVersVoisins());
+	}
+}
+
 //le graphe qui contient tt les point de plan
 public Graph SuperGraphe(){
 	Graph g=new Graph(N_intersections);
