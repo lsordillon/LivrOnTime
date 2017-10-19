@@ -200,7 +200,7 @@ public class DessinerPlan {
     	int x,y;
     	   
     	
-    	Circle circle1 = new Circle(4);
+    	Circle circle1 = new Circle(1);
     	 circle1.setStroke(Color.BLACK);
          circle1.setFill(Color.BLACK);
          x= D.getX() / divX - minus;
@@ -209,7 +209,7 @@ public class DessinerPlan {
          
          x= O.getX() / divX -minus;
          y=O.getY() / divX - minus;
-    	Circle circle2 = new Circle(4);
+    	Circle circle2 = new Circle(1);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
         circle2.relocate(x , y);
@@ -272,6 +272,7 @@ public class DessinerPlan {
         	canvas.getChildren().remove(circle);
         	circle.setStroke(Color.BLUE);
         	circle.setFill(Color.BLUE);
+        	circle.setRadius(8);
             canvas.getChildren().add(circle);
         }
         group.getChildren().add(canvas);
