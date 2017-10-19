@@ -7,13 +7,17 @@ import java.util.Map;
 public class GrapheComplet {
 	private int [] duree;
 	private int [][] cout;
-	private int[] equivalent;
+
 	
-	public GrapheComplet (ArrayList<Livraison> listeLivraisons) {
-		equivalent= new int [listeLivraisons.size()];
-		for(int i=0;i<listeLivraisons.size();i++) {
+	public GrapheComplet (ArrayList<Livraison> listeLivraisons,ArrayList <Chemin> analyse) {
+		int taille = listeLivraisons.size();
+		duree= new int [taille];
+		cout= new int [taille][taille];
+		
+		for(int i=0;i<taille;i++) {
 			duree[i]=listeLivraisons.get(i).getDuree();
 		}
+		
 		
 		
 	}
