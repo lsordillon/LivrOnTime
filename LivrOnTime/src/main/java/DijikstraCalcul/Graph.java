@@ -48,7 +48,7 @@ public	Graph(int v)
 	// sorting of given graph.
 	
 	
-	//Le résultat
+	//Le rï¿½sultat
 	
 	private int pre[] = new int[V];
 	public  double []  shortestPath(int s)
@@ -73,7 +73,7 @@ public	Graph(int v)
 		// distance to source as 0
 		for (int i = 0; i < V; i++)
 			dist[i] = INF;
-		dist[s] = 0;
+			dist[s] = 0;
 
 		// Process vertices in topological order
 		while (stack.empty() == false)

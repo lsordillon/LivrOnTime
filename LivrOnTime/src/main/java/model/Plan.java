@@ -31,7 +31,7 @@ public class Plan {
 
         
   private static ArrayList<Intersection> RemplirIntersectionsDL(DemandeLivraison DL){
-	  ArrayList<Intersection> list = null;
+	  ArrayList<Intersection> list = new ArrayList();
 	// list.add(entropot);
 	  int N_livraisons = DL.getLivraisons().size();
 	   for(int i=0;i<N_livraisons; i++)

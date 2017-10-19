@@ -28,6 +28,7 @@ public class AccueilController implements Initializable {
 	public AnchorPane VueControl;
 	public Button ChargerButoon;
 	public Button ChargerLivraison;
+	public Button CalculTournee;
 	public Label AccueilLabel;
 	private Plan plan;
 	static DessinerPlan dessinerPlan;
@@ -79,9 +80,15 @@ public class AccueilController implements Initializable {
 			
 			VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
 		    dessinerPlan.PannableScene(VuePlan.getScene());
+		    CalculTournee.setDisable(false);
 		}
 		
 	}
+	
+	public void CalculTournee(ActionEvent actionEvent) {
+		plan.calculerLaTournee(dl);
+	}
+	
 	public Plan CreerPlan(String chemin){
 		XmlParserPlan parser = new XmlParserPlan();
 		Plan plan = new Plan();
