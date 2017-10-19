@@ -75,8 +75,8 @@ public class AccueilController implements Initializable {
 			parserLivraison.Reader(selectedFile.getAbsolutePath());
 			DemandeLivraison dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 			
-			ArrayList<Livraison> liste = dl.getLivraisons();
-			VuePlan.getChildren().add(dessinerPlan.Dessiner(liste));
+			
+			VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
 		    dessinerPlan.PannableScene(VuePlan.getScene());
 		}
 		
@@ -89,6 +89,7 @@ public class AccueilController implements Initializable {
 		plan.CreerIntersections(XmlParserPlan.noeuds);
 		plan.CreerTroncons(XmlParserPlan.troncons);
 		return plan;
-	}
 
+	}
+      
 }
