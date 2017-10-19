@@ -15,27 +15,25 @@ public class Plan {
 	private ArrayList <Livraison> solution;
 	private ArrayList <Chemin> analyse;
 	
-	private GrapheComplet graphe_complet=new GrapheComplet(Livraisons);
+	//private GrapheComplet graphe_complet=new GrapheComplet(Livraisons);
 	private static HashMap<Long,Intersection> Intersections = new HashMap();
 	private static ArrayList<Long> id_intersections=new ArrayList<Long>();
 	private static int N_intersections;;
 	private static ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
 	private static int N_Troncons;
-	private static DemandeLivraison DL;
-	private static Intersection entropot=DL.getAdresseEntrepot();
-	private static ArrayList<Livraison> Livraisons=DL.getLivraisons();
-	private static int N_livraisons;
-	private static ArrayList<Intersection> IntersectionsDL=RemplirIntersectionsDL();
-	private static int N_IntersectionsDL=IntersectionsDL.size();
+	
+	//private static DemandeLivraison DL
+
 	
 	
 
         
-  private static ArrayList<Intersection> RemplirIntersectionsDL(){
+  private static ArrayList<Intersection> RemplirIntersectionsDL(DemandeLivraison DL){
 	  ArrayList<Intersection> list = null;
-	 list.add(entropot);
+	// list.add(entropot);
+	  int N_livraisons = DL.getLivraisons().size();
 	   for(int i=0;i<N_livraisons; i++)
-		   list.add(Livraisons.get(i).getDestination());
+		   list.add(DL.getLivraisons().get(i).getDestination());
 		   return list;
 	   
 	  
@@ -106,8 +104,12 @@ public Troncon trouverTroncon(Intersection origine, Intersection distination){
 	 return Troncons.get(i);
 }
 
-public void m(){
-	double cout[][] = null;
+public void m(DemandeLivraison DL){
+		Intersection entropot=DL.getAdresseEntrepot();
+		ArrayList<Livraison> Livraisons=DL.getLivraisons();
+		ArrayList<Intersection> IntersectionsDL=RemplirIntersectionsDL(DL);
+		int N_IntersectionsDL=IntersectionsDL.size();
+		double cout[][] = null;
 	Chemin chemin[][]=null;
 	Date HeureD=DL.getHeureDepart();
 	Date HeureA;
