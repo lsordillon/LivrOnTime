@@ -50,17 +50,19 @@ public	Graph(int v)
 	
 	//Le résultat
 	
-	
+	private int pre[] = new int[V];
 	public  double []  shortestPath(int s)
 	{
 		Stack stack = new Stack();
 		double dist[] = new double[V];
+		
 
 		// Mark all the vertices as not visited
 		Boolean visited[] = new Boolean[V];
-		for (int i = 0; i < V; i++)
+		for (int i = 0; i < V; i++){
 			visited[i] = false;
-
+			pre[i]=-1;
+		}
 		// Call the recursive helper function to store Topological
 		// Sort starting from all vertices one by one
 		for (int i = 0; i < V; i++)
@@ -88,7 +90,10 @@ public	Graph(int v)
 				{
 					NoeudVoisin i= it.next();
 					if (dist[i.getV()] > dist[u] + i.getWeight())
+					{
 						dist[i.getV()] = dist[u] + i.getWeight();
+						pre[i.getV()] = u;
+					}
 				}
 			}
 		}
@@ -96,6 +101,12 @@ public	Graph(int v)
 
 		
 	}
+	public int[] predecenceTable() {
+		return pre;
+	}
+	
+	
+	
 }
 
 

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class GrapheComplet {
 	private int [] duree;
-	private int [][] cout;
+	private double [][] cout;
 	private int[] equivalent;
 	
 	public GrapheComplet (ArrayList<Livraison> listeLivraisons) {
@@ -19,7 +19,7 @@ public class GrapheComplet {
 	}
 	
 	//On peut renvoyer des tableaux ?
-	public int[][] getCout () {
+	public double[][] getCout () {
 		return cout;
 	}
 	public int[] getDuree () {
