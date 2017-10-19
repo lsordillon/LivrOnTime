@@ -37,17 +37,11 @@ class PannableCanvas extends Pane {
     public PannableCanvas() {
         setPrefSize(600, 600);
      
-
         // add scale transform
         scaleXProperty().bind(myScale);
         scaleYProperty().bind(myScale);
     }
 
-
-
-
-
- 
 
     public double getScale() {
         return myScale.get();
@@ -113,6 +107,7 @@ class SceneGestures {
             sceneDragContext.mouseAnchorY = event.getSceneY();
 
             sceneDragContext.translateAnchorX = canvas.getTranslateX();
+            System.out.println(canvas.getTranslateX() + " "+ canvas.getTranslateY());
             sceneDragContext.translateAnchorY = canvas.getTranslateY();
 
         }
@@ -158,7 +153,7 @@ class SceneGestures {
             double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight()/2 + canvas.getBoundsInParent().getMinY()));
 
             canvas.setScale( scale);
-
+            System.out.println(scale);
             // note: pivot value must be untransformed, i. e. without scaling
             canvas.setPivot(f*dx, f*dy);
 
@@ -187,15 +182,16 @@ class SceneGestures {
  * An application with a zoomable and pannable canvas.
  */
 public class DessinerPlan {
-	public static final int divX = 40;
-	public static final int minus =1300;
+	public int divX = 40;
+	public int minus =1300;
+	int minX,minY,maxX=0,maxY=0;
 	
 	Pane overlay = new Pane();
 	PannableCanvas canvas = new PannableCanvas();
 	HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
+	
 
-
-    // Méthode qui dessine les tronçons
+    // Methode qui dessine les troncons
     public void dessinerTroncon(Intersection D, Intersection O) {
     	int x,y;
     	   
@@ -203,16 +199,15 @@ public class DessinerPlan {
     	Circle circle1 = new Circle(1);
     	 circle1.setStroke(Color.BLACK);
          circle1.setFill(Color.BLACK);
-         x= D.getX() / divX - minus;
-         y=D.getY() / divX - minus;
-         circle1.relocate(x , y);
-         
-         x= O.getX() / divX -minus;
-         y=O.getY() / divX - minus;
+         x= (int)((D.getX() - minus)*1500.0 / divX);
+         y=(int)((D.getY() - minus) *1500.0/ divX);
+         circle1.relocate(y , -x);
+         x= (int)((O.getX() - minus)*1500.0/ divX);
+         y=(int)((O.getY() - minus)*1500.0/ divX );
     	Circle circle2 = new Circle(1);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
-        circle2.relocate(x , y);
+        circle2.relocate(y , -x);
     	
     	if (!dessine.containsKey(D.getId())){
     		canvas.getChildren().add(circle1);
@@ -235,38 +230,65 @@ public class DessinerPlan {
 
     }
 
-
-   
     public Group Dessiner(Plan plan) {
-
        
     	Group group = new Group();
-        canvas.setTranslateX(1000);
-        canvas.setTranslateY(1000);
+        
      
-
+    	
+    	int minX,minY,maxX=0,maxY=0;
+    	//Calcul du minX et du min Y 
+	   	 for (Troncon T: plan.getTroncons()){
+	   		if(T.getDestination().getX()>maxX||T.getOrigine().getX()>maxY)
+	   		{
+	   			maxX=Math.max(T.getDestination().getX(), T.getOrigine().getX());
+	   		}
+	   		
+	   		if(T.getDestination().getY()>maxY||T.getOrigine().getY()>maxY)
+	   		{
+	   			maxY=Math.max(T.getDestination().getY(), T.getOrigine().getY());
+	   		}
+	   	 }
+    	
+    	minY=maxY;
+    	minX=maxX;
+    	
+    	
+    	//Calcul du minX et du min Y 
+    	 for (Troncon T: plan.getTroncons()){
+    		if(T.getDestination().getX()<minX||T.getOrigine().getX()<minX)
+    		{
+    			minX=Math.min(T.getDestination().getX(), T.getOrigine().getX());
+    		}
+    		
+    		if(T.getDestination().getY()<minY||T.getOrigine().getY()<minY)
+    		{
+    			minY=Math.min(T.getDestination().getY(), T.getOrigine().getY());
+    		}
+    	 }
         // create sample nodes which can be dragged
-        
-        
+    	minus=Math.min(minX, minY);
+        divX=Math.max(maxX, maxY)-minus;
+       
         for (Troncon T: plan.getTroncons()){
         	
         	dessinerTroncon(T.getDestination(), T.getOrigine());
         }
-
-       
-
+        canvas.setTranslateX(-(maxX-minX)*1000/divX);
+        canvas.setTranslateY((maxY-minY)*1000/divX);
+        System.out.println("youyou "+canvas.getTranslateX()+" "+canvas.getTranslateY());
         group.getChildren().add(canvas);
+        System.out.println(canvas.getWidth());
         return group;
-       
-        
-
+               
     }
     
     public Group Dessiner(DemandeLivraison dl) {
     	ArrayList<Livraison> livraisons = dl.getLivraisons();
     	Group group = new Group();
-        canvas.setTranslateX(1000);
-        canvas.setTranslateY(1000);
+    	 canvas.setTranslateX(-(maxX-minX)*1000/divX);
+         canvas.setTranslateY((maxY-minY)*1000/divX);
+        System.out.println("youyou "+canvas.getTranslateX()+" "+canvas.getTranslateY());
         
         Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
         canvas.getChildren().remove(circle);
@@ -283,11 +305,9 @@ public class DessinerPlan {
         	circle.setRadius(8);
             canvas.getChildren().add(circle);
         }
-        group.getChildren().add(canvas);
+      
         return group;
-		     
-        
-        
+		             
 	}
     
     public void PannableScene(Scene scene) {
