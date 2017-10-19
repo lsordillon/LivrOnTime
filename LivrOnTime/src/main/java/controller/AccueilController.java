@@ -17,6 +17,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import model.DemandeLivraison;
 import model.Livraison;
 import model.Plan;
+import model.Tournee;
 import util.parserXML.XmlParserLivraison;
 import util.parserXML.XmlParserPlan;
 import vue.DessinerPlan;
@@ -88,7 +89,7 @@ public class AccueilController implements Initializable {
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		plan.calculerLaTournee(dl);
+		Tournee tournee=plan.calculerLaTournee(dl);
 	}
 	
 	public Plan CreerPlan(String chemin){

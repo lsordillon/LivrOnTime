@@ -178,7 +178,7 @@ public static void setTroncons(ArrayList<Troncon> troncons) {
 }
 
 
-public void calculerLaTournee(DemandeLivraison dl) {
+public Tournee calculerLaTournee(DemandeLivraison dl) {
 	int tpLimite = 10;
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size();
@@ -187,12 +187,16 @@ public void calculerLaTournee(DemandeLivraison dl) {
 	calculDijkstra(dl);
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
 	
-	for(int i=0; i<nbSommet;i++) {
+	for(int i=0; i<nbSommet-1;i++) {
 		System.out.print(etape2.getMeilleureSolution(i)+";");
+		itineraire.add(chemin[etape2.getMeilleureSolution(i)][etape2.getMeilleureSolution(i-1)]);
 	}
-	System.out.println(" ");
+	itineraire.add(chemin[nbSommet-1][0]);
+	System.out.println(etape2.getMeilleureSolution(nbSommet-1));
 	
-	Tournee tournee = new Tournee();
+	Tournee tournee = new Tournee(itineraire);
+	
+	return tournee;
 	
 	
 }
