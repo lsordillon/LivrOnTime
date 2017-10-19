@@ -26,6 +26,7 @@ public class AccueilController implements Initializable {
 	//Etape 1 : Redéfinir tout les composants existants dans le fichier fxml comme des attributs public du controller
 	public AnchorPane VuePlan;
 	public AnchorPane VueControl;
+	public AnchorPane VueDescriptif; 
 	public Button ChargerButoon;
 	public Button ChargerLivraison;
 	public Button CalculTournee;

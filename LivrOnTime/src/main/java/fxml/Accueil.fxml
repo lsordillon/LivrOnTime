@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 
-<SplitPane dividerPositions="0.7157190635451505" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9">
+<SplitPane dividerPositions="0.6655518394648829" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AccueilController">
   <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+    <AnchorPane fx:id="VuePlan" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+    <AnchorPane fx:id="VueControl" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
-            <SplitPane dividerPositions="0.696969696969697" layoutX="133.0" layoutY="184.0" orientation="VERTICAL" prefHeight="398.0" prefWidth="425.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                     <children>
-                        <Button fx:id="ChargerButoon" layoutX="25.0" layoutY="46.0" mnemonicParsing="false" onAction="#ChargerFichier" prefHeight="25.0" prefWidth="95.0" text="Charger plan" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="304.0" AnchorPane.topAnchor="46.0" />
-                        <Button fx:id="ChargerLivraison" disable="true" layoutX="148.0" layoutY="46.0" mnemonicParsing="false" onAction="#ChargerLivraison" prefHeight="25.0" prefWidth="116.0" text="Charger livraisons" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="148.0" AnchorPane.rightAnchor="159.0" AnchorPane.topAnchor="46.0" />
-                        <Button fx:id="CalculTournee" disable="true" layoutX="297.0" layoutY="46.0" mnemonicParsing="false" onAction="#CalculTournee" text="Calculer tournee" AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="297.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="46.0" />
-                        <Text layoutX="187.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Accueil" AnchorPane.bottomAnchor="86.98828125" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="198.294921875" AnchorPane.topAnchor="14.05078125" />
-                     </children>
-                  </AnchorPane>
-              </items>
-            </SplitPane>
+            <Button fx:id="ChargerButoon" layoutX="144.0" layoutY="195.0" mnemonicParsing="false" onAction="#ChargerFichier" prefHeight="25.0" prefWidth="111.0" text="Charger Plan" />
+            <Label fx:id="AccueilLabel" layoutX="180.0" layoutY="89.0" text="Accueil" />
+            <Button fx:id="ChargerLivraison" disable="true" layoutX="144.0" layoutY="240.0" mnemonicParsing="false" onAction="#ChargerLivraison" prefHeight="25.0" prefWidth="111.0" text="Charger Livraison" />
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
   </items>
+  
 </SplitPane>
+
