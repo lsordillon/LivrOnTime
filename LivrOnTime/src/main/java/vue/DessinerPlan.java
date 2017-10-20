@@ -107,7 +107,6 @@ class SceneGestures {
             sceneDragContext.mouseAnchorY = event.getSceneY();
 
             sceneDragContext.translateAnchorX = canvas.getTranslateX();
-            System.out.println(canvas.getTranslateX() + " "+ canvas.getTranslateY());
             sceneDragContext.translateAnchorY = canvas.getTranslateY();
 
         }
@@ -153,7 +152,6 @@ class SceneGestures {
             double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight()/2 + canvas.getBoundsInParent().getMinY()));
 
             canvas.setScale( scale);
-            System.out.println(scale);
             // note: pivot value must be untransformed, i. e. without scaling
             canvas.setPivot(f*dx, f*dy);
 
@@ -183,7 +181,9 @@ class SceneGestures {
  */
 public class DessinerPlan {
 	public int divX = 40;
-	public int minus =1300;
+	public int minusX =1300;
+	public int divY = 40;
+	public int minusY =1300;
 	int minX,minY,maxX=0,maxY=0;
 	
 	Pane overlay = new Pane();
@@ -207,11 +207,11 @@ public class DessinerPlan {
     	Circle circle1 = new Circle(1);
     	 circle1.setStroke(Color.BLACK);
          circle1.setFill(Color.BLACK);
-         x= (int)((D.getX() - minus)*1500.0 / divX);
-         y=(int)((D.getY() - minus) *1500.0/ divX);
+         x= (int)((D.getX() - minusX)*1500.0 / divX);
+         y=(int)((D.getY() - minusY) *1500.0/ divY);
          circle1.relocate(y , -x);
-         x= (int)((O.getX() - minus)*1500.0/ divX);
-         y=(int)((O.getY() - minus)*1500.0/ divX );
+         x= (int)((O.getX() - minusX)*1500.0/ divX);
+         y=(int)((O.getY() - minusY)*1500.0/ divY );
     	Circle circle2 = new Circle(1);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
@@ -260,7 +260,7 @@ public class DessinerPlan {
     	
     	minY=maxY;
     	minX=maxX;
-    	
+    	 	  	
     	
     	//Calcul du minX et du min Y 
     	 for (Troncon T: plan.getTroncons()){
@@ -275,8 +275,10 @@ public class DessinerPlan {
     		}
     	 }
         // create sample nodes which can be dragged
-    	minus=Math.min(minX, minY);
-        divX=Math.max(maxX, maxY)-minus;
+    	minusX=minX;
+        divX=maxX-minusX;
+        minusY=minY;
+        divY=maxY-minusY;
        
         for (Troncon T: plan.getTroncons()){
         	
@@ -284,9 +286,7 @@ public class DessinerPlan {
         }
         canvas.setTranslateX(-(maxX-minX)*1000/divX);
         canvas.setTranslateY((maxY-minY)*1000/divX);
-        System.out.println("youyou "+canvas.getTranslateX()+" "+canvas.getTranslateY());
         group.getChildren().add(canvas);
-        System.out.println(canvas.getWidth());
         return group;
                
     }
@@ -296,7 +296,6 @@ public class DessinerPlan {
     	Group group = new Group();
     	 canvas.setTranslateX(-(maxX-minX)*1000/divX);
          canvas.setTranslateY((maxY-minY)*1000/divX);
-        System.out.println("youyou "+canvas.getTranslateX()+" "+canvas.getTranslateY());
         
         Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
         canvas.getChildren().remove(circle);
