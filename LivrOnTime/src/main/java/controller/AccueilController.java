@@ -40,6 +40,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 import model.DemandeLivraison;
+import model.Intersection;
 import model.Livraison;
 import model.Plan;
 import model.Tournee;
@@ -121,7 +122,11 @@ public class AccueilController implements Initializable {
 	
 	public void CalculTournee(ActionEvent actionEvent) {
 		//Tournee tournee=
-				plan.calculerLaTournee(dl);
+				//plan.calculerLaTournee(dl);
+		Intersection i = plan.getTroncons().get(0).getOrigine();
+		VuePlan.getChildren().add(dessinerPlan.afficherChemin(plan.getTroncons(), i));
+	    dessinerPlan.PannableScene(VuePlan.getScene());
+			    
 	}
 	
 	public Plan CreerPlan(String chemin){
