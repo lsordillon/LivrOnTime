@@ -146,7 +146,7 @@ class SceneGestures {
 
             scale = clamp( scale, MIN_SCALE, MAX_SCALE);
 
-            double f = (scale- oldScale / oldScale);
+            double f = (scale - oldScale / oldScale);
 
             double dx = (event.getSceneX() - (canvas.getBoundsInParent().getWidth()/2 + canvas.getBoundsInParent().getMinX()));
             double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight()/2 + canvas.getBoundsInParent().getMinY()));
@@ -325,6 +325,34 @@ public class DessinerPlan {
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 		
 	}
+    public Group afficherChemin(ArrayList<Troncon> chemin,Intersection i){
+		Group group = new Group();
+		Circle circle1 = dessine.get(i.getId());
+    	canvas.getChildren().remove(circle1);
+    	circle1.setStroke(Color.GREEN);
+    	circle1.setFill(Color.GREEN);
+    	canvas.getChildren().add(circle1);
+    	
+    	int j =0;
+    	for (Troncon t : chemin){
+    		if (t.getOrigine().getId() == i.getId()){
+    			System.out.println("EQUAL");
+    			j++;
+    			Circle circle2 = dessine.get(t.getOrigine().getId());
+            	canvas.getChildren().remove(circle2);
+            	circle2.setStroke(Color.GREEN);
+            	circle2.setFill(Color.GREEN);
+            	canvas.getChildren().add(circle2);
+            	Line line = new Line(circle1.getLayoutX(), circle2.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+            	line.setFill(Color.GREEN);
+                line.setStroke(Color.GREEN);
+                canvas.getChildren().add(line);
+                
+    		}else{}
+    		if (j==7) break;
+    	}
+    	return group;
+    }
     
    
 }
