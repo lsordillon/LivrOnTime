@@ -4,31 +4,22 @@ package vue;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.sun.org.apache.xpath.internal.operations.Minus;
-
 import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
 import model.Troncon;
-import javafx.application.Application;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 class PannableCanvas extends Pane {
 
@@ -352,10 +343,10 @@ public class DessinerPlan {
             	line.setStrokeWidth(4);
             	line.setFill(Color.GREEN);
                 line.setStroke(Color.GREEN);
+                line.setStrokeWidth(4);
                 canvas.getChildren().add(line);
                 
-    		}else{}
-    		if (j==7) break;
+    		}
     	}
     	return group;
     }

@@ -1,7 +1,5 @@
 package controller;
 
-
-
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
+import model.Tournee;
 import util.parserXML.XmlParserLivraison;
 import util.parserXML.XmlParserPlan;
 import vue.DessinerPlan;
@@ -108,11 +107,11 @@ public class AccueilController implements Initializable {
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		//Tournee tournee=
-				//plan.calculerLaTournee(dl);
+		Tournee tournee=plan.calculerLaTournee(dl);
+
 		Intersection i = plan.getTroncons().get(0).getOrigine();
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(plan.getTroncons(), i));
-		System.out.println("test");
+
+		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee.getItineraire().get(0).getTroncons(), i));
 	    dessinerPlan.PannableScene(VuePlan.getScene());
 			    
 	}
@@ -127,7 +126,7 @@ public class AccueilController implements Initializable {
 		plan.TronconsVoisins();
 		return plan;
 
-	}
+	}   
 
 	
 	/*public void ListerLivraisons(ArrayList<Livraison> livraisons){

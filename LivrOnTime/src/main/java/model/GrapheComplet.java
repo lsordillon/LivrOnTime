@@ -1,7 +1,5 @@
 package model;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class GrapheComplet {
@@ -15,7 +13,7 @@ public class GrapheComplet {
 		couts= new double [taille][taille];
 	
 		int i;
-		//remplir les durées
+		//remplir les durees
 		for(i=1;i<taille;i++) {
 			duree[i]=listeLivraisons.get(i-1).getDuree();
 		}
