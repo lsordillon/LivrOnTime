@@ -14,7 +14,7 @@ public class Main extends Application {
 	 */
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../fxml/Accueil.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../fxml/AccueilNew.fxml"));
         primaryStage.setTitle("LivrOnTime");
         primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.show();

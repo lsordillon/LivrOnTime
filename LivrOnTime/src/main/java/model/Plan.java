@@ -1,7 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -17,7 +17,7 @@ public class Plan {
 	
 
 	private ArrayList <Livraison> solution;
-	private ArrayList <Chemin> analyse;
+	private Chemin[][] chemin;
 	
 	private GrapheComplet graphe_complet;
 	private HashMap<Long,Intersection> Intersections = new HashMap();
@@ -135,7 +135,7 @@ public void calculDijkstra(DemandeLivraison DL){
 		ArrayList<Intersection> IntersectionsDL=RemplirIntersectionsDL(DL);
 		int N_IntersectionsDL=IntersectionsDL.size();
 		double cout[][] = null;
-	Chemin chemin[][]=null;
+	chemin=null;
 	Date HeureD=DL.getHeureDepart();
 	Date HeureA;
 	
@@ -148,7 +148,14 @@ public void calculDijkstra(DemandeLivraison DL){
 			       chemin[i][j].setHeureDepart(HeureD);
 			       chemin[i][j].setOrigine(IntersectionsDL.get(i));
 			       chemin[i][j].setDestination(IntersectionsDL.get(j));
-			       HeureA=HeureD;///a completer
+			       
+			       double tempsSup = cout[i][j]/(15.0/36.0); // conversion correcte a faire A DEPLACER
+			       Calendar cal = Calendar.getInstance();
+			       cal.setTime(HeureD);
+			       cal.add(Calendar.SECOND, (int)(tempsSup));
+			       HeureA = cal.getTime();
+			       
+			       
 			       chemin[i][j].setHeureArrivee(HeureD);
 			       int k=i;
 			       
@@ -189,20 +196,34 @@ public void setTroncons(ArrayList<Troncon> troncons) {
 }
 
 
-public void calculerLaTournee(DemandeLivraison dl) {
+public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	Dijkstra d = new Dijkstra();
 	Intersection ptDepart = dl.getAdresseEntrepot();
 	d.algoDijkstra(this, ptDepart);
-	/*int tpLimite = 10;
-	calculDijkstra(dl);
+	//-----------------------------------------
+
+	int tpLimite = 10;
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size();
+	ArrayList <Chemin> itineraire = new ArrayList ();
+	
+	calculDijkstra(dl);
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
-	for(int i=0; i<nbSommet;i++) {
+	
+	for(int i=0; i<nbSommet-1;i++) {
 		System.out.print(etape2.getMeilleureSolution(i)+";");
+		itineraire.add(chemin[etape2.getMeilleureSolution(i)][etape2.getMeilleureSolution(i-1)]);
 	}
-	System.out.println(" ");*/
+	
+	System.out.println(" ");
+
+	itineraire.add(chemin[nbSommet-1][0]);
+	System.out.println(etape2.getMeilleureSolution(nbSommet-1));
+	
+	Tournee tournee = new Tournee(itineraire);
+	
+	return tournee;
 }
 
 }
