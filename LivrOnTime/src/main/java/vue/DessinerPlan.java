@@ -312,6 +312,7 @@ public class DessinerPlan {
         	circle.setRadius(8);
             canvas.getChildren().add(circle);
         }
+     
       
         return group;
 		             
@@ -325,6 +326,7 @@ public class DessinerPlan {
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 		
 	}
+    
     public Group afficherChemin(ArrayList<Troncon> chemin,Intersection i){
 		Group group = new Group();
 		Circle circle1 = dessine.get(i.getId());
