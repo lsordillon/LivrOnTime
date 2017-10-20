@@ -26,6 +26,15 @@ public class DemandeLivraison {
 		return this.listeLivraisons;
 	}
 	
+	public ArrayList<Intersection> getIntersections(){
+		ArrayList<Intersection> intersections=new ArrayList();
+		intersections.add(adresseEntrepot);
+		for(int i=0; i<listeLivraisons.size();i++) {
+			intersections.add(listeLivraisons.get(i).getDestination());
+		}
+		return intersections;
+	}
+	
 	public DemandeLivraison(NodeList livraisons, NodeList entrepot,Plan plan) {
 		
 		

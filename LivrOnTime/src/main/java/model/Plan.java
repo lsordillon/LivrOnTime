@@ -17,7 +17,7 @@ public class Plan {
 	
 
 	private ArrayList <Livraison> solution;
-	private Chemin[][] chemin;
+	private ArrayList <Chemin> chemins=new ArrayList();
 	
 	private GrapheComplet graphe_complet;
 	private HashMap<Long,Intersection> Intersections = new HashMap();
@@ -120,16 +120,9 @@ public void CalculPCC(Intersection inter){
 	 distance=GrapheDuPlan.shortestPath(conversion(inter));
 	 precedence=GrapheDuPlan.predecenceTable();
 }
-public Troncon trouverTroncon(Intersection origine, Intersection distination){
-	int i;
-	for(i=0; i<N_Troncons; i++)
-		if(Troncons.get(i).getOrigine()==origine && Troncons.get(i).getDestination()==distination) 
-		break;
-		
-	 return Troncons.get(i);
-}
 
-public void calculDijkstra(DemandeLivraison DL){
+
+/*public void calculDijkstra(DemandeLivraison DL){
 		Intersection entropot=DL.getAdresseEntrepot();
 		ArrayList<Livraison> Livraisons=DL.getLivraisons();
 		ArrayList<Intersection> IntersectionsDL=RemplirIntersectionsDL(DL);
@@ -173,7 +166,7 @@ public void calculDijkstra(DemandeLivraison DL){
 	
 	graphe_complet=new GrapheComplet(Livraisons,cout);
 	
-}
+}*/
 
 
 
@@ -195,12 +188,53 @@ public void setTroncons(ArrayList<Troncon> troncons) {
 	Troncons = troncons;
 }
 
+public void deroulerLesDijkstra (DemandeLivraison dl) {		
+	Dijkstra d = new Dijkstra();
+	ArrayList <Intersection> origines=new ArrayList(dl.getIntersections());
+	for (int j=0; j<origines.size();j++) {
+		Intersection ptDepart = origines.get(j);
+		d.algoDijkstra(this, ptDepart);
+		ArrayList <Intersection> destinations=new ArrayList(dl.getIntersections());
+		
+		destinations.remove(ptDepart);
+		
+		for (int i=0; i<destinations.size();i++) {
+			Chemin chemin = new Chemin();
+			chemin.setOrigine(ptDepart);
+			chemin.setDestination(destinations.get(i));
+			
+			Intersection courante = destinations.get(i);
+			ArrayList<Troncon> troncons=new ArrayList();
+			while (courante!=ptDepart) {
+				Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
+				if(troncon!=null) {
+					troncons.add(0, troncon);
+				}
+				courante=courante.getPredecesseur();
+			}
+			chemin.setTroncons(troncons);
+			chemins.add(chemin);
+		}
+	} 	
+}
+
+public Troncon trouverTroncon (Intersection origine, Intersection destination) {
+	Troncon result=null;
+	for(int i=0; i<Troncons.size(); i++) {
+		if(Troncons.get(i).getDestination()==destination && Troncons.get(i).getOrigine()==origine ) {
+			result = Troncons.get(i);
+			break;
+		}
+	}
+	return result;
+}
 
 public void calculerLaTournee(DemandeLivraison dl) {
 	
-	Dijkstra d = new Dijkstra();
-	Intersection ptDepart = dl.getAdresseEntrepot();
-	d.algoDijkstra(this, ptDepart);
+	deroulerLesDijkstra(dl);
+	for(int i=0; i<chemins.size();i++) {
+		System.out.println(chemins.get(i).toString());
+	}
 	//-----------------------------------------
 /*
 	int tpLimite = 10;

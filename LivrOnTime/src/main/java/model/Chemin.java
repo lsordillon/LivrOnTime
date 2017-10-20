@@ -51,4 +51,12 @@ public class Chemin {
 		this.troncons = troncons;
 	}
 
+	@Override
+	public String toString() {
+		return "Chemin [heureArrivee=" + heureArrivee + ", origine=" + origine + ", destination=" + destination
+				+ ", troncons=" + troncons + ", heureDepart=" + heureDepart + "]";
+	}
+	
+	
+
 }

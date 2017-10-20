@@ -12,6 +12,7 @@ public class Livraison {
 	public int getDuree() {
 		return duree;
 	}
+
 	
 	public Date getDebutPlageHoraire() {
 		return this.debutPlageHoraire;
