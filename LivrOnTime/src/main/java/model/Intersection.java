@@ -7,6 +7,8 @@ public class Intersection {
 	private int x;
 	private int y;
 	private ArrayList<Troncon> tronconsVersVoisins;
+	private Intersection predecesseur;
+	private double distance;
 	
 
 	public Intersection(long id, int x, int y) {
@@ -16,6 +18,32 @@ public class Intersection {
 		tronconsVersVoisins = new ArrayList<Troncon>();
 	}
 	
+	
+	
+	public Intersection getPredecesseur() {
+		return predecesseur;
+	}
+
+
+
+	public void setPredecesseur(Intersection predecesseur) {
+		this.predecesseur = predecesseur;
+	}
+
+
+
+	public double getDistance() {
+		return distance;
+	}
+
+
+
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
+
+
+
 	public ArrayList<Troncon> getTronconsVersVoisins() {
 		return this.tronconsVersVoisins;
 	}
@@ -25,6 +53,11 @@ public class Intersection {
 		return this.tronconsVersVoisins;
 	}
 
+	public String toString() {
+		
+		String affichage = "ID ="+id+"NbTroncons"+tronconsVersVoisins.size();
+		return affichage;
+	}
 
 	public long getId() {
 		return id;

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import DijikstraCalcul.Graph;
+import util.tsp.Dijkstra;
 import util.tsp.TSP;
 import util.tsp.TSP1;
 
@@ -18,11 +20,11 @@ public class Plan {
 	private ArrayList <Chemin> analyse;
 	
 	private GrapheComplet graphe_complet;
-	private static HashMap<Long,Intersection> Intersections = new HashMap();
-	private static ArrayList<Long> id_intersections=new ArrayList<Long>();
-	private static int N_intersections;;
-	private static ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
-	private static int N_Troncons;
+	private HashMap<Long,Intersection> Intersections = new HashMap();
+	private ArrayList<Long> id_intersections=new ArrayList<Long>();
+	private int N_intersections;;
+	private ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
+	private int N_Troncons;
 	
 	//private static DemandeLivraison DL
 
@@ -30,7 +32,7 @@ public class Plan {
 	
 
         
-  private static ArrayList<Intersection> RemplirIntersectionsDL(DemandeLivraison DL){
+  private ArrayList<Intersection> RemplirIntersectionsDL(DemandeLivraison DL){
 	  ArrayList<Intersection> list = new ArrayList();
 	// list.add(entropot);
 	  int N_livraisons = DL.getLivraisons().size();
@@ -57,9 +59,9 @@ public void CreerTroncons(NodeList troncons) {
   for(int j = 0; j<nbTroncons; j++) {
       final Element troncon = (Element) troncons.item(j);
       Long k = Long.parseLong(troncon.getAttribute("destination"));
-      Intersection intersectionD = Plan.Intersections.get(k);
+      Intersection intersectionD = Intersections.get(k);
       k = Long.parseLong(troncon.getAttribute("origine"));
-      Intersection intersectionO = Plan.Intersections.get(k); 
+      Intersection intersectionO = Intersections.get(k); 
       Troncons.add(new Troncon(intersectionD, Double.parseDouble(troncon.getAttribute("longueur")), troncon.getAttribute("nomRue") , intersectionO));
   
   }
@@ -71,8 +73,17 @@ public void TronconsVoisins() {
 	
 	for(int i =0; i< Troncons.size();i++) {
 		Troncons.get(i).getOrigine().setTronconsVersVoisins(Troncons.get(i));
-		System.out.println(Troncons.get(i).getOrigine().getTronconsVersVoisins());
 	}
+	
+	/*Collection <Intersection> inter = Intersections.values();
+	ArrayList inters = new ArrayList(inter);
+	for ( int i =0; i<inters.size();i++) {
+		ArrayList<Troncon> tr = ((Intersection) inters.get(i)).getTronconsVersVoisins();
+		System.out.println(inters.get(i));
+		for ( int j =0; j<tr.size();j++) {
+			System.out.println("Voisin : " + tr.get(j).getDestination() + "   " + tr.get(j).getLongueur() );
+		}
+	}*/
 }
 
 //le graphe qui contient tt les point de plan
@@ -164,22 +175,26 @@ public void calculDijkstra(DemandeLivraison DL){
 
 
 
-public static HashMap<Long, Intersection> getIntersections() {
+public HashMap<Long, Intersection> getIntersections() {
 	return Intersections;
 }
-public static void setIntersections(HashMap<Long, Intersection> intersections) {
+public void setIntersections(HashMap<Long, Intersection> intersections) {
 	Intersections = intersections;
 }
-public static ArrayList<Troncon> getTroncons() {
+public ArrayList<Troncon> getTroncons() {
 	return Troncons;
 }
-public static void setTroncons(ArrayList<Troncon> troncons) {
+public void setTroncons(ArrayList<Troncon> troncons) {
 	Troncons = troncons;
 }
 
 
 public void calculerLaTournee(DemandeLivraison dl) {
-	int tpLimite = 10;
+	
+	Dijkstra d = new Dijkstra();
+	Intersection ptDepart = dl.getAdresseEntrepot();
+	d.algoDijkstra(this, ptDepart);
+	/*int tpLimite = 10;
 	calculDijkstra(dl);
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size();
@@ -187,7 +202,7 @@ public void calculerLaTournee(DemandeLivraison dl) {
 	for(int i=0; i<nbSommet;i++) {
 		System.out.print(etape2.getMeilleureSolution(i)+";");
 	}
-	System.out.println(" ");
+	System.out.println(" ");*/
 }
 
 }
