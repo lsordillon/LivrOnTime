@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -137,7 +138,14 @@ public void calculDijkstra(DemandeLivraison DL){
 			       chemin[i][j].setHeureDepart(HeureD);
 			       chemin[i][j].setOrigine(IntersectionsDL.get(i));
 			       chemin[i][j].setDestination(IntersectionsDL.get(j));
-			       HeureA=HeureD;///a completer
+			       
+			       double tempsSup = cout[i][j]/(15.0/36.0); // conversion correcte a faire A DEPLACER
+			       Calendar cal = Calendar.getInstance();
+			       cal.setTime(HeureD);
+			       cal.add(Calendar.SECOND, (int)(tempsSup));
+			       HeureA = cal.getTime();
+			       
+			       
 			       chemin[i][j].setHeureArrivee(HeureD);
 			       int k=i;
 			       
