@@ -188,10 +188,18 @@ public class DessinerPlan {
 	
 	Pane overlay = new Pane();
 	PannableCanvas canvas = new PannableCanvas();
-	HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
+	public static HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
 	
 
-    // Methode qui dessine les troncons
+    public static HashMap<Long, Circle> getDessine() {
+		return dessine;
+	}
+
+	public static void setDessine(HashMap<Long, Circle> dessine) {
+		DessinerPlan.dessine = dessine;
+	}
+
+	// Methode qui dessine les troncons
     public void dessinerTroncon(Intersection D, Intersection O) {
     	int x,y;
     	   
