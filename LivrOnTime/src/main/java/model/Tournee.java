@@ -10,4 +10,7 @@ public class Tournee {
 		public Tournee(ArrayList<Chemin> itineraire2) {
 		itineraire=itineraire2;
 	}
+		public ArrayList <Chemin> getItineraire(){
+			return itineraire;
+		}
 }

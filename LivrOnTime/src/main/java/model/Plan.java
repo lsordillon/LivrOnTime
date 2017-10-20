@@ -229,21 +229,55 @@ public Troncon trouverTroncon (Intersection origine, Intersection destination) {
 	return result;
 }
 
+public Chemin trouverChemin (Intersection origine, Intersection destination) {
+	Chemin result=null;
+	for(int i=0; i<chemins.size(); i++) {
+		if(chemins.get(i).getDestination()==destination && chemins.get(i).getOrigine()==origine ) {
+			result = chemins.get(i);
+			break;
+		}
+	}
+	return result;
+}
+
 public void calculerLaTournee(DemandeLivraison dl) {
 	
 	deroulerLesDijkstra(dl);
 	for(int i=0; i<chemins.size();i++) {
 		System.out.println(chemins.get(i).toString());
 	}
-	//-----------------------------------------
-/*
+	
+	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	int tpLimite = 10;
 	TSP etape2 = new TSP1 ();
-	int nbSommet=dl.getLivraisons().size();
+	int nbSommet=dl.getLivraisons().size()+1;
 	ArrayList <Chemin> itineraire = new ArrayList ();
 	
-	calculDijkstra(dl);
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
+	
+	for(int i=0; i<nbSommet-1;i++) {
+		System.out.print(etape2.getMeilleureSolution(i)+";");
+		Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(i));
+		Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(i+1));
+		itineraire.add(trouverChemin(origine,destination));
+	}
+	
+	System.out.println(" ");
+
+
+	Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(0));
+	Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(nbSommet-1));
+	itineraire.add(trouverChemin(origine,destination));
+
+	
+	Tournee tournee = new Tournee(itineraire);
+	for(int j=0;j<tournee.getItineraire().size();j++) {
+		System.out.println(tournee.getItineraire().get(j).toString());
+	}
+	
+	//-----------------------------------------
+/*
+
 	
 	for(int i=0; i<nbSommet-1;i++) {
 		System.out.print(etape2.getMeilleureSolution(i)+";");
