@@ -10,24 +10,26 @@ import model.*;
 public class Dijkstra {
 	
 		public void algoDijkstra(Plan plan, Intersection ptDepart) {
-			System.out.println("Dijkstra");
+			
+			//INIT des éléments
 			HashMap<Long,Intersection> intersections = plan.getIntersections();
 			
 			Collection <Intersection> inter = intersections.values();
 			ArrayList <Intersection> sommetsBlancs = new ArrayList<Intersection> (inter);
 			ArrayList <Intersection> sommetsGris = new ArrayList<Intersection> ();
-					
+			
+			//Pré remplissage des predecesseurs à NULL et des couts à infini
 			for (int i =0; i<sommetsBlancs.size();i++) {
 				sommetsBlancs.get(i).setPredecesseur(null);
 				sommetsBlancs.get(i).setDistance(Double.MAX_VALUE);
 			}
 			
+			//Réalisation du processus sur le premier point 
 			sommetsBlancs.remove(ptDepart);
 			sommetsGris.add(ptDepart);
 			ptDepart.setDistance(0.0);
 			
 			ArrayList <Troncon> versVoisins = ptDepart.getTronconsVersVoisins();
-			
 			Iterator<Troncon> it = versVoisins.iterator();
 			Troncon nextTroncon;
 			Intersection nextIntersection;
@@ -45,8 +47,18 @@ public class Dijkstra {
 			
 			
 			while (!sommetsBlancs.isEmpty()||!sommetsGris.isEmpty()) {
-				Intersection courant = chercherMin(sommetsGris);
-				System.out.println(courant);
+				System.out.println("taille de sommets gris : "+sommetsGris.size());
+				Intersection courant;
+				if(sommetsGris.isEmpty()) {
+					courant=sommetsBlancs.get(0);
+					sommetsBlancs.remove(0);
+					sommetsGris.add(courant);
+				}
+				else {
+					courant = chercherMin(sommetsGris);
+				}
+				
+				//System.out.println(courant);
 
 				versVoisins = courant.getTronconsVersVoisins();
 				
@@ -69,6 +81,7 @@ public class Dijkstra {
 				}
 				
 				sommetsGris.remove(courant);
+
 			}
 			
 			System.out.println("Fin");
@@ -81,9 +94,12 @@ public class Dijkstra {
 			
 			while(it2.hasNext()){
 				next2 = it2.next();
-				System.out.println(next2.getDistance());	
-				System.out.println(next2.getPredecesseur());
+				//System.out.println(next2.getDistance());	
+				//System.out.println(next2.getPredecesseur());
 			}
+			
+			sommetsGris.clear();
+			sommetsBlancs.clear();
 		}
 		
 		public Intersection chercherMin (ArrayList<Intersection> sommetsGris) {

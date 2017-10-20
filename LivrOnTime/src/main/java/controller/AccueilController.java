@@ -121,10 +121,9 @@ public class AccueilController implements Initializable {
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		//Tournee tournee=
-				plan.calculerLaTournee(dl);
+		Tournee tournee=plan.calculerLaTournee(dl);
 		Intersection i = plan.getTroncons().get(0).getOrigine();
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(plan.getTroncons(), i));
+		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee.getItineraire().get(0).getTroncons(), i));
 	    dessinerPlan.PannableScene(VuePlan.getScene());
 			    
 	}

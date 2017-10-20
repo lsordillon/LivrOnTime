@@ -348,10 +348,10 @@ public class DessinerPlan {
             	Line line = new Line(circle1.getLayoutX(), circle2.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
             	line.setFill(Color.GREEN);
                 line.setStroke(Color.GREEN);
+                line.setStrokeWidth(4);
                 canvas.getChildren().add(line);
                 
-    		}else{}
-    		if (j==7) break;
+    		}
     	}
     	return group;
     }

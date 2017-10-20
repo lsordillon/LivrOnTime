@@ -193,6 +193,8 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 	ArrayList <Intersection> origines=new ArrayList(dl.getIntersections());
 	for (int j=0; j<origines.size();j++) {
 		Intersection ptDepart = origines.get(j);
+		
+		System.out.println(j+1);
 		d.algoDijkstra(this, ptDepart);
 		ArrayList <Intersection> destinations=new ArrayList(dl.getIntersections());
 		
@@ -240,9 +242,10 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
 	return result;
 }
 
-public void calculerLaTournee(DemandeLivraison dl) {
+public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	deroulerLesDijkstra(dl);
+	System.out.println("CHEMINS");
 	for(int i=0; i<chemins.size();i++) {
 		System.out.println(chemins.get(i).toString());
 	}
@@ -256,42 +259,24 @@ public void calculerLaTournee(DemandeLivraison dl) {
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
 	
 	for(int i=0; i<nbSommet-1;i++) {
-		System.out.print(etape2.getMeilleureSolution(i)+";");
 		Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(i));
 		Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(i+1));
 		itineraire.add(trouverChemin(origine,destination));
 	}
-	
-	System.out.println(" ");
 
 
 	Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(0));
 	Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(nbSommet-1));
 	itineraire.add(trouverChemin(origine,destination));
 
-	
+	System.out.println("LA TOURNEE");
 	Tournee tournee = new Tournee(itineraire);
 	for(int j=0;j<tournee.getItineraire().size();j++) {
 		System.out.println(tournee.getItineraire().get(j).toString());
 	}
-	
-	//-----------------------------------------
-/*
 
 	
-	for(int i=0; i<nbSommet-1;i++) {
-		System.out.print(etape2.getMeilleureSolution(i)+";");
-		itineraire.add(chemin[etape2.getMeilleureSolution(i)][etape2.getMeilleureSolution(i-1)]);
-	}
-	
-	System.out.println(" ");
-
-	itineraire.add(chemin[nbSommet-1][0]);
-	System.out.println(etape2.getMeilleureSolution(nbSommet-1));
-	
-	Tournee tournee = new Tournee(itineraire);
-	
-	return tournee;*/
+	return tournee;
 }
 
 }
