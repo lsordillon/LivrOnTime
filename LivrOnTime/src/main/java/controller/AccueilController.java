@@ -120,7 +120,8 @@ public class AccueilController implements Initializable {
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		Tournee tournee=plan.calculerLaTournee(dl);
+		//Tournee tournee=
+				plan.calculerLaTournee(dl);
 	}
 	
 	public Plan CreerPlan(String chemin){

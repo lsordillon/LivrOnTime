@@ -196,13 +196,13 @@ public void setTroncons(ArrayList<Troncon> troncons) {
 }
 
 
-public Tournee calculerLaTournee(DemandeLivraison dl) {
+public void calculerLaTournee(DemandeLivraison dl) {
 	
 	Dijkstra d = new Dijkstra();
 	Intersection ptDepart = dl.getAdresseEntrepot();
 	d.algoDijkstra(this, ptDepart);
 	//-----------------------------------------
-
+/*
 	int tpLimite = 10;
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size();
@@ -223,7 +223,7 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	Tournee tournee = new Tournee(itineraire);
 	
-	return tournee;
+	return tournee;*/
 }
 
 }
