@@ -146,7 +146,7 @@ class SceneGestures {
 
             scale = clamp( scale, MIN_SCALE, MAX_SCALE);
 
-            double f = (scale / oldScale)-1;
+            double f = (scale- oldScale / oldScale);
 
             double dx = (event.getSceneX() - (canvas.getBoundsInParent().getWidth()/2 + canvas.getBoundsInParent().getMinX()));
             double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight()/2 + canvas.getBoundsInParent().getMinY()));
