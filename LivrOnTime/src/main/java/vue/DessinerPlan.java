@@ -135,8 +135,9 @@ class SceneGestures {
         public void handle(ScrollEvent event) {
 
             double delta = 1.2;
-
-            double scale = canvas.getScale(); // currently we only use Y, same value is used for X
+            
+            double scale = canvas.getScale();
+            System.out.println(scale);// currently we only use Y, same value is used for X
             double oldScale = scale;
 
             if (event.getDeltaY() < 0)
@@ -207,11 +208,11 @@ public class DessinerPlan {
     	Circle circle1 = new Circle(1);
     	 circle1.setStroke(Color.BLACK);
          circle1.setFill(Color.BLACK);
-         x= (int)((D.getX() - minusX)*1500.0 / divX);
-         y=(int)((D.getY() - minusY) *1500.0/ divY);
+         x= (int)((D.getX() - minusX)*600.0 / divX);
+         y=(int)((D.getY() - minusY) *600.0/ divY);
          circle1.relocate(y , -x);
-         x= (int)((O.getX() - minusX)*1500.0/ divX);
-         y=(int)((O.getY() - minusY)*1500.0/ divY );
+         x= (int)((O.getX() - minusX)*600.0/ divX);
+         y=(int)((O.getY() - minusY)*600.0/ divY );
     	Circle circle2 = new Circle(1);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
@@ -329,6 +330,8 @@ public class DessinerPlan {
     
     public Group afficherChemin(ArrayList<Troncon> chemin,Intersection i){
 		Group group = new Group();
+		canvas.setTranslateX(-(maxX-minX)*2000/divX);
+        canvas.setTranslateY((maxY-minY)*2000/divX);
 		Circle circle1 = dessine.get(i.getId());
     	canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
@@ -346,6 +349,7 @@ public class DessinerPlan {
             	circle2.setFill(Color.GREEN);
             	canvas.getChildren().add(circle2);
             	Line line = new Line(circle1.getLayoutX(), circle2.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+            	line.setStrokeWidth(4);
             	line.setFill(Color.GREEN);
                 line.setStroke(Color.GREEN);
                 canvas.getChildren().add(line);

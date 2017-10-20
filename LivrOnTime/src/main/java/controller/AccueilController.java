@@ -7,34 +7,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -43,7 +31,6 @@ import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
-import model.Tournee;
 import util.parserXML.XmlParserLivraison;
 import util.parserXML.XmlParserPlan;
 import vue.DessinerPlan;
@@ -52,7 +39,7 @@ import vue.DessinerPlan;
 
 public class AccueilController implements Initializable {
 	
-	//Etape 1 : Redéfinir tout les composants existants dans le fichier fxml comme des attributs public du controller
+	//Etape 1 : Redefinir tout les composants existants dans le fichier fxml comme des attributs public du controller
 	public AnchorPane VuePlan;
 	public AnchorPane VueControl;
 	public AnchorPane VueDescriptif; 
@@ -67,11 +54,11 @@ public class AccueilController implements Initializable {
 	
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		// cette méthode sert à initialiser la vue (vide pour le moment)
+		// cette methode sert a� initialiser la vue (vide pour le moment)
 	
 	}
 
-	// L'implémentation méthode executer par le button ChargerButton ==> voir Accueil.fxml (onAction="#ChargerFichier"):
+	// L'implementation methode executer par le button ChargerButton ==> voir Accueil.fxml (onAction="#ChargerFichier"):
 	
 	public void ChargerFichier (ActionEvent actionEvent) {
 		
@@ -86,7 +73,7 @@ public class AccueilController implements Initializable {
 		    dessinerPlan = new DessinerPlan();
 		    plan = CreerPlan(selectedFile.getAbsolutePath());
 		    Group group = dessinerPlan.Dessiner(plan);
-		    // On déssine le plan (on le met dans un Group) et puis on l'ajoute à notre anchorpane "VuePlan"
+		    // On dessine le plan (on le met dans un Group) et puis on l'ajoute a� notre anchorpane "VuePlan"
 		    VuePlan.getChildren().clear();
 		    VuePlan.getChildren().add(group);
 		    dessinerPlan.PannableScene(VuePlan.getScene());
@@ -122,9 +109,10 @@ public class AccueilController implements Initializable {
 	
 	public void CalculTournee(ActionEvent actionEvent) {
 		//Tournee tournee=
-				plan.calculerLaTournee(dl);
+				//plan.calculerLaTournee(dl);
 		Intersection i = plan.getTroncons().get(0).getOrigine();
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(plan.getTroncons(), i));
+		System.out.println("test");
 	    dessinerPlan.PannableScene(VuePlan.getScene());
 			    
 	}
@@ -148,7 +136,7 @@ public class AccueilController implements Initializable {
 		AccueilLabel.setVisible(false);
 		
 	ListView<HBox> listeLivraison = new ListView<>();
-	HBox HBox  = new HBox(new Label("Plages Horaires"),new Label("Adresse"),new Label("Durée"));
+	HBox HBox  = new HBox(new Label("Plages Horaires"),new Label("Adresse"),new Label("Duree"));
 	HBox.setSpacing(10);
 	HBox.setAlignment(Pos.CENTER);
 	listeLivraison.getChildren().add(HBox);
