@@ -77,7 +77,6 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 	for (int j=0; j<origines.size();j++) {
 		Intersection ptDepart = origines.get(j);
 		
-		System.out.println(j+1);
 		d.algoDijkstra(this, ptDepart);
 		ArrayList <Intersection> destinations=new ArrayList<Intersection>(dl.getIntersections());
 		
@@ -128,10 +127,6 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
 public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	deroulerLesDijkstra(dl);
-	System.out.println("CHEMINS");
-	for(int i=0; i<chemins.size();i++) {
-		System.out.println(chemins.get(i).toString());
-	}
 	
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	int tpLimite = 10;
