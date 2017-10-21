@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1"> 
+    <!-- Déclarations de éléments simples Temp (h:m:s) -->
+    <xsd:simpleType name="typeTime">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="([0-9])+:([0-60])+:([0-60])+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <!-- Déclarations de élément Entrepot avec son TYPE -->
+    <xsd:element name="entrepot" type="entrepotType" />
+    
+    <xsd:complexType name="entrepotType">
+        <xsd:attribute name="adresse" type="xsd:long" />
+        <xsd:attribute name="heureDepart" type="typeTime" />
+    </xsd:complexType>
+    
+    <!-- Déclarations de élément Livraison avec son TYPE -->
+    <xsd:element name="livraison" type="livraisonType" />
+    
+    <xsd:complexType name="livraisonType">
+        <xsd:attribute name="adresse" type="xsd:long" />
+        <xsd:attribute name="debutPlage" type="typeTime" use="optional"/>
+        <xsd:attribute name="duree" type="xsd:integer" />
+        <xsd:attribute name="finPlage" type="typeTime" use="optional"/>
+    </xsd:complexType>
+    
+    <!-- Déclarations de élément racine DemandeDeLivraison avec son TYPE -->
+            
+    <xsd:element name="demandeDeLivraisons" type="dlType"/>
+    <xsd:complexType name="dlType">
+        <xsd:sequence>
+            <xsd:element name="entrepot" type="entrepotType"/>
+            <xsd:element name="livraison" type="livraisonType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+
+</xsd:schema>

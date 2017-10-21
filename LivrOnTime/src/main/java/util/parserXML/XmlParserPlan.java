@@ -1,12 +1,23 @@
 package util.parserXML;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class XmlParserPlan {
 	
@@ -15,8 +26,12 @@ public class XmlParserPlan {
 	public static NodeList troncons;
 	
 	
-	    public Document Reader(String file_name){
+	    @SuppressWarnings("resource")
+		public Document Reader(String file_name) throws FileNotFoundException{
 	    	Document document= null;
+	    	InputStream xsd = new FileInputStream("src/main/java/resources/ValidationPlan.xsd");
+	    	InputStream xml = new FileInputStream(file_name);
+	    	if(validationXSD(xml, xsd)){
 	        try {
 	        	 
 	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -38,10 +53,27 @@ public class XmlParserPlan {
 	        noeuds = racine.getElementsByTagName("noeud");
 	      
 	        troncons = racine.getElementsByTagName("troncon");
-	    
+	    	
 	        
-	        
-	         return doc;
+	       
 	    	
 	}
+	    	 return doc;
+	}
+	   public boolean validationXSD(InputStream xml, InputStream xsd)
+	    {
+	        try
+	        {
+	            SchemaFactory factory = 
+	                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	            Schema schema = factory.newSchema(new StreamSource(xsd));
+	            Validator validator = schema.newValidator();
+	            validator.validate(new StreamSource(xml));
+	            return true;
+	        }
+	        catch(Exception ex)
+	        {
+	            return false;
+	        }
+	    }
 }

@@ -1,6 +1,9 @@
 package controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -12,10 +15,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -53,55 +58,68 @@ public class AccueilController implements Initializable {
 	
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		// cette methode sert a  initialiser la vue (vide pour le moment)
-	
+
 	}
 
-	// L'implementation methode executer par le button ChargerButton ==> voir Accueil.fxml (onAction="#ChargerFichier"):
 	
-	public void ChargerFichier (ActionEvent actionEvent) {
+	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
 		
-		//FileChooser ouvre une fenetre pour parcourir les repertoires et choisir un fichier XML
+
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML Files", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(null);
-
+		XmlParserPlan parserPlan = new XmlParserPlan();
 		if (selectedFile != null) {
 		   // System.out.println(selectedFile.getAbsolutePath());
 		    
 		    dessinerPlan = new DessinerPlan();
-		    plan = CreerPlan(selectedFile.getAbsolutePath());
-		    Group group = dessinerPlan.Dessiner(plan);
-		    
-		    // On dessine le plan (on le met dans un Group) et puis on l'ajoute a  notre anchorpane "VuePlan"
-		    VuePlan.getChildren().clear();
-		    VuePlan.getChildren().add(group);
-		    dessinerPlan.PannableScene(VuePlan.getScene());
-		    ChargerLivraison.setDisable(false);
+		
+		    InputStream xsd = new FileInputStream("src/main/java/resources/ValidationPlan.xsd");
+	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
+	        
+		    if (parserPlan.validationXSD(xml, xsd)){
+		    	 plan = CreerPlan(selectedFile.getAbsolutePath());
+		    	 Group group = dessinerPlan.Dessiner(plan);
+				    
+				    VuePlan.getChildren().clear();
+				    VuePlan.getChildren().add(group);
+				    dessinerPlan.PannableScene(VuePlan.getScene());
+				    ChargerLivraison.setDisable(false);
+		    }else{
+		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
+	    		alert.showAndWait();
+		    }
+		   
+		   
 		}
 		else {
 		    System.err.println("Error");
 		}	
 
 	}
-	public void ChargerLivraison(ActionEvent actionEvent) {
+	public void ChargerLivraison(ActionEvent actionEvent) throws FileNotFoundException {
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML Files", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(null);
 
 		if (selectedFile != null) {
-			XmlParserLivraison parserLivraison = new XmlParserLivraison();
-			parserLivraison.Reader(selectedFile.getAbsolutePath());
-			dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
+			InputStream xsd = new FileInputStream("src/main/java/resources/ValidationDL.xsd");
+	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
+	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
+	    	if(parserLivraison.validationXSD(xml, xsd)){
+	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
+				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
+				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
+			    dessinerPlan.PannableScene(VuePlan.getScene());
+			    ListerLivraisons(dl.getLivraisons());
+			    CalculTournee.setDisable(false);
+	    	}else{
+	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
+	    		alert.showAndWait();
+	    	}
 			
 			
-			VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
-		    dessinerPlan.PannableScene(VuePlan.getScene());
-		    ListerLivraisons(dl.getLivraisons());
-		    
-		   
-		    CalculTournee.setDisable(false);
 		}
 		
 	}
@@ -115,7 +133,7 @@ public class AccueilController implements Initializable {
 			    
 	}
 	
-	public Plan CreerPlan(String chemin){
+	public Plan CreerPlan(String chemin) throws FileNotFoundException{
 		XmlParserPlan parser = new XmlParserPlan();
 		Plan plan = new Plan();
 		

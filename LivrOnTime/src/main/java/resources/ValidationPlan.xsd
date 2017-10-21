@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Déclarations de élément noeud avec son TYPE -->
+    <xsd:element name="noeud" type="noeudType"/>
+
+    <xsd:complexType name="noeudType">
+        <xsd:attribute name="id" type="xsd:long"/>
+        <xsd:attribute name="x" type="xsd:long"/>
+        <xsd:attribute name="y" type="xsd:long"/>
+    </xsd:complexType>
+
+    <!-- Déclarations de élément troncon avec son TYPE -->
+    <xsd:element name="troncon" type="tronconType"/>
+
+    <xsd:complexType name="tronconType">
+        <xsd:attribute name="destination" type="xsd:long"/>
+        <xsd:attribute name="longueur" type="xsd:double"/>
+        <xsd:attribute name="nomRue" type="xsd:string"/>
+        <xsd:attribute name="origine" type="xsd:long"/>
+    </xsd:complexType>
+
+    <!-- Déclarations de élément racine reseau avec son TYPE -->
+
+    <xsd:element name="reseau" type="reseauType"/>
+
+    <xsd:complexType name="reseauType">
+        <xsd:sequence>
+            <xsd:element name="noeud" type="noeudType" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="troncon" type="tronconType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>
