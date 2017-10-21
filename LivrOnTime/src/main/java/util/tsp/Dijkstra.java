@@ -47,7 +47,6 @@ public class Dijkstra {
 			
 			
 			while (!sommetsBlancs.isEmpty()||!sommetsGris.isEmpty()) {
-				System.out.println("taille de sommets gris : "+sommetsGris.size());
 				Intersection courant;
 				if(sommetsGris.isEmpty()) {
 					courant=sommetsBlancs.get(0);
@@ -84,7 +83,6 @@ public class Dijkstra {
 
 			}
 			
-			System.out.println("Fin");
 			HashMap<Long,Intersection> inters = plan.getIntersections();
 			Collection <Intersection> inters2 = inters.values();
 			ArrayList <Intersection> inters3 = new ArrayList<Intersection> (inters2);
