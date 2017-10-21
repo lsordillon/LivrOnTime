@@ -4,10 +4,12 @@ package vue;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
+import model.Tournee;
 import model.Troncon;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -127,8 +129,7 @@ class SceneGestures {
 
             double delta = 1.2;
             
-            double scale = canvas.getScale();
-            System.out.println(scale);// currently we only use Y, same value is used for X
+            double scale = canvas.getScale();// currently we only use Y, same value is used for X
             double oldScale = scale;
 
             if (event.getDeltaY() < 0)
@@ -172,11 +173,14 @@ class SceneGestures {
  * An application with a zoomable and pannable canvas.
  */
 public class DessinerPlan {
-	public int divX = 40;
-	public int minusX =1300;
-	public int divY = 40;
-	public int minusY =1300;
-	int minX,minY,maxX=0,maxY=0;
+	
+	//Variables de mise a l'echelle
+	private int divX, minusX,divY,minusY;
+	private int minX,minY,maxX=0,maxY=0;
+	
+	//Taille supposee du canvas, a ne pas laisser en dur
+	double sizeCanvas=400.0;
+	double widthStroke=0.5;
 	
 	Pane overlay = new Pane();
 	PannableCanvas canvas = new PannableCanvas();
@@ -199,15 +203,25 @@ public class DessinerPlan {
     	Circle circle1 = new Circle(1);
     	 circle1.setStroke(Color.BLACK);
          circle1.setFill(Color.BLACK);
-         x= (int)((D.getX() - minusX)*600.0 / divX);
-         y=(int)((D.getY() - minusY) *600.0/ divY);
-         circle1.relocate(y , -x);
-         x= (int)((O.getX() - minusX)*600.0/ divX);
-         y=(int)((O.getY() - minusY)*600.0/ divY );
+         
+         //Mise a l'echelle
+         x= (int)((D.getX() - minusX)*sizeCanvas / divX);
+         y=(int)((D.getY() - minusY) *sizeCanvas/ divY);
+         circle1.setRadius(widthStroke/2);
+         
+         //Centrage
+         circle1.relocate(y + sizeCanvas/2, -x+sizeCanvas);
+         
+        //Mise a l'echelle
+        x= (int)((O.getX() - minusX)*sizeCanvas/ divX);
+        y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
     	Circle circle2 = new Circle(1);
+    	circle2.setRadius(widthStroke/2);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
-        circle2.relocate(y , -x);
+        
+        //Centrage
+        circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
     	
     	if (!dessine.containsKey(D.getId())){
     		canvas.getChildren().add(circle1);
@@ -220,22 +234,18 @@ public class DessinerPlan {
         	dessine.put(O.getId(), circle2);
         }
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
-        line.setStrokeWidth(2);
+        
+        line.setStrokeWidth(widthStroke);
+        //line.setId(O.getId()+""+D.getId());
 
         canvas.getChildren().add(line);
-        
-
-        
-		
 
     }
 
     public Group Dessiner(Plan plan) {
        
     	Group group = new Group();
-        
-     
-    	
+        	
     	int minX,minY,maxX=0,maxY=0;
     	//Calcul du minX et du min Y 
 	   	 for (Troncon T: plan.getTroncons()){
@@ -276,8 +286,6 @@ public class DessinerPlan {
         	
         	dessinerTroncon(T.getDestination(), T.getOrigine());
         }
-        canvas.setTranslateX(-(maxX-minX)*1000/divX);
-        canvas.setTranslateY((maxY-minY)*1000/divX);
         group.getChildren().add(canvas);
         return group;
                
@@ -286,14 +294,12 @@ public class DessinerPlan {
     public Group Dessiner(DemandeLivraison dl) {
     	ArrayList<Livraison> livraisons = dl.getLivraisons();
     	Group group = new Group();
-    	 canvas.setTranslateX(-(maxX-minX)*1000/divX);
-         canvas.setTranslateY((maxY-minY)*1000/divX);
         
         Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
         canvas.getChildren().remove(circle);
     	circle.setStroke(Color.RED);
     	circle.setFill(Color.RED);
-    	circle.setRadius(15);
+    	circle.setRadius(widthStroke*6);
     	 canvas.getChildren().add(circle);
         
         for (Livraison livraison : livraisons){
@@ -301,7 +307,7 @@ public class DessinerPlan {
         	canvas.getChildren().remove(circle);
         	circle.setStroke(Color.BLUE);
         	circle.setFill(Color.BLUE);
-        	circle.setRadius(8);
+        	circle.setRadius(widthStroke*4);
             canvas.getChildren().add(circle);
         }
      
@@ -318,36 +324,39 @@ public class DessinerPlan {
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 		
 	}
+   
     
-    public Group afficherChemin(ArrayList<Troncon> chemin,Intersection i){
+    public Group afficherChemin(Tournee tournee){
 		Group group = new Group();
-		canvas.setTranslateX(-(maxX-minX)*2000/divX);
-        canvas.setTranslateY((maxY-minY)*2000/divX);
-		Circle circle1 = dessine.get(i.getId());
+		
+		
+		//On affiche l'entrepot en vert
+		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
     	canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
     	circle1.setFill(Color.GREEN);
+    	circle1.setRadius(widthStroke*10);
     	canvas.getChildren().add(circle1);
-    	
-    	int j =0;
-    	for (Troncon t : chemin){
-    		if (t.getOrigine().getId() == i.getId()){
-    			System.out.println("EQUAL");
-    			j++;
-    			Circle circle2 = dessine.get(t.getOrigine().getId());
-            	canvas.getChildren().remove(circle2);
-            	circle2.setStroke(Color.GREEN);
-            	circle2.setFill(Color.GREEN);
-            	canvas.getChildren().add(circle2);
-            	Line line = new Line(circle1.getLayoutX(), circle2.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
-            	line.setStrokeWidth(4);
-            	line.setFill(Color.GREEN);
-                line.setStroke(Color.GREEN);
-                line.setStrokeWidth(4);
-                canvas.getChildren().add(line);
-                
+    
+    	Circle circle2;
+    	for (Chemin c : tournee.getItineraire()){
+    		for(Troncon t: c.getTroncons()){
+    			circle1=dessine.get(t.getOrigine().getId());
+    			circle2=dessine.get(t.getDestination().getId());
+    			
+    			 Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+    		        
+    			 line.setStroke(Color.GREEN);
+    			line.setFill(Color.GREEN);
+    		        line.setStrokeWidth(widthStroke*4);
+
+    		        canvas.getChildren().add(line);
+
     		}
+    		    
     	}
+    	
+    	
     	return group;
     }
     

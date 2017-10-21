@@ -72,6 +72,7 @@ public class AccueilController implements Initializable {
 		    dessinerPlan = new DessinerPlan();
 		    plan = CreerPlan(selectedFile.getAbsolutePath());
 		    Group group = dessinerPlan.Dessiner(plan);
+		    
 		    // On dessine le plan (on le met dans un Group) et puis on l'ajoute a  notre anchorpane "VuePlan"
 		    VuePlan.getChildren().clear();
 		    VuePlan.getChildren().add(group);
@@ -109,9 +110,7 @@ public class AccueilController implements Initializable {
 	public void CalculTournee(ActionEvent actionEvent) {
 		Tournee tournee=plan.calculerLaTournee(dl);
 
-		Intersection i = plan.getTroncons().get(0).getOrigine();
-
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee.getItineraire().get(0).getTroncons(), i));
+		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene());
 			    
 	}
