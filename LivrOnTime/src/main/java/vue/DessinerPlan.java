@@ -126,20 +126,14 @@ class SceneGestures {
     private EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
 
         public void handle(ScrollEvent event) {
-
-            double delta = 1.2;
             
             double scale = canvas.getScale();// currently we only use Y, same value is used for X
             double oldScale = scale;
-
-            if (event.getDeltaY() < 0)
-                scale /= delta;
-            else
-                scale *= delta;
-
+            
+            scale *= Math.pow(1.01, event.getDeltaY());
             scale = clamp( scale, MIN_SCALE, MAX_SCALE);
 
-            double f = (scale - oldScale / oldScale);
+            double f = (scale / oldScale)-1;
 
             double dx = (event.getSceneX() - (canvas.getBoundsInParent().getWidth()/2 + canvas.getBoundsInParent().getMinX()));
             double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight()/2 + canvas.getBoundsInParent().getMinY()));
@@ -149,6 +143,7 @@ class SceneGestures {
             canvas.setPivot(f*dx, f*dy);
 
             event.consume();
+            
 
         }
 
@@ -158,10 +153,13 @@ class SceneGestures {
     public static double clamp( double value, double min, double max) {
 
         if( Double.compare(value, min) < 0)
+        {
             return min;
-
+        }
         if( Double.compare(value, max) > 0)
+        {
             return max;
+        }
 
         return value;
     }

@@ -15,12 +15,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -31,7 +29,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 import model.DemandeLivraison;
-import model.Intersection;
 import model.Livraison;
 import model.Plan;
 import model.Tournee;
@@ -86,8 +83,8 @@ public class AccueilController implements Initializable {
 				    dessinerPlan.PannableScene(VuePlan.getScene());
 				    ChargerLivraison.setDisable(false);
 		    }else{
-		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
-	    		alert.showAndWait();
+		    	/**Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
+	    		alert.showAndWait();*/
 		    }
 		   
 		   
@@ -115,8 +112,8 @@ public class AccueilController implements Initializable {
 			    ListerLivraisons(dl.getLivraisons());
 			    CalculTournee.setDisable(false);
 	    	}else{
-	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
-	    		alert.showAndWait();
+	    		//Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
+	    		//alert.showAndWait();
 	    	}
 			
 			

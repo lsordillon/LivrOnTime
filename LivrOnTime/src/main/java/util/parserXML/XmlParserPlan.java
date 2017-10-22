@@ -16,9 +16,6 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
 public class XmlParserPlan {
 	
 	static Document doc;
@@ -26,8 +23,7 @@ public class XmlParserPlan {
 	public static NodeList troncons;
 	
 	
-	    @SuppressWarnings("resource")
-		public Document Reader(String file_name) throws FileNotFoundException{
+	    public Document Reader(String file_name) throws FileNotFoundException{
 	    	Document document= null;
 	    	InputStream xsd = new FileInputStream("src/main/java/resources/ValidationPlan.xsd");
 	    	InputStream xml = new FileInputStream(file_name);

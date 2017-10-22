@@ -1,5 +1,4 @@
 package util.parserXML;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +14,6 @@ import javax.xml.validation.Validator;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 public class XmlParserLivraison {
 	
