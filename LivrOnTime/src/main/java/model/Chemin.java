@@ -2,6 +2,7 @@ package model;
 
 import java.util.Date;
 import java.util.ArrayList;
+import model.Intersection;
 
 public class Chemin {
 
