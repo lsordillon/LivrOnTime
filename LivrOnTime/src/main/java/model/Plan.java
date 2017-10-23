@@ -11,6 +11,11 @@ import util.tsp.Dijkstra;
 import util.tsp.TSP;
 import util.tsp.TSP1;
 
+/**
+ * Cette classe gère le chargement du plan et le lancement du calcul de la tournée
+ * @author lauriesordillon
+ *
+ */
 public class Plan {
 	
 	private ArrayList <Chemin> chemins=new ArrayList<Chemin>();
@@ -71,22 +76,34 @@ public void setTroncons(ArrayList<Troncon> troncons) {
 	Troncons = troncons;
 }
 
+/**
+ * Lance le dijkstra pour chaque point de Livraison + entrepot 
+ * Trie et stocke les résultats
+ * @param dl
+ */
 public void deroulerLesDijkstra (DemandeLivraison dl) {		
 	Dijkstra d = new Dijkstra();
+	
+	//charge la liste des points de livraison + entrepot
 	ArrayList <Intersection> origines=new ArrayList<Intersection>(dl.getIntersections());
+	
+	// Pour chaque point de livraison
 	for (int j=0; j<origines.size();j++) {
 		Intersection ptDepart = origines.get(j);
 		
+		//lance le calcul
 		d.algoDijkstra(this, ptDepart);
-		ArrayList <Intersection> destinations=new ArrayList<Intersection>(dl.getIntersections());
 		
+		ArrayList <Intersection> destinations=new ArrayList<Intersection>(dl.getIntersections());
 		destinations.remove(ptDepart);
 		
 		for (int i=0; i<destinations.size();i++) {
+			// Pour chaque trajet reliant deux points de livraison, je cree un chemin
 			Chemin chemin = new Chemin();
 			chemin.setOrigine(ptDepart);
 			chemin.setDestination(destinations.get(i));
 			
+			// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
 			Intersection courante = destinations.get(i);
 			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
 			while (courante!=ptDepart) {
@@ -102,6 +119,13 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 	} 	
 }
 
+/**
+ * Permet de renvoyer le troncon liant deux intersections
+ * Parcours simplement la liste de troncon en comparant les origines et destinations
+ * @param origine
+ * @param destination
+ * @return un troncon
+ */
 public Troncon trouverTroncon (Intersection origine, Intersection destination) {
 	Troncon result=null;
 	for(int i=0; i<Troncons.size(); i++) {
@@ -113,6 +137,12 @@ public Troncon trouverTroncon (Intersection origine, Intersection destination) {
 	return result;
 }
 
+/**
+ * Permet de renvoyer le chemin liant deux points
+ * @param origine
+ * @param destination
+ * @return un chemin
+ */
 public Chemin trouverChemin (Intersection origine, Intersection destination) {
 	Chemin result=null;
 	for(int i=0; i<chemins.size(); i++) {
@@ -124,25 +154,36 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
 	return result;
 }
 
+/**
+ * Calcul l'ensemble de la tournee a partir de la demande de livraison
+ * realise tout d'abord des Dijkstra pour trouver les plus courts chemins entre chaque point
+ * construit un graphe complet oriente
+ * realise le TSP pour calculer l'itineraire le plus court
+ * @param dl
+ * @return
+ */
 public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	deroulerLesDijkstra(dl);
 	
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
+	
 	int tpLimite = 10;
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size()+1;
-	ArrayList <Chemin> itineraire = new ArrayList<Chemin> ();
-	
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
 	
+	ArrayList <Chemin> itineraire = new ArrayList<Chemin> ();
 	for(int i=0; i<nbSommet-1;i++) {
+		//on déroule le tableau MeilleureSolution du TSP pour creer l'itineraire
+		//Pour chaque element du tableau, on cherche l'intersection correspondante. il s'agira a tour de role d'une origine et d'une destination
+		//on cherche le chemin joignant ces deux intersections
 		Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(i));
 		Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(i+1));
 		itineraire.add(trouverChemin(origine,destination));
 	}
 
-
+	//On ajoute le chemin entre le dernier point et le retour a l'entrepot
 	Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(0));
 	Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(nbSommet-1));
 	itineraire.add(trouverChemin(origine,destination));

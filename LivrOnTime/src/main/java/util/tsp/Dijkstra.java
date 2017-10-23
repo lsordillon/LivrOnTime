@@ -8,7 +8,7 @@ import java.util.Iterator;
 import model.*;
 
 /**
- * Cette classe est une classe utilitaire implémentant
+ * Cette classe est une classe utilitaire implementant
  * l'algorithme de Dijkstra.
  * 
  * @author Matthieu
@@ -17,17 +17,17 @@ import model.*;
 public class Dijkstra {
 	
 		/**
-		 * Méthode principale de la classe, elle implémente l'algorithme de
+		 * Methode principale de la classe, elle implemente l'algorithme de
 		 * Dijkstra en calculant les plus cours chemins vers tous les noeuds d'un
-		 * graphe à partir d'un noeud de départ.
+		 * graphe a partir d'un noeud de depart.
 		 * 
-		 * @param plan, le graphe utilisé pour l'algorithme repésentant la ville de Lyon
-		 * @param ptDepart, l'intersection de départ de l'algorithme
+		 * @param plan, le graphe utilise pour l'algorithme representant la ville de Lyon
+		 * @param ptDepart, l'intersection de depart de l'algorithme
 		 * 
 		 */
 		public void algoDijkstra(Plan plan, Intersection ptDepart) {
 			
-			//Creation des différentes structures de donnees necessaires
+			//Creation des differentes structures de donnees necessaires
 			HashMap<Long,Intersection> intersections = plan.getIntersections();
 			
 			Collection <Intersection> inter = intersections.values();
@@ -122,12 +122,12 @@ public class Dijkstra {
 		
 		
 		/**
-		 * Cette méthode est utilisée pour l'algorithme de Dijkstra
-		 * elle permet, à partir d'une liste de noeuds du graphe de
-		 * trouver celui qui a la plus petite distance à partir
+		 * Cette methode est utilisee pour l'algorithme de Dijkstra
+		 * elle permet, a partir d'une liste de noeuds du graphe de
+		 * trouver celui qui a la plus petite distance a partir
 		 * de l'origine.
 		 * 
-		 * @param sommetsGris, la liste de noeuds du graphe qu'on considère
+		 * @param sommetsGris, la liste de noeuds du graphe qu'on considere
 		 * @return suivant, le noeud de la liste d'entree dont la distance par
 		 * rapport au point de depart est la plus petite
 		 */
