@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
@@ -86,7 +87,9 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 	
 	//charge la liste des points de livraison + entrepot
 	ArrayList <Intersection> origines=new ArrayList<Intersection>(dl.getIntersections());
-	
+
+	Date hDepart=dl.getHeureDepart();
+
 	// Pour chaque point de livraison
 	for (int j=0; j<origines.size();j++) {
 		Intersection ptDepart = origines.get(j);
@@ -96,6 +99,7 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 		
 		ArrayList <Intersection> destinations=new ArrayList<Intersection>(dl.getIntersections());
 		destinations.remove(ptDepart);
+		
 		
 		for (int i=0; i<destinations.size();i++) {
 			// Pour chaque trajet reliant deux points de livraison, je cree un chemin
@@ -189,7 +193,7 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	itineraire.add(trouverChemin(origine,destination));
 
 	System.out.println("LA TOURNEE");
-	Tournee tournee = new Tournee(itineraire);
+	Tournee tournee = new Tournee(itineraire,dl);
 	for(int j=0;j<tournee.getItineraire().size();j++) {
 		System.out.println(tournee.getItineraire().get(j).toString());
 	}

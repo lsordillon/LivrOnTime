@@ -1,5 +1,4 @@
 package util.parserXML;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,9 +24,7 @@ public class XmlParserPlan {
 	
 	    public Document Reader(String file_name) throws FileNotFoundException{
 	    	Document document= null;
-	    	InputStream xsd = new FileInputStream("src/main/java/resources/ValidationPlan.xsd");
-	    	InputStream xml = new FileInputStream(file_name);
-	    	if(validationXSD(xml, xsd)){
+	    	
 	        try {
 	        	 
 	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -53,7 +50,7 @@ public class XmlParserPlan {
 	        
 	       
 	    	
-	}
+	
 	    	 return doc;
 	}
 	   public boolean validationXSD(InputStream xml, InputStream xsd)

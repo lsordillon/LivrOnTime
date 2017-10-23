@@ -1,4 +1,5 @@
 package model;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -88,7 +89,9 @@ public class DemandeLivraison {
 	            cal.set(Calendar.SECOND, Integer.parseInt(items[2]));
 	            
 	            heureDebutPlage = cal.getTime();
-	            
+	          
+
+			
 	        }
 	        if (noeud.getAttributeNode("finPlage")!=null){
 	        	fin = true;
