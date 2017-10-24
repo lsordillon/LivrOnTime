@@ -8,6 +8,7 @@ import java.util.HashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+//TODO Prendre en compte dans le TSP
 public class DemandeLivraison {
 	
 	private Date heureDepart;
