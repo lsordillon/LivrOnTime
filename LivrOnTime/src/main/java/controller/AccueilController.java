@@ -186,9 +186,10 @@ public class AccueilController{
            table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Row>() {
 			public void changed(ObservableValue<? extends Row> observableValue, Row oldValue, Row newValue) {
 			       if (table.getSelectionModel().getSelectedItem() != null) {
+			    	   if (oldValue != null){
 			    	   ((Circle) dessinerPlan.dessine.get(oldValue.getId())).setFill(Color.BLUE);
 			    	   ((Circle) dessinerPlan.dessine.get(oldValue.getId())).setStroke(Color.BLUE);
-			    	   
+			    	   }
 			    	   long id = newValue.getId();
 			          ((Circle) dessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
 			          ((Circle) dessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
