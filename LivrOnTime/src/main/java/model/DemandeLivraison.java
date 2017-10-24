@@ -1,5 +1,5 @@
 package model;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,7 +27,7 @@ public class DemandeLivraison {
 	}
 	
 	public ArrayList<Intersection> getIntersections(){
-		ArrayList<Intersection> intersections=new ArrayList();
+		ArrayList<Intersection> intersections=new ArrayList<Intersection>();
 		intersections.add(adresseEntrepot);
 		for(int i=0; i<listeLivraisons.size();i++) {
 			intersections.add(listeLivraisons.get(i).getDestination());
@@ -66,7 +66,7 @@ public class DemandeLivraison {
 		
 		
 		final int nbNoeuds = livraisons.getLength();
-		listeLivraisons =  new ArrayList();
+		listeLivraisons =  new ArrayList<Livraison>();
 	    for(int i = 0; i<nbNoeuds; i++) {
 	    	
 	    	boolean debut = false;
