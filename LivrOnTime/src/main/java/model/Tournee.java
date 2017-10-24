@@ -1,11 +1,11 @@
 package model;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Tournee {
 
         final static double VITESSE=(double)15/3600; //15KM/h
-		private DemandeLivraison demande;
 		private Date heureDepart;
 		private Date heureArrive;
 		private ArrayList <Chemin> itineraire;
@@ -25,15 +25,17 @@ public class Tournee {
 					dureeTotal+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur()/VITESSE;
 				}
 			}
-			heureArrive=new Date(heureDepart.getTime()+(long)dureeTotal+3600000);// Ajouter 1 heure en millisecondes
-		    System.out.println(heureArrive+"   "+dureeTotal+"   "+heureDepart);
+			heureArrive=new Date(heureDepart.getTime()+(long)dureeTotal);// Ajouter 1 heure en millisecondes
+			Date duree = new Date(heureArrive.getTime()-heureDepart.getTime());
+			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
+		    System.err.println(heureArrive+"   "+dureeHms.format(duree)+"   "+heureDepart);
 			
 			
 	}
 		public ArrayList <Chemin> getItineraire(){
 			return itineraire;
 		}
-		private Date getHeureDepart() {
+		/*private Date getHeureDepart() {
 			return heureDepart;
 		}
 		private void setHeureDepart(Date heureDepart) {
@@ -44,6 +46,6 @@ public class Tournee {
 		}
 		private void setHeureArrive(Date heureArrive) {
 			this.heureArrive = heureArrive;
-		}
+		}*/
 		
 }
