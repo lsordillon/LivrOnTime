@@ -202,4 +202,9 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	return tournee;
 }
 
+
+public void ajouterLivraison(DemandeLivraison dl, Livraison liv){
+	dl.getLivraisons().add(liv);
+}
+
 }

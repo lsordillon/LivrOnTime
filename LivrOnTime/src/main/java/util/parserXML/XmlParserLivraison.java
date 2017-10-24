@@ -15,6 +15,8 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+import model.Livraison;
+
 /** Cette classe est une classe utilitaire permettant
  * le parsage du fichier xml de demande de livraison
  * et sa conversion en objet demande de livraison
@@ -84,4 +86,35 @@ public class XmlParserLivraison {
 	            return false;
 	        }
 	    }
+	    
+	    public void AjouterLivraison(Livraison liv){
+	    	
+	    	Element livE=doc.createElement("Livraison");
+	    	Element root = doc.getDocumentElement();
+	    	root.appendChild(livE);
+	    	
+	    	Node adresse=doc.createAttribute("adresse");
+	    	adresse.setNodeValue(String.valueOf(liv.getDestination().getId()));
+	        livE.appendChild(adresse);
+	        
+	    	if(liv.getDebutPlageHoraire()!=null){
+	    		Node DPH=doc.createAttribute("debutPlage");
+	    		DPH.setNodeValue(liv.getDebutPlageHoraire().toString());
+	    		livE.appendChild(DPH);
+	    	}
+	    	
+	    	Node duree=doc.createAttribute("duree");
+	    	duree.setNodeValue(String.valueOf(liv.getDuree()));
+	    	livE.appendChild(duree);
+	    	
+	    	if(liv.getFinPlageHoraire()!=null){
+	    		Node FPH=doc.createAttribute("finPlage");
+	    		FPH.setNodeValue(liv.getFinPlageHoraire().toString());
+	    		livE.appendChild(FPH);
+	    	}
+	    	
+	    }
+	    
+	    
+	  
 }
