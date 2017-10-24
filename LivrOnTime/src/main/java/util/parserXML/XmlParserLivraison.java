@@ -86,7 +86,7 @@ public class XmlParserLivraison {
 	            return false;
 	        }
 	    }
-	    
+	    /*
 	    public void AjouterLivraison(Livraison liv){
 	    	
 	    	Element livE=doc.createElement("Livraison");
@@ -124,7 +124,7 @@ public class XmlParserLivraison {
 	            if(adresse.equals(String.valueOf(liv.getDestination().getId())))
 	                livE.getParentNode().removeChild(livE);
 		  }
-	  }  
+	  }  */
 
-	  
+	 
 }
