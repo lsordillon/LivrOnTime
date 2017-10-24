@@ -27,7 +27,13 @@ public class Plan {
 	private ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
 	
 
-  public void CreerIntersections(NodeList noeuds) {
+  public ArrayList<Long> getId_intersections() {
+		return id_intersections;
+	}
+	public void setId_intersections(ArrayList<Long> id_intersections) {
+		this.id_intersections = id_intersections;
+	}
+public void CreerIntersections(NodeList noeuds) {
 	  final int nbNoeuds = noeuds.getLength();
       for(int j = 0; j<nbNoeuds; j++) {
           final Element noeud = (Element) noeuds.item(j);

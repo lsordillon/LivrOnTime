@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javafx.scene.paint.Color;
 
@@ -225,6 +227,58 @@ public class AccueilController{
 	}
 	
 	
-	}  
+	
+	/** Récupère une intersection du plan a partir des coordonnee
+	 * d un clic su le plan
+	 * @param x, l abscisse du point
+	 * @param y, l ordonnee du point
+	 * @return selectionne, l intersection la plus proche des coordonnees
+	 */
+	public Intersection getIntersectionParCoordonnees (int x, int y) {
+		
+		Intersection selectionnee = null;
+		
+		ArrayList<Long> id_intersections= plan.getId_intersections();
+		HashMap<Long,Intersection> intersections = plan.getIntersections();
+		
+		Iterator<Long> it = id_intersections.iterator();
+		Long idCourant;
+		Intersection courant;
+		double distanceMin = Double.MAX_VALUE;
+		double distance;
+		
+		while(it.hasNext()) {
+			idCourant = it.next();
+			courant = intersections.get(idCourant);
+			
+			
+			distance = distancePoints(x, y, courant.getX(), courant.getY());
+			if (distance < distanceMin) {
+				distanceMin = distance;
+				selectionnee = courant;
+			}
+			
+		}
+		return selectionnee;
+		
+	}
+	
+	/** Calcule la distance entre 2 points a partir de leurs
+	 * coordonnees
+	 * @param x1, l abscisse du point 1
+	 * @param y1, l ordonnee du point 1
+	 * @param x2, l abscisse du point 2
+	 * @param y2, l abscisse du point 2
+	 * @return distance, la distance entre les points
+	 */
+	public double distancePoints(int x1, int y1, int x2, int y2) {
+		
+		double distance = Math.sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
+		
+		return distance;
+	}
+	
+	
+}  
 
 
