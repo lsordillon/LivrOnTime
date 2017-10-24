@@ -30,7 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
+import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
@@ -54,7 +54,7 @@ public class AccueilController{
 	public Button CalculTournee;
 	public Label AccueilLabel;
 	
-	private final TableView<Row> table = new TableView<Row>();
+	private TableView<Row> table = new TableView<Row>();
     private final ObservableList<Row> data = FXCollections.observableArrayList();
 	private Plan plan;
 	static DessinerPlan dessinerPlan;
@@ -124,10 +124,28 @@ public class AccueilController{
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
+		boolean premireFois = true;
+		
+		
+		ArrayList<Livraison> livraisons = new ArrayList<Livraison>();
+		ArrayList<Livraison> dl2 =dl.getLivraisons();
 		Tournee tournee=plan.calculerLaTournee(dl);
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene());
+	    for (Chemin chemin : tournee.getItineraire()){
+	    	for(Livraison l : dl2){
+	    		if(l.getDestination().getId() == chemin.getOrigine().getId() && premireFois){
+	    			livraisons.add(0,l);
+	    			System.out.println("origine");
+	    		}else if(l.getDestination().getId() == chemin.getDestination().getId()){
+	    			livraisons.add(l);
+	    			System.out.println("destination");
+	    		}
+	    	}
+	    premireFois=false;
+	    }
+	    ListerLivraisons(livraisons);
 			    
 	}
 	
@@ -145,7 +163,8 @@ public class AccueilController{
 
 	
 	public void ListerLivraisons(ArrayList<Livraison> livraisons){
-
+		data.clear();
+		table = new TableView<Row>();
 		for(Livraison item : livraisons){
 			String adresse = getAdresse(item.getDestination());
 			String plageHoraire = "";
