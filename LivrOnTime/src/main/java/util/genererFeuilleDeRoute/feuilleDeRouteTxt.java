@@ -41,14 +41,23 @@ public class feuilleDeRouteTxt {
 	private String nomFichier;
 	
 	public feuilleDeRouteTxt(Tournee tournee, String nomFichier) {
-		
 	
 	    int heureDep=tournee.getHeureDepart();
 	    int heureArr=tournee.getHeureArrive();
 	    Intersection entrepotAd= ...getAdresseEntrepot();
-	    
-	    String ligne1 = "Depart de l'entrepot"+ entrepotAd+ "a" + "heureDep";
-	    String ligneFin = "Arrivee a l'entrepot" + entrepotAd + "a" + "heureArr";
+	}
+	
+	public String genererFeuilleDeRoute(){
+	String contenu = "";
+	contenu = contenu + "Depart de l'entrepot"+ entrepotAd+ "a" + "heureDep";
+	
+		for (...) {
+		contenu = contenu + ....
+		}
+		
+	contenu = contenu + "Arrivee a l'entrepot" + entrepotAd + "a" + "heureArr";
+	
+	    return contenu;
 	}
 	/*
 ouvrir systeme de gestion de fichier pour enregistrer  

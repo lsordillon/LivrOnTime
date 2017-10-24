@@ -173,6 +173,7 @@ public class AccueilController{
 		FileWriter fichierGenere;
 		try {
 			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
+			//fichierGenere.write(... .genererFeuilleDeRoute());
 			fichierGenere.write("Feuille de route : \n");
 			fichierGenere.close();	
 			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
