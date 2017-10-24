@@ -1,9 +1,17 @@
 package controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,11 +24,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 
 import javafx.scene.control.TableColumn;
@@ -32,7 +44,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
+import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
@@ -54,14 +66,18 @@ public class AccueilController{
 	public Button ChargerButoon;
 	public Button ChargerLivraison;
 	public Button CalculTournee;
-	public Label AccueilLabel;
+	public Button AccueilBouton;
+	public Button GenererFeuille; 
 	
-	private final TableView<Row> table = new TableView<Row>();
+	private TableView<Row> table = new TableView<Row>();
     private final ObservableList<Row> data = FXCollections.observableArrayList();
 	private Plan plan;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 
+
+    
+    
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
 		
 
@@ -126,11 +142,60 @@ public class AccueilController{
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
+		boolean premireFois = true;
+		
+		
+		ArrayList<Livraison> livraisons = new ArrayList<Livraison>();
+		ArrayList<Livraison> dl2 =dl.getLivraisons();
 		Tournee tournee=plan.calculerLaTournee(dl);
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene());
+	    for (Chemin chemin : tournee.getItineraire()){
+	    	for(Livraison l : dl2){
+	    		if(l.getDestination().getId() == chemin.getOrigine().getId() && premireFois){
+	    			livraisons.add(0,l);
+	    			System.out.println("origine");
+	    		}else if(l.getDestination().getId() == chemin.getDestination().getId()){
+	    			livraisons.add(l);
+	    			System.out.println("destination");
+	    		}
+	    	}
+	    premireFois=false;
+	    }
+
+	    GenererFeuille.setDisable(false);
+	    ListerLivraisons(livraisons);
 			    
+	}
+	
+	public void GenererFeuille(ActionEvent actionEvent) {
+		FileWriter fichierGenere;
+		try {
+			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
+			//fichierGenere.write(... .genererFeuilleDeRoute());
+			fichierGenere.write("Feuille de route : \n");
+			fichierGenere.close();	
+			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
+			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
+    		alert.showAndWait();
+			
+    		
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+		e.printStackTrace();
+		}     	
+
+		
+	}
+	public void retourAccueil(ActionEvent actionEvent) {
+		VuePlan.getChildren().clear();
+		VueDescriptif.getChildren().clear();
+	    ChargerLivraison.setDisable(true);
+	    CalculTournee.setDisable(true);
+	    GenererFeuille.setDisable(true);
 	}
 	
 	public Plan CreerPlan(String chemin) throws FileNotFoundException{
@@ -147,7 +212,8 @@ public class AccueilController{
 
 	
 	public void ListerLivraisons(ArrayList<Livraison> livraisons){
-
+		data.clear();
+		table = new TableView<Row>();
 		for(Livraison item : livraisons){
 			String adresse = getAdresse(item.getDestination());
 			String plageHoraire = "";
