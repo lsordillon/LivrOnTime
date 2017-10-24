@@ -37,7 +37,7 @@ public class Tournee {
 		public ArrayList <Chemin> getItineraire(){
 			return itineraire;
 		}
-		/*private Date getHeureDepart() {
+		private Date getHeureDepart() {
 			return heureDepart;
 		}
 		private void setHeureDepart(Date heureDepart) {
@@ -48,6 +48,6 @@ public class Tournee {
 		}
 		private void setHeureArrive(Date heureArrive) {
 			this.heureArrive = heureArrive;
-		}*/
+		}
 		
 }
