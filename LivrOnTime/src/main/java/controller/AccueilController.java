@@ -197,7 +197,7 @@ public class AccueilController{
 			       }
 			   }
 		});
-       VBox vBox = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Départ: "+ dl.getHeureDepart().getTime()));
+       VBox vBox = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
    		vBox.setSpacing(10);
    		VBox vBox2 = new VBox(vBox,table);
    		vBox2.setSpacing(40);
