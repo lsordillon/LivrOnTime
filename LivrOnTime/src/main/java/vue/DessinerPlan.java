@@ -33,6 +33,7 @@ class PannableCanvas extends Pane {
         // add scale transform
         scaleXProperty().bind(myScale);
         scaleYProperty().bind(myScale);
+        
     }
 
 
@@ -71,9 +72,11 @@ class SceneGestures {
     private DragContext sceneDragContext = new DragContext();
 
     PannableCanvas canvas;
+    DessinerPlan dessinerPlan;
 
-    public SceneGestures( PannableCanvas canvas) {
+    public SceneGestures( PannableCanvas canvas, DessinerPlan dessinerPlan) {
         this.canvas = canvas;
+        this.dessinerPlan = dessinerPlan;
     }
 
     public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
@@ -93,15 +96,34 @@ class SceneGestures {
         public void handle(MouseEvent event) {
 
             // right mouse button => panning
-            if( !event.isSecondaryButtonDown())
-                return;
+            if( event.isSecondaryButtonDown()) {
 
-            sceneDragContext.mouseAnchorX = event.getSceneX();
-            sceneDragContext.mouseAnchorY = event.getSceneY();
+	            sceneDragContext.mouseAnchorX = event.getSceneX();
+	            sceneDragContext.mouseAnchorY = event.getSceneY();
+	
+	            sceneDragContext.translateAnchorX = canvas.getTranslateX();
+	            sceneDragContext.translateAnchorY = canvas.getTranslateY();
+            }
+            
+            if(event.isPrimaryButtonDown()) {
+            	
+            	double translateX = canvas.getTranslateX();
+            	double translateY = canvas.getTranslateY();
+            	
+            	int xtemp = (int) ( - event.getY() + dessinerPlan.getSizeCanvas() + translateY);
+            	int ytemp = (int)(event.getX() - (dessinerPlan.getSizeCanvas()/2) - translateX);
+            	
 
-            sceneDragContext.translateAnchorX = canvas.getTranslateX();
-            sceneDragContext.translateAnchorY = canvas.getTranslateY();
-
+            	int x = (int) ((xtemp*dessinerPlan.getDivX()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusX());
+            	int y = (int) ((ytemp*dessinerPlan.getDivY()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusY());
+            	
+            	
+            	/*System.out.println("clic");
+            	System.out.println(x);
+            	System.out.println(y);
+            	System.out.println(translateX);
+            	System.out.println(translateY);*/
+            }
         }
 
     };
@@ -316,7 +338,7 @@ public class DessinerPlan {
     
     public void PannableScene(Scene scene) {
     	
-    	   SceneGestures sceneGestures = new SceneGestures(canvas);
+    	   SceneGestures sceneGestures = new SceneGestures(canvas,this);
            scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
            scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
@@ -357,6 +379,46 @@ public class DessinerPlan {
     	
     	return group;
     }
+
+	public int getDivX() {
+		return divX;
+	}
+
+	public void setDivX(int divX) {
+		this.divX = divX;
+	}
+
+	public int getMinusX() {
+		return minusX;
+	}
+
+	public void setMinusX(int minusX) {
+		this.minusX = minusX;
+	}
+
+	public int getDivY() {
+		return divY;
+	}
+
+	public void setDivY(int divY) {
+		this.divY = divY;
+	}
+
+	public int getMinusY() {
+		return minusY;
+	}
+
+	public void setMinusY(int minusY) {
+		this.minusY = minusY;
+	}
+
+	public double getSizeCanvas() {
+		return sizeCanvas;
+	}
+
+	public void setSizeCanvas(double sizeCanvas) {
+		this.sizeCanvas = sizeCanvas;
+	}
     
    
 }
