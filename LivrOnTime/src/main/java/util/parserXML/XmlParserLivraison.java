@@ -112,9 +112,19 @@ public class XmlParserLivraison {
 	    		FPH.setNodeValue(liv.getFinPlageHoraire().toString());
 	    		livE.appendChild(FPH);
 	    	}
+	 
 	    	
 	    }
 	    
 	    
+	  public void supprimerLivraison(Livraison liv){
+		  for (int i = 0; i <livraisons.getLength(); i++) {       
+	            Element livE = (Element)livraisons.item(i);
+	            String adresse = livE.getAttribute("adresse");
+	            if(adresse.equals(String.valueOf(liv.getDestination().getId())))
+	                livE.getParentNode().removeChild(livE);
+		  }
+	  }  
+
 	  
 }
