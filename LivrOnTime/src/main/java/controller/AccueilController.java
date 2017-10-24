@@ -229,7 +229,7 @@ public class AccueilController{
 	
 	
 	
-	/** Récupère une intersection du plan a partir des coordonnee
+	/** Recupere une intersection du plan a partir des coordonnees
 	 * d un clic su le plan
 	 * @param x, l abscisse du point
 	 * @param y, l ordonnee du point
