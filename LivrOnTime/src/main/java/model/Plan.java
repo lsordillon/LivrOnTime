@@ -209,11 +209,6 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 }
 
 
-public void ajouterLivraison(DemandeLivraison dl, Livraison liv){
-	dl.getLivraisons().add(liv);
-}
-public void supprimerLivraiosn(DemandeLivraison dl, Livraison liv){
-	dl.getLivraisons().remove(liv);
-}
+
 
 }

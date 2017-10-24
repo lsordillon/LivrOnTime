@@ -74,7 +74,7 @@ public class AccueilController{
 		    
 		    dessinerPlan = new DessinerPlan();
 		
-		    InputStream xsd = new FileInputStream("src/main/java/resources/ValidationPlan.xsd");
+		    InputStream xsd = new FileInputStream("src/main/resources/ValidationPlan.xsd");
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
 	        
 		    if (parserPlan.validationXSD(xml, xsd)){
@@ -104,7 +104,7 @@ public class AccueilController{
 		File selectedFile = fileChooser.showOpenDialog(null);
 
 		if (selectedFile != null) {
-			InputStream xsd = new FileInputStream("src/main/java/resources/ValidationDL.xsd");
+			InputStream xsd = new FileInputStream("src/main/resources/ValidationDL.xsd");
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
 	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
 	    	if(parserLivraison.validationXSD(xml, xsd)){
@@ -188,9 +188,10 @@ public class AccueilController{
            table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Row>() {
 			public void changed(ObservableValue<? extends Row> observableValue, Row oldValue, Row newValue) {
 			       if (table.getSelectionModel().getSelectedItem() != null) {
+			    	   if (oldValue != null){
 			    	   ((Circle) dessinerPlan.dessine.get(oldValue.getId())).setFill(Color.BLUE);
 			    	   ((Circle) dessinerPlan.dessine.get(oldValue.getId())).setStroke(Color.BLUE);
-			    	   
+			    	   }
 			    	   long id = newValue.getId();
 			          ((Circle) dessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
 			          ((Circle) dessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
@@ -198,7 +199,7 @@ public class AccueilController{
 			       }
 			   }
 		});
-       VBox vBox = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Départ: "+ dl.getHeureDepart().getTime()));
+       VBox vBox = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
    		vBox.setSpacing(10);
    		VBox vBox2 = new VBox(vBox,table);
    		vBox2.setSpacing(40);
