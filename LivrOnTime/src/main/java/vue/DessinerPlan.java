@@ -4,6 +4,7 @@ package vue;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import controller.AccueilController;
 import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
@@ -20,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -73,10 +75,16 @@ class SceneGestures {
 
     PannableCanvas canvas;
     DessinerPlan dessinerPlan;
+    AccueilController controleur;
+    Paint couleurSelectionne;
+	Intersection intersectionSelectionnee;
 
-    public SceneGestures( PannableCanvas canvas, DessinerPlan dessinerPlan) {
+    public SceneGestures( PannableCanvas canvas, DessinerPlan dessinerPlan, AccueilController controleur) {
         this.canvas = canvas;
         this.dessinerPlan = dessinerPlan;
+        this.controleur = controleur;
+        intersectionSelectionnee = null;
+        couleurSelectionne = Color.BLACK;
     }
 
     public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
@@ -110,6 +118,7 @@ class SceneGestures {
             	double translateX = canvas.getTranslateX();
             	double translateY = canvas.getTranslateY();
             	
+            	
             	int xtemp = (int) ( - event.getY() + dessinerPlan.getSizeCanvas() + translateY);
             	int ytemp = (int)(event.getX() - (dessinerPlan.getSizeCanvas()/2) - translateX);
             	
@@ -117,6 +126,40 @@ class SceneGestures {
             	int x = (int) ((xtemp*dessinerPlan.getDivX()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusX());
             	int y = (int) ((ytemp*dessinerPlan.getDivY()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusY());
             	
+            	controleur.getIntersectionParCoordonnees(x,y);
+            	Intersection in = controleur.getIntersectionSelectionne();
+            	System.out.println(in);
+            	
+            	if(in != null) {
+	            	// On stocke l'intersection qu on selectionne
+	            	// avec sa couleur pour pouvoir la remettre quand on
+	            	// en selectionne une autre
+	            	
+	            	if (intersectionSelectionnee != null) {
+	            		Circle precedent = dessinerPlan.dessine.get(intersectionSelectionnee.getId());
+	            		canvas.getChildren().remove(precedent);
+	                 	precedent.setStroke(couleurSelectionne);
+	                 	precedent.setFill(couleurSelectionne);
+	                 	precedent.setRadius(3);
+	                 	canvas.getChildren().add(precedent);
+	            	}
+	            	
+	            	Circle nouveau = dessinerPlan.dessine.get(in.getId());
+	            	intersectionSelectionnee = in;
+	            	System.out.println(nouveau.getFill());
+	            	couleurSelectionne = nouveau.getFill();
+	            	
+	                canvas.getChildren().remove(nouveau);
+	            	nouveau.setStroke(Color.YELLOW);
+	            	nouveau.setFill(Color.YELLOW);
+	            	nouveau.setRadius(1);
+	            	canvas.getChildren().add(nouveau);
+            	}
+            	
+            	//((Circle) dessinerPlan.dessine.get(in.getId())).setFill(Color.YELLOW);
+            	//((Circle)dessinerPlan.dessine.get(in.getId())).setFill(Color.YELLOW);
+            	//Circle cercle = dessinerPlan.dessine.get(in.getId());
+            	//System.out.println(cercle);
             	
             	/*System.out.println("clic");
             	System.out.println(x);
@@ -336,9 +379,9 @@ public class DessinerPlan {
 		             
 	}
     
-    public void PannableScene(Scene scene) {
+    public void PannableScene(Scene scene, AccueilController controleur) {
     	
-    	   SceneGestures sceneGestures = new SceneGestures(canvas,this);
+    	   SceneGestures sceneGestures = new SceneGestures(canvas, this, controleur);
            scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
            scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());

@@ -61,6 +61,7 @@ public class AccueilController{
 	private Plan plan;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
+	private Intersection intersectionSelectionne;
 
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
 		
@@ -83,7 +84,7 @@ public class AccueilController{
 				    
 				    VuePlan.getChildren().clear();
 				    VuePlan.getChildren().add(group);
-				    dessinerPlan.PannableScene(VuePlan.getScene());
+				    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 				    ChargerLivraison.setDisable(false);
 		    }else{
 		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
@@ -111,7 +112,7 @@ public class AccueilController{
 	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
-			    dessinerPlan.PannableScene(VuePlan.getScene());			    
+			    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
 			    ListerLivraisons(dl.getLivraisons());
 			    CalculTournee.setDisable(false);
 	    	}else{
@@ -134,7 +135,7 @@ public class AccueilController{
 		Tournee tournee=plan.calculerLaTournee(dl);
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-	    dessinerPlan.PannableScene(VuePlan.getScene());
+	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    for (Chemin chemin : tournee.getItineraire()){
 	    	for(Livraison l : dl2){
 	    		if(l.getDestination().getId() == chemin.getOrigine().getId() && premireFois){
@@ -254,7 +255,7 @@ public class AccueilController{
 	 * @param y, l ordonnee du point
 	 * @return selectionne, l intersection la plus proche des coordonnees
 	 */
-	public Intersection getIntersectionParCoordonnees (int x, int y) {
+	public void getIntersectionParCoordonnees (int x, int y) {
 		
 		Intersection selectionnee = null;
 		
@@ -273,13 +274,14 @@ public class AccueilController{
 			
 			
 			distance = distancePoints(x, y, courant.getX(), courant.getY());
-			if (distance < distanceMin) {
+			if (distance < distanceMin && distance <20) {
 				distanceMin = distance;
 				selectionnee = courant;
 			}
 			
 		}
-		return selectionnee;
+		
+		intersectionSelectionne = selectionnee;
 		
 	}
 	
@@ -296,6 +298,12 @@ public class AccueilController{
 		double distance = Math.sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
 		
 		return distance;
+	}
+	public Intersection getIntersectionSelectionne() {
+		return intersectionSelectionne;
+	}
+	public void setIntersectionSelectionne(Intersection intersectionSelectionne) {
+		this.intersectionSelectionne = intersectionSelectionne;
 	}
 	
 	
