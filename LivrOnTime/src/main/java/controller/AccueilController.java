@@ -1,9 +1,17 @@
 package controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,11 +24,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 
 import javafx.scene.control.TableColumn;
@@ -54,7 +66,8 @@ public class AccueilController{
 	public Button ChargerButoon;
 	public Button ChargerLivraison;
 	public Button CalculTournee;
-	public Label AccueilLabel;
+	public Button AccueilBouton;
+	public Button GenererFeuille; 
 	
 	private TableView<Row> table = new TableView<Row>();
     private final ObservableList<Row> data = FXCollections.observableArrayList();
@@ -63,6 +76,9 @@ public class AccueilController{
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
 
+
+    
+    
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
 		
 
@@ -148,8 +164,39 @@ public class AccueilController{
 	    	}
 	    premireFois=false;
 	    }
+
+	    GenererFeuille.setDisable(false);
 	    ListerLivraisons(livraisons);
 			    
+	}
+	
+	public void GenererFeuille(ActionEvent actionEvent) {
+		FileWriter fichierGenere;
+		try {
+			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
+			//fichierGenere.write(... .genererFeuilleDeRoute());
+			fichierGenere.write("Feuille de route : \n");
+			fichierGenere.close();	
+			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
+			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
+    		alert.showAndWait();
+			
+    		
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+		e.printStackTrace();
+		}     	
+
+		
+	}
+	public void retourAccueil(ActionEvent actionEvent) {
+		VuePlan.getChildren().clear();
+		VueDescriptif.getChildren().clear();
+	    ChargerLivraison.setDisable(true);
+	    CalculTournee.setDisable(true);
+	    GenererFeuille.setDisable(true);
 	}
 	
 	public Plan CreerPlan(String chemin) throws FileNotFoundException{
@@ -249,7 +296,7 @@ public class AccueilController{
 	
 	
 	
-	/** Récupère une intersection du plan a partir des coordonnee
+	/** Recupere une intersection du plan a partir des coordonnees
 	 * d un clic su le plan
 	 * @param x, l abscisse du point
 	 * @param y, l ordonnee du point
