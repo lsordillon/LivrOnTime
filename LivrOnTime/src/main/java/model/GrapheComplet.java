@@ -35,7 +35,8 @@ public class GrapheComplet {
 					for(int k=0; k<courant.getTroncons().size(); k++) {
 						cout=cout+courant.getTroncons().get(k).getLongueur();
 					}
-					couts[i][j]=cout;
+					//Conversion d'une distance en durée
+					couts[i][j]=cout/Tournee.VITESSE;
 				}
 			}
 		}

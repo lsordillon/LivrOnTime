@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Tournee {
 
-        final static double VITESSE=(double)15/3600; //15KM/h
+        final static double VITESSE=(double)15/36; //15KM/h
 		private Date heureDepart;
 		private Date heureArrive;
 		private ArrayList <Chemin> itineraire;
