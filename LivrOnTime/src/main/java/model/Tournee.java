@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Tournee {
 
-        final static double VITESSE=(double)15/36; //TODO 15KM/h ATTENTION il faudra peut être changer cette foutue vitesse
+        final static double VITESSE=(double)15/3.6; //TODO 15KM/h ATTENTION il faudra peut être changer cette foutue vitesse
 		private Date heureDepart;
 		private Date heureArrive;
 		private ArrayList <Chemin> itineraire;
