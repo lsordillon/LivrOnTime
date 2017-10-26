@@ -37,13 +37,13 @@ public class Tournee {
 		public ArrayList <Chemin> getItineraire(){
 			return itineraire;
 		}
-		private Date getHeureDepart() {
+		public Date getHeureDepart() {
 			return heureDepart;
 		}
 		private void setHeureDepart(Date heureDepart) {
 			this.heureDepart = heureDepart;
 		}
-		private Date getHeureArrive() {
+		public Date getHeureArrive() {
 			return heureArrive;
 		}
 		private void setHeureArrive(Date heureArrive) {
