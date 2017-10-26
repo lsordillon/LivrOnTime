@@ -6,7 +6,7 @@ import java.util.Iterator;
 public abstract class TemplateTSP implements TSP {
 	
 	private Integer[] meilleureSolution;
-	private double coutMeilleureSolution = 0;
+	private long coutMeilleureSolution = 0;
 	private Boolean tempsLimiteAtteint;
 	
 	public Boolean getTempsLimiteAtteint(){
@@ -87,9 +87,12 @@ public abstract class TemplateTSP implements TSP {
 	        	
 	        	//Code simple permettant de savoir si la plage horaire est respectée
 	        	boolean branching = true;	
-	        	if (sommetCrt<time.length)
-	        		if ((time[sommetCrt][0]!=-1 && (time[sommetCrt][0]-departTournee)<coutVus) || (time[sommetCrt][1]!=-1 && (time[sommetCrt][1]-departTournee)>coutVus))
-	        		branching = false;
+	        	if (prochainSommet<time.length)
+	        		if (time[prochainSommet][0]!=-1) 
+	        			if ((time[prochainSommet][0]-departTournee)<coutVus)
+	        				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time, departTournee);
+	        		else if (time[prochainSommet][1]!=-1 && (time[prochainSommet][1]-departTournee)>coutVus)
+	        			branching = false;
 	        	
 	        	//Si la plage horaire est respectée, on fait le branchement.
 	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand même un iti avec des plages non respectées.
