@@ -8,19 +8,19 @@ import java.util.ArrayList;
  *
  */
 public class GrapheComplet {
-	private int [] duree;
-	private double [][] couts;
+	private long [] duree;
+	private long [][] couts;
 
 	
 	public GrapheComplet (ArrayList<Livraison> listeLivraisons,ArrayList<Intersection> listeIntersections,ArrayList<Chemin> chemins) {
 		int taille = listeIntersections.size();
-		duree= new int [taille];
-		couts= new double [taille][taille];
+		duree= new long [taille];
+		couts= new long [taille][taille];
 	
 		int i;
 		//remplir les durees : on stocke le temps passe a chaque point de livraison
 		for(i=1;i<taille;i++) {
-			duree[i]=listeLivraisons.get(i-1).getDuree();
+			duree[i]=listeLivraisons.get(i-1).getDuree()*1000;
 		}
 		
 		//remplir le tableau de cout : on stocke le cout du trajet entre chaque point de livraison 
@@ -36,7 +36,7 @@ public class GrapheComplet {
 						cout=cout+courant.getTroncons().get(k).getLongueur();
 					}
 					//Conversion d'une distance en durée
-					couts[i][j]=cout;
+					couts[i][j]=(long)(cout*1000/Tournee.VITESSE);
 				}
 			}
 		}
@@ -61,10 +61,10 @@ public class GrapheComplet {
 	}
 	
 	
-	public double[][] getCout () {
+	public long[][] getCout () {
 		return couts;
 	}
-	public int[] getDuree () {
+	public long[] getDuree () {
 		return duree;
 	}
 

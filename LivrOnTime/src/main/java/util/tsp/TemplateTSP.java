@@ -13,7 +13,7 @@ public abstract class TemplateTSP implements TSP {
 		return tempsLimiteAtteint;
 	}
 	
-	public void chercheSolution(int tpsLimite, int nbSommets, double[][] cout, int[] duree){
+	public void chercheSolution(int tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] time, long departTournee){
 		tempsLimiteAtteint = false;
 		coutMeilleureSolution = Integer.MAX_VALUE;
 		meilleureSolution = new Integer[nbSommets];
@@ -21,8 +21,7 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<nbSommets; i++) nonVus.add(i);
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
-		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite);
-		System.out.println("Meilleure solution TSP trouvé : "+coutMeilleureSolution);
+		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite,time,departTournee);
 	}
 	
 	public Integer getMeilleureSolution(int i){
@@ -44,7 +43,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	 */
-	protected abstract int bound(Integer sommetCourant, ArrayList<Integer> nonVus, double[][] cout, int[] duree);
+	protected abstract int bound(Integer sommetCourant, ArrayList<Integer> nonVus, long[][] cout, long[] duree);
 	
 	/**
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -54,7 +53,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
 	 */
-	protected abstract Iterator<Integer> iterator(Integer sommetCrt, ArrayList<Integer> nonVus, double[][] cout, int[] duree);
+	protected abstract Iterator<Integer> iterator(Integer sommetCrt, ArrayList<Integer> nonVus, long[][] cout, long[] duree);
 	
 	/**
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP
@@ -67,9 +66,10 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
-	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, double coutVus, double[][] cout, int[] duree, long tpsDebut, int tpsLimite){
+	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, int tpsLimite, long[][] time, long departTournee){
 		 if (System.currentTimeMillis() - tpsDebut > tpsLimite){
 			 tempsLimiteAtteint = true;
+			 System.err.println("Temps limite atteint !");
 			 return;
 		 }
 	    if (nonVus.size() == 0){ // tous les sommets ont ete visites
@@ -84,7 +84,18 @@ public abstract class TemplateTSP implements TSP {
 	        	Integer prochainSommet = it.next();
 	        	vus.add(prochainSommet);
 	        	nonVus.remove(prochainSommet);
-	        	branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+	        	
+	        	//Code simple permettant de savoir si la plage horaire est respectée
+	        	boolean branching = true;	
+	        	if (sommetCrt<time.length)
+	        		if ((time[sommetCrt][0]!=-1 && (time[sommetCrt][0]-departTournee)<coutVus) || (time[sommetCrt][1]!=-1 && (time[sommetCrt][1]-departTournee)>coutVus))
+	        		branching = false;
+	        	
+	        	//Si la plage horaire est respectée, on fait le branchement.
+	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand même un iti avec des plages non respectées.
+	        	if (branching)
+	        		branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time, departTournee);
+	        	
 	        	vus.remove(prochainSommet);
 	        	nonVus.add(prochainSommet);
 	        }	    

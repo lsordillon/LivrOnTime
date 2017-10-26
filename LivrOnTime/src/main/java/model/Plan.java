@@ -181,7 +181,15 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	int tpLimite = 10;
 	TSP etape2 = new TSP1 ();
 	int nbSommet=dl.getLivraisons().size()+1;
-	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree());
+	
+	//Gestion des plages horaires dans un tableau 2d
+	long[][] time = new long[dl.getLivraisons().size()][2];
+	for (int i= 0;i<dl.getLivraisons().size();i++) {
+		time[i][0]=(dl.getLivraisons().get(i).getDebutPlageHoraire()==null? -1:dl.getLivraisons().get(i).getDebutPlageHoraire().getTime());
+		time[i][1]=(dl.getLivraisons().get(i).getFinPlageHoraire()==null? -1:dl.getLivraisons().get(i).getFinPlageHoraire().getTime());
+	}
+	
+	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree(), time, dl.getHeureDepart().getTime());
 	
 	ArrayList <Chemin> itineraire = new ArrayList<Chemin> ();
 	for(int i=0; i<nbSommet-1;i++) {
