@@ -23,7 +23,7 @@ public class Tournee {
 			double dureeTrajets=0;
 			for(int i=0; i<itineraire2.size();i++){
 				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur()/VITESSE;//Durée des trajets en seconde
+					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur();//Durée des trajets en seconde
 				}
 			}
 			System.out.println("Temps de trajet : "+dureeTrajets);
