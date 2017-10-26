@@ -34,11 +34,12 @@ Arrivée à l’entrepot rue st mort - rue sainte cathy à 9h25
  *
  */
 
-/*
+
 public class feuilleDeRouteTxt {
 
 	private Tournee tourneeCalculee;
 	private String nomFichier;
+	/*
 	
 	public feuilleDeRouteTxt(Tournee tournee, String nomFichier) {
 	
@@ -47,12 +48,12 @@ public class feuilleDeRouteTxt {
 	    Intersection entrepotAd= ...getAdresseEntrepot();
 	}
 	
-	public String genererFeuilleDeRoute(){
+	public static String genererFeuilleDeRoute(Tournee tournee){
 	String contenu = "";
 	contenu = contenu + "Depart de l'entrepot"+ entrepotAd+ "a" + "heureDep";
 	
 		for (...) {
-		contenu = contenu + ....
+		contenu = contenu + ....;
 		}
 		
 	contenu = contenu + "Arrivee a l'entrepot" + entrepotAd + "a" + "heureArr";
@@ -75,3 +76,4 @@ récupérer attente s’il y a
 */
 
 
+}

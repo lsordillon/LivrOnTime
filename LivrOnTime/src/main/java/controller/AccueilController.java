@@ -51,6 +51,7 @@ import model.Livraison;
 import model.Plan;
 import model.Tournee;
 import model.Troncon;
+import util.genererFeuilleDeRoute.feuilleDeRouteTxt;
 import util.parserXML.XmlParserLivraison;
 import util.parserXML.XmlParserPlan;
 import vue.DessinerPlan;
@@ -72,6 +73,7 @@ public class AccueilController{
 	private TableView<Row> table = new TableView<Row>();
     private final ObservableList<Row> data = FXCollections.observableArrayList();
 	private Plan plan;
+	private Tournee tournee;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
@@ -167,15 +169,15 @@ public class AccueilController{
 
 	    GenererFeuille.setDisable(false);
 	    ListerLivraisons(livraisons);
-			    
+		this.tournee = tournee ;	    
 	}
 	
 	public void GenererFeuille(ActionEvent actionEvent) {
 		FileWriter fichierGenere;
+		
 		try {
 			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
-			//fichierGenere.write(... .genererFeuilleDeRoute());
-			fichierGenere.write("Feuille de route : \n");
+			//fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
 			fichierGenere.close();	
 			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
 			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
@@ -189,8 +191,9 @@ public class AccueilController{
 		e.printStackTrace();
 		}     	
 
-		
 	}
+	
+	
 	public void retourAccueil(ActionEvent actionEvent) {
 		VuePlan.getChildren().clear();
 		VueDescriptif.getChildren().clear();
@@ -198,6 +201,7 @@ public class AccueilController{
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
 	}
+	
 	
 	public Plan CreerPlan(String chemin) throws FileNotFoundException{
 		XmlParserPlan parser = new XmlParserPlan();
