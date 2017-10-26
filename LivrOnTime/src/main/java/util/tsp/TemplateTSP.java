@@ -22,6 +22,7 @@ public abstract class TemplateTSP implements TSP {
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
 		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite);
+		System.out.println("Meilleure solution TSP trouvé : "+coutMeilleureSolution);
 	}
 	
 	public Integer getMeilleureSolution(int i){
