@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import util.tsp.Dijkstra;
 import util.tsp.TSP;
 import util.tsp.TSP1;
+import util.tsp.TSP2;
 
 /**
  * Cette classe gère le chargement du plan et le lancement du calcul de la tournée
@@ -179,14 +180,16 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	
 	int tpLimite = 10;
-	TSP etape2 = new TSP1 ();
+	TSP etape2 = new TSP2 ();
 	int nbSommet=dl.getLivraisons().size()+1;
 	
 	//Gestion des plages horaires dans un tableau 2d
 	long[][] time = new long[dl.getLivraisons().size()+1][2];
+	time[0][0]=-1;
+	time[0][1]=Long.MAX_VALUE;
 	for (int i= 0;i<dl.getLivraisons().size();i++) {
-		time[i][0]=(dl.getLivraisons().get(i).getDebutPlageHoraire()==null? -1:dl.getLivraisons().get(i).getDebutPlageHoraire().getTime()-dl.getHeureDepart().getTime());
-		time[i][1]=(dl.getLivraisons().get(i).getFinPlageHoraire()==null? Long.MAX_VALUE:dl.getLivraisons().get(i).getFinPlageHoraire().getTime()-dl.getHeureDepart().getTime());
+		time[i+1][0]=(dl.getLivraisons().get(i).getDebutPlageHoraire()==null? -1:dl.getLivraisons().get(i).getDebutPlageHoraire().getTime()-dl.getHeureDepart().getTime());
+		time[i+1][1]=(dl.getLivraisons().get(i).getFinPlageHoraire()==null? Long.MAX_VALUE:dl.getLivraisons().get(i).getFinPlageHoraire().getTime()-dl.getHeureDepart().getTime());
 	}
 	
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree(), time);

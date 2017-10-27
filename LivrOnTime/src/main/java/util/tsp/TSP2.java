@@ -25,12 +25,12 @@ public class TSP2 extends TSP1 {
 			min=cout[nonVu][0]+duree[nonVu];
 			for(int i=0;i<cout[nonVu].length;i++)
 			{
-				if((cout[nonVu][i]+duree[nonVu])<min&&nonVu!=i)
+				if((cout[nonVu][i])<min&&nonVu!=i)
 				{
-					min=cout[nonVu][i]+duree[nonVu];
+					min=cout[nonVu][i];
 				}
 			}
-			borne+=min;
+			borne+=min+duree[nonVu];
 		}		
 		return borne;
 	}

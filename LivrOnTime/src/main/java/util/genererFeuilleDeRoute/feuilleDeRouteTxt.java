@@ -7,23 +7,23 @@ import model.*;
 
 
 /*
-Départ de l’entrepot rue st mort - rue sainte cathy à 8h00
+Dï¿½part de lï¿½entrepot rue st mort - rue sainte cathy ï¿½ 8h00
 Prendre rue sainte cathy sur 800 metres
 Prendre rue des maches sur 1200 metres
-Arrivée au point de livraison rue des maches - rue caroline à 8h15
+Arrivï¿½e au point de livraison rue des maches - rue caroline ï¿½ 8h15
 Livraison pendant 10 minutes
-Départ du point de livraison rue des maches - rue Caroline à 8h25
+Dï¿½part du point de livraison rue des maches - rue Caroline ï¿½ 8h25
 Prendre rue Caroline sur 800 metres
 Prendre avenue des Arts sur 800 metres
 Prendre rue des sports sur 200 metres
 Prendre chemin des Coquelicots sur 100 metres
-Arrivée au point de livraison avenue jean jaures - chemin de coquelicot à 8h45
+Arrivï¿½e au point de livraison avenue jean jaures - chemin de coquelicot ï¿½ 8h45
 Attente pendant 15 minutes 
 Livraison pendant 10 minutes
-Départ du point de livraison avenue jean jaures - chemin de coquelicot à 9h10
+Dï¿½part du point de livraison avenue jean jaures - chemin de coquelicot ï¿½ 9h10
 Prendre avenue Jean Jaures sur 30 metres
 Prendre rue st mort sur 200 metres
-Arrivée à l’entrepot rue st mort - rue sainte cathy à 9h25
+Arrivï¿½e ï¿½ lï¿½entrepot rue st mort - rue sainte cathy ï¿½ 9h25
 */
 
 
@@ -54,24 +54,15 @@ public class feuilleDeRouteTxt {
 		//Premiere ligne de depart 
 		contenu = contenu + "Depart de l'entrepot "+ entrepotAd+ " a " + heureDep+ "\r\n";
 		
-		int it = 0;
 		
-		//Tant que la destination du chemin n'est pas l'adresse de l'entrepot
-		//On parcout l'itineraire entier (= Liste de chemins) 
-		while ((tournee.getItineraire()).get(it).getDestination().getId() != entrepotAd.getId()) {
-		
-			//Pour tous les chemins, on recup adress dep adress arr
-			//ainsi que heure arrivee au depart et heure de depart apres livraison
-			for (int numChemin = 0; numChemin < nbChemin; numChemin++) {
-				Chemin cheminActuel = ((tournee.getItineraire()).get(numChemin));
-				contenu = contenu + retranscriptionDunChemin(cheminActuel);
-			}
-			it++;
+
+		//Pour tous les chemins, on recup adress dep adress arr
+		//ainsi que heure arrivee au depart et heure de depart apres livraison
+		for (int numChemin = 0; numChemin < nbChemin; numChemin++) {
+			Chemin cheminActuel = ((tournee.getItineraire()).get(numChemin));
+			contenu = contenu + retranscriptionDunChemin(cheminActuel);
 		}
 		
-		//decomposer le dernier itineraire de retour jusque dans l'entrepot
-			Chemin cheminActuel = ((tournee.getItineraire()).get(it));
-			contenu = contenu + retranscriptionDunChemin(cheminActuel);
 
 	
 		//Derniere ligne d'arrivee

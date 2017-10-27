@@ -19,19 +19,20 @@ public class Tournee {
 			this.setListeLivraison(dl.getLivraisons());
 			
 			for(int i=0;i<dl.getLivraisons().size();i++) {
-				dureeTotale+=dl.getLivraisons().get(i).getDuree(); // duree de livraison en seconde
-				System.out.println("Temps d'attente : "+dureeTotale);
+				dureeTotale+=dl.getLivraisons().get(i).getDuree()*1000; // duree de livraison en seconde
 			}
+			
+			System.out.println("Temps d'attente : "+dureeTotale);
 			
 			double dureeTrajets=0;
 			for(int i=0; i<itineraire2.size();i++){
 				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur();//Dur�e des trajets en seconde
+					dureeTrajets+=(long) itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Dur�e des trajets en seconde
 				}
 			}
 			System.out.println("Temps de trajet : "+dureeTrajets);
+			
 			dureeTotale+=dureeTrajets;
-			dureeTotale*=1000;
 			heureArrive=new Date(heureDepart.getTime()+(long)dureeTotale);
 			Date duree = new Date(heureArrive.getTime()-heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (?)
 			
