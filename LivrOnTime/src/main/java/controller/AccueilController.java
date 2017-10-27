@@ -11,48 +11,32 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javafx.scene.paint.Color;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
+
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
+
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
+
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.util.Callback;
-import model.Chemin;
+
 import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
@@ -78,8 +62,7 @@ public class AccueilController{
 	public Button AccueilBouton;
 	public Button GenererFeuille; 
 	
-	private TableView<Row> table = new TableView<Row>();
-    private final ObservableList<Row> data = FXCollections.observableArrayList();
+
 	private Plan plan;
 	private Tournee tournee;
 	static DessinerPlan dessinerPlan;

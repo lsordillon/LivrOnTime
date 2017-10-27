@@ -14,8 +14,10 @@ import model.Tournee;
 import model.Troncon;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -84,7 +86,6 @@ class SceneGestures {
         this.dessinerPlan = dessinerPlan;
         this.controleur = controleur;
         intersectionSelectionnee = null;
-        couleurSelectionne = Color.BLACK;
     }
 
     public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
@@ -113,60 +114,8 @@ class SceneGestures {
 	            sceneDragContext.translateAnchorY = canvas.getTranslateY();
             }
             
-            if(event.isPrimaryButtonDown()) {
-            		double translateX = canvas.getTranslateX();
-            		double translateY = canvas.getTranslateY();
+           if(event.isPrimaryButtonDown()) {
             		
-            		System.out.println("clic");
-            	
-            	
-            		int xtemp = (int) ( - event.getY() + dessinerPlan.getSizeCanvas() + translateY);
-            		int ytemp = (int)(event.getX() - (dessinerPlan.getSizeCanvas()/2) - translateX);
-            	
-
-            		int x = (int) ((xtemp*dessinerPlan.getDivX()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusX());
-            		int y = (int) ((ytemp*dessinerPlan.getDivY()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusY());
-            		System.out.println("x :"+x+" y :"+y  );
-            		controleur.getIntersectionParCoordonnees(x,y);
-            		Intersection in = controleur.getIntersectionSelectionne();
-            		System.out.println(in);
-            	
-            		if(in != null) {
-	            	// On stocke l'intersection qu on selectionne
-	            	// avec sa couleur pour pouvoir la remettre quand on
-	            	// en selectionne une autre
-	            	
-            			if (intersectionSelectionnee != null) {
-            				Circle precedent = dessinerPlan.dessine.get(intersectionSelectionnee.getId());
-            				canvas.getChildren().remove(precedent);
-	                 	precedent.setStroke(couleurSelectionne);
-	                 	precedent.setFill(couleurSelectionne);
-	                 	precedent.setRadius(3);
-	                 	canvas.getChildren().add(precedent);
-            			}
-	            	
-            			Circle nouveau = dessinerPlan.dessine.get(in.getId());
-            			intersectionSelectionnee = in;
-            			//System.out.println(nouveau.getFill());
-            			couleurSelectionne = nouveau.getFill();
-	            	
-	                canvas.getChildren().remove(nouveau);
-	                nouveau.setStroke(Color.YELLOW);
-	            		nouveau.setFill(Color.YELLOW);
-	            		nouveau.setRadius(1);
-	            		canvas.getChildren().add(nouveau);
-            		}
-            	
-            	//((Circle) dessinerPlan.dessine.get(in.getId())).setFill(Color.YELLOW);
-            	//((Circle)dessinerPlan.dessine.get(in.getId())).setFill(Color.YELLOW);
-            	//Circle cercle = dessinerPlan.dessine.get(in.getId());
-            	//System.out.println(cercle);
-            	
-            	/*System.out.println("clic");
-            	System.out.println(x);
-            	System.out.println(y);
-            	System.out.println(translateX);
-            	System.out.println(translateY);*/
             }
         }
 
@@ -207,7 +156,7 @@ class SceneGestures {
             canvas.setScale( scale);
             // note: pivot value must be untransformed, i. e. without scaling
             canvas.setPivot(f*dx, f*dy);
-            System.out.println(scale);
+            //System.out.println(scale);
 
             event.consume();
             
@@ -231,6 +180,7 @@ class SceneGestures {
         return value;
     }
 }
+
 
 
 
@@ -261,7 +211,7 @@ public class DessinerPlan {
 	}
 
 	// Methode qui dessine les troncons
-    public void dessinerTroncon(Intersection D, Intersection O) {
+    public void dessinerTroncon(Intersection D, Intersection O,Plan plan) {
     	int x,y;
     	   
     	
@@ -276,12 +226,7 @@ public class DessinerPlan {
          
          //Centrage
          circle1.relocate(y + sizeCanvas/2, -x+sizeCanvas);
-         circle1.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() {
-             @Override
-             public void handle(MouseEvent e) {
-            	 circle1.setFill(Color.RED);
-             }
-             });
+         
         //Mise a l'echelle
         x= (int)((O.getX() - minusX)*sizeCanvas/ divX);
         y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
@@ -289,32 +234,37 @@ public class DessinerPlan {
     	circle2.setRadius(widthStroke/2);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
-        circle2.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-           	 circle1.setFill(Color.RED);
-            }
-            });
-        
         //Centrage
         circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
+        //Rendre les circles clickable
+        MouseGestures mg = new MouseGestures(plan);
+        mg.makeClickable(circle1);
+        mg.makeClickable(circle2);
+        
+       
     	
-    	if (!dessine.containsKey(D.getId())){
-    		canvas.getChildren().add(circle1);
-    		dessine.put(D.getId(), circle1);
-    	}
     	
-            
-        if (!dessine.containsKey(O.getId())){
-        	canvas.getChildren().add(circle2);
-        	dessine.put(O.getId(), circle2);
-        }
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         
         line.setStrokeWidth(widthStroke);
         //line.setId(O.getId()+""+D.getId());
 
         canvas.getChildren().add(line);
+        
+        if (!dessine.containsKey(D.getId())){
+    		canvas.getChildren().add(circle1);
+    		dessine.put(D.getId(), circle1);
+    	}else{
+    		((Circle) dessine.get(D.getId())).toFront();
+    	}
+    	
+            
+        if (!dessine.containsKey(O.getId())){
+        	canvas.getChildren().add(circle2);
+        	dessine.put(O.getId(), circle2);
+        }else{
+        	((Circle) dessine.get(O.getId())).toFront();
+        }
 
     }
 
@@ -360,8 +310,10 @@ public class DessinerPlan {
        
         for (Troncon T: plan.getTroncons()){
         	
-        	dessinerTroncon(T.getDestination(), T.getOrigine());
+        	dessinerTroncon(T.getDestination(), T.getOrigine(),plan);
         }
+        
+   
         group.getChildren().add(canvas);
         return group;
                
