@@ -25,5 +25,5 @@ public interface TSP {
 	/** 
 	 * @return la duree de la solution calculee par chercheSolution
 	 */
-	public double getCoutMeilleureSolution();
+	public long getCoutMeilleureSolution();
 }
