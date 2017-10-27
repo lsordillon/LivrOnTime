@@ -13,7 +13,7 @@ public abstract class TemplateTSP implements TSP {
 		return tempsLimiteAtteint;
 	}
 	
-	public void chercheSolution(int tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] time, long departTournee){
+	public void chercheSolution(int tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] time){
 		tempsLimiteAtteint = false;
 		coutMeilleureSolution = Integer.MAX_VALUE;
 		meilleureSolution = new Integer[nbSommets];
@@ -21,7 +21,7 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<nbSommets; i++) nonVus.add(i);
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
-		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite,time,departTournee);
+		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite,time);
 	}
 	
 	public Integer getMeilleureSolution(int i){
@@ -66,7 +66,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
-	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, int tpsLimite, long[][] time, long departTournee){
+	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, int tpsLimite, long[][] time){
 		 if (System.currentTimeMillis() - tpsDebut > tpsLimite){
 			 tempsLimiteAtteint = true;
 			 System.err.println("Temps limite atteint !");
@@ -86,17 +86,16 @@ public abstract class TemplateTSP implements TSP {
 	        	nonVus.remove(prochainSommet);
 	        	
 	        	//Code simple permettant de savoir si la plage horaire est respectée
-	        	boolean branching = true;	
-        		if (time[prochainSommet][0]!=-1) 
-        			if ((time[prochainSommet][0]-departTournee)<coutVus)
-        				branchAndBound(prochainSommet, nonVus, vus,time[prochainSommet][0]-departTournee, cout, duree, tpsDebut, tpsLimite,time, departTournee);
-        		else if (time[prochainSommet][1]!=-1 && (time[prochainSommet][1]-departTournee)>coutVus)
-        			branching = false;
-	        	
+        		if ((time[prochainSommet][1])>coutVus) {
+        			if ((time[prochainSommet][0])>coutVus) {
+        				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time);
+        			}
+        			else {
+        				branchAndBound(prochainSommet, nonVus, vus,time[prochainSommet][0], cout, duree, tpsDebut, tpsLimite,time);
+        			}
+        		}
 	        	//Si la plage horaire est respectée, on fait le branchement.
 	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand même un iti avec des plages non respectées.
-	        	if (branching)
-	        		branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time, departTournee);
 	        	
 	        	vus.remove(prochainSommet);
 	        	nonVus.add(prochainSommet);
