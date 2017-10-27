@@ -282,13 +282,15 @@ public class AccueilController{
 
 	}
 
-	
+	//mettre seconde en format heure minutes secondes
 	public static String convertSecondsToHMmSs(long seconds) {
 	    long s = seconds % 60;
 	    long m = (seconds / 60) % 60;
 	    long h = (seconds / (60 * 60)) % 24;
 	    return String.format("%d:%02d:%02d", h,m,s);
 	}
+	
+	
 	//Methode pour retourner l'adresse d'une intersection
 	public String getAdresse(Intersection item){
 		  for(Troncon troncon : plan.getTroncons()){

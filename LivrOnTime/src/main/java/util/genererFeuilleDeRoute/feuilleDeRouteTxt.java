@@ -1,5 +1,6 @@
 package util.genererFeuilleDeRoute;
 import java.util.ArrayList;
+import java.util.Date;
 
 import model.*;
 
@@ -37,26 +38,66 @@ Arrivée à l’entrepot rue st mort - rue sainte cathy à 9h25
 
 public class feuilleDeRouteTxt {
 
-	private Tournee tourneeCalculee;
-	private String nomFichier;
-	/*
 	
-	public feuilleDeRouteTxt(Tournee tournee, String nomFichier) {
-	
-	    int heureDep=tournee.getHeureDepart();
-	    int heureArr=tournee.getHeureArrive();
-	    Intersection entrepotAd= ...getAdresseEntrepot();
+	public feuilleDeRouteTxt(){
+	// Constructeur vide
 	}
 	
-	public static String genererFeuilleDeRoute(Tournee tournee){
-	String contenu = "";
-	contenu = contenu + "Depart de l'entrepot"+ entrepotAd+ "a" + "heureDep";
 	
-		for (...) {
-		contenu = contenu + ....;
+	public static String genererFeuilleDeRoute(Tournee tournee){
+		String contenu = "";
+		Date heureDep = tournee.getHeureDepart(); //a quoi ressemble cette date de merde?
+		Date heureArr = tournee.getHeureArrive();
+		Intersection entrepotAd = (tournee.getItineraire()).get(0).getOrigine(); //getOrigine donne une coordonnee?
+		
+		//Premiere ligne de depart 
+		contenu = contenu + "Depart de l'entrepot "+ entrepotAd+ " a " + heureDep+ "\r\n";
+		
+		int it = 0;
+		
+		//Tant que la destination du chemin n'est pas l'adresse de l'entrepot
+		//On parcout l'itineraire entier (= Liste de chemins) 
+		while ((tournee.getItineraire()).get(it).getDestination() != entrepotAd) {
+		
+			//Pour tous les chemins, on recup adress dep adress arr
+			//ainsi que heure arrivee au depart et heure de depart apres livraison
+			for (int numChemin = 0; numChemin < 10000000; numChemin++) {
+				Intersection origineCheminSuivant = null ;
+				Intersection destinationCheminActuel = null ;
+				Date heureFinCheminActuel = null ; 
+				Date heureDepartCheminSuivant = null;
+				int tempsAttente = 0;
+	
+				//Puis on recupere chaque troncon (nom de rue et longueur du troncon)
+				//et le temps de la livraison d'arrivee de l'it
+				for (int numTroncon = 0; numTroncon < 10000000; numTroncon++) {
+					String rueAPrendre = "";
+					double distanceTroncon = 10000; // A CONVERTIR EN METRES 
+					contenu = contenu + "Prendre "+ rueAPrendre + " sur " + distanceTroncon+ " metres \r\n";
+				}
+				
+				contenu = contenu + "Arrivee au point de livraison "+ destinationCheminActuel+ " a " + heureFinCheminActuel+ "\r\n";
+				if (tempsAttente >0) {
+					contenu = contenu + "Attente pendant "+ tempsAttente+ " minutes \r\n";
+				}
+				contenu = contenu + "Livraison pendant "+ " TEMPS DE LIVRAISON";
+				//heureDepartPoint = heureFinCheminActuel + TEMPS DE LIVRAISON;
+				contenu = contenu + "Depart du point de livraison "+ destinationCheminActuel + " a " + heureDepartCheminSuivant+ "\r\n";
+			}
+			
+			it++;
 		}
 		
-	contenu = contenu + "Arrivee a l'entrepot" + entrepotAd + "a" + "heureArr";
+		
+		//decomposer le dernier itineraire de retour jusque dans l'entrepot
+		for (int numTroncon = 0; numTroncon < 10000000; numTroncon++) {
+			String rueAPrendre = "";
+			double distanceTroncon = 10000; // A CONVERTIR EN METRES 
+			contenu = contenu + "Prendre "+ rueAPrendre + " sur " + distanceTroncon+ " metres \r\n";
+		}
+	
+		//Derniere ligne d'arrivee
+		contenu = contenu + "Arrivee a l'entrepot " + entrepotAd + " a " + heureArr +"\r\n";
 	
 	    return contenu;
 	}
@@ -74,6 +115,6 @@ récupérer attente s’il y a
 
 }
 */
-
+	
 
 }

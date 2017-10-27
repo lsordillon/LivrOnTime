@@ -5,7 +5,8 @@ import java.util.Date;
 
 public class Tournee {
 
-        final static double VITESSE=(double)15/36; //TODO 15KM/h ATTENTION il faudra peut �tre changer cette foutue vitesse
+
+        final static double VITESSE=(double)15/3.6; //TODO 15KM/h ATTENTION il faudra peut �tre changer cette foutue vitesse
 		private Date heureDepart;
 		private Date heureArrive;
 		private ArrayList <Chemin> itineraire;
@@ -25,7 +26,7 @@ public class Tournee {
 			double dureeTrajets=0;
 			for(int i=0; i<itineraire2.size();i++){
 				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur()/VITESSE;//Dur�e des trajets en seconde
+					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur();//Dur�e des trajets en seconde
 				}
 			}
 			System.out.println("Temps de trajet : "+dureeTrajets);
@@ -44,13 +45,13 @@ public class Tournee {
 		public ArrayList <Chemin> getItineraire(){
 			return itineraire;
 		}
-		private Date getHeureDepart() {
+		public Date getHeureDepart() {
 			return heureDepart;
 		}
 		private void setHeureDepart(Date heureDepart) {
 			this.heureDepart = heureDepart;
 		}
-		private Date getHeureArrive() {
+		public Date getHeureArrive() {
 			return heureArrive;
 		}
 		private void setHeureArrive(Date heureArrive) {
