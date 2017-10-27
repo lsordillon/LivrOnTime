@@ -150,7 +150,8 @@ public class AccueilController{
 		
 		ArrayList<Livraison> livraisons = new ArrayList<Livraison>();
 		ArrayList<Livraison> dl2 =dl.getLivraisons();
-		Tournee tournee=plan.calculerLaTournee(dl);
+		tournee=plan.calculerLaTournee(dl);
+	
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
@@ -325,7 +326,7 @@ public class AccueilController{
 			
 			
 			distance = distancePoints(x, y, courant.getX(), courant.getY());
-			if (distance < distanceMin && distance <20) {
+			if (distance < distanceMin && distance <200) { //de 20 a 200
 				distanceMin = distance;
 				selectionnee = courant;
 			}

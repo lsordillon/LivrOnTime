@@ -114,47 +114,48 @@ class SceneGestures {
             }
             
             if(event.isPrimaryButtonDown()) {
+            		double translateX = canvas.getTranslateX();
+            		double translateY = canvas.getTranslateY();
+            		
+            		System.out.println("clic");
             	
-            	double translateX = canvas.getTranslateX();
-            	double translateY = canvas.getTranslateY();
             	
-            	
-            	int xtemp = (int) ( - event.getY() + dessinerPlan.getSizeCanvas() + translateY);
-            	int ytemp = (int)(event.getX() - (dessinerPlan.getSizeCanvas()/2) - translateX);
+            		int xtemp = (int) ( - event.getY() + dessinerPlan.getSizeCanvas() + translateY);
+            		int ytemp = (int)(event.getX() - (dessinerPlan.getSizeCanvas()/2) - translateX);
             	
 
-            	int x = (int) ((xtemp*dessinerPlan.getDivX()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusX());
-            	int y = (int) ((ytemp*dessinerPlan.getDivY()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusY());
+            		int x = (int) ((xtemp*dessinerPlan.getDivX()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusX());
+            		int y = (int) ((ytemp*dessinerPlan.getDivY()/dessinerPlan.getSizeCanvas())+dessinerPlan.getMinusY());
+            		System.out.println("x :"+x+" y :"+y  );
+            		controleur.getIntersectionParCoordonnees(x,y);
+            		Intersection in = controleur.getIntersectionSelectionne();
+            		System.out.println(in);
             	
-            	controleur.getIntersectionParCoordonnees(x,y);
-            	Intersection in = controleur.getIntersectionSelectionne();
-            	System.out.println(in);
-            	
-            	if(in != null) {
+            		if(in != null) {
 	            	// On stocke l'intersection qu on selectionne
 	            	// avec sa couleur pour pouvoir la remettre quand on
 	            	// en selectionne une autre
 	            	
-	            	if (intersectionSelectionnee != null) {
-	            		Circle precedent = dessinerPlan.dessine.get(intersectionSelectionnee.getId());
-	            		canvas.getChildren().remove(precedent);
+            			if (intersectionSelectionnee != null) {
+            				Circle precedent = dessinerPlan.dessine.get(intersectionSelectionnee.getId());
+            				canvas.getChildren().remove(precedent);
 	                 	precedent.setStroke(couleurSelectionne);
 	                 	precedent.setFill(couleurSelectionne);
 	                 	precedent.setRadius(3);
 	                 	canvas.getChildren().add(precedent);
-	            	}
+            			}
 	            	
-	            	Circle nouveau = dessinerPlan.dessine.get(in.getId());
-	            	intersectionSelectionnee = in;
-	            	System.out.println(nouveau.getFill());
-	            	couleurSelectionne = nouveau.getFill();
+            			Circle nouveau = dessinerPlan.dessine.get(in.getId());
+            			intersectionSelectionnee = in;
+            			//System.out.println(nouveau.getFill());
+            			couleurSelectionne = nouveau.getFill();
 	            	
 	                canvas.getChildren().remove(nouveau);
-	            	nouveau.setStroke(Color.YELLOW);
-	            	nouveau.setFill(Color.YELLOW);
-	            	nouveau.setRadius(1);
-	            	canvas.getChildren().add(nouveau);
-            	}
+	                nouveau.setStroke(Color.YELLOW);
+	            		nouveau.setFill(Color.YELLOW);
+	            		nouveau.setRadius(1);
+	            		canvas.getChildren().add(nouveau);
+            		}
             	
             	//((Circle) dessinerPlan.dessine.get(in.getId())).setFill(Color.YELLOW);
             	//((Circle)dessinerPlan.dessine.get(in.getId())).setFill(Color.YELLOW);
@@ -206,6 +207,7 @@ class SceneGestures {
             canvas.setScale( scale);
             // note: pivot value must be untransformed, i. e. without scaling
             canvas.setPivot(f*dx, f*dy);
+            System.out.println(scale);
 
             event.consume();
             

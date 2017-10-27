@@ -5,15 +5,17 @@ import java.util.Date;
 
 public class Tournee {
 
-        final static double VITESSE=(double)15/36; //TODO 15KM/h ATTENTION il faudra peut être changer cette foutue vitesse
+        final static double VITESSE=(double)15/36; //TODO 15KM/h ATTENTION il faudra peut ï¿½tre changer cette foutue vitesse
 		private Date heureDepart;
 		private Date heureArrive;
 		private ArrayList <Chemin> itineraire;
+		private ArrayList <Livraison> listeLivraison;
 		
 		public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
 		    this.heureDepart=dl.getHeureDepart();
 			this.itineraire=itineraire2;
 			double dureeTotale=0;
+			this.setListeLivraison(dl.getLivraisons());
 			
 			for(int i=0;i<dl.getLivraisons().size();i++) {
 				dureeTotale+=dl.getLivraisons().get(i).getDuree(); // duree de livraison en seconde
@@ -23,7 +25,7 @@ public class Tournee {
 			double dureeTrajets=0;
 			for(int i=0; i<itineraire2.size();i++){
 				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur()/VITESSE;//Durée des trajets en seconde
+					dureeTrajets+=(double) itineraire2.get(i).getTroncons().get(j).getLongueur()/VITESSE;//Durï¿½e des trajets en seconde
 				}
 			}
 			System.out.println("Temps de trajet : "+dureeTrajets);
@@ -35,7 +37,7 @@ public class Tournee {
 			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 			SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 			
-		    System.out.println("Durée : "+dureeHms.format(duree)+"\nDépart : "+dateJhms.format(heureDepart)+"\nArrivée : "+dateJhms.format(heureArrive));
+		    System.out.println("Durï¿½e : "+dureeHms.format(duree)+"\nDï¿½part : "+dateJhms.format(heureDepart)+"\nArrivï¿½e : "+dateJhms.format(heureArrive));
 			
 			
 	}
@@ -53,6 +55,12 @@ public class Tournee {
 		}
 		private void setHeureArrive(Date heureArrive) {
 			this.heureArrive = heureArrive;
+		}
+		private void setListeLivraison(ArrayList <Livraison> liste) {
+			this.listeLivraison=liste;
+		}
+		private ArrayList <Livraison> getListeLivraison() {
+			return listeLivraison;
 		}
 		
 }
