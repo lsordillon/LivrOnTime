@@ -170,7 +170,7 @@ public class AccueilController{
 
 	    GenererFeuille.setDisable(false);
 	    ListerLivraisons(livraisons);
-		this.tournee = tournee ;	    
+		this.tournee = tournee;	    
 	}
 	
 	public void GenererFeuille(ActionEvent actionEvent) {
@@ -178,7 +178,7 @@ public class AccueilController{
 		
 		try {
 			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
-			//fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
+			fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
 			fichierGenere.close();	
 			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
 			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
