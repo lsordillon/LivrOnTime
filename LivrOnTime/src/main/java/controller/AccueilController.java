@@ -168,21 +168,26 @@ public class AccueilController{
 		
 		ArrayList<Livraison> livraisons = new ArrayList<Livraison>();
 		ArrayList<Livraison> dl2 =dl.getLivraisons();
-		Tournee tournee=plan.calculerLaTournee(dl);
+		tournee=plan.calculerLaTournee(dl);
+	
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    
 	    GenererFeuille.setDisable(false);
-	    VBox vBox3 = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
-   		vBox3.setSpacing(10);
-   		VBox vBox2 = new VBox(vBox3,dController.ListerTournee(tournee, dl, plan));
-   		
-   		vBox2.setSpacing(40);
-   		vBox2.setLayoutX(30);
-        vBox2.setLayoutY(100);
-	    VueDescriptif.getChildren().add(vBox2);
-		this.tournee = tournee ;	    
+
+		VBox vBox3 = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
+		vBox3.setSpacing(10);
+		VBox vBox2 = new VBox(vBox3,dController.ListerTournee(tournee, dl, plan));
+	
+		vBox2.setSpacing(40);
+		vBox2.setLayoutX(30);
+		vBox2.setLayoutY(100);
+		VueDescriptif.getChildren().add(vBox2);
+			
+	    //ListerLivraisons(livraisons);
+		this.tournee = tournee;	    
+
 	}
 	
 	public void GenererFeuille(ActionEvent actionEvent) {
@@ -190,7 +195,7 @@ public class AccueilController{
 		
 		try {
 			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
-			//fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
+			fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
 			fichierGenere.close();	
 			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
 			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
@@ -397,7 +402,7 @@ public class AccueilController{
 			
 			
 			distance = distancePoints(x, y, courant.getX(), courant.getY());
-			if (distance < distanceMin && distance <20) {
+			if (distance < distanceMin && distance <200) { //de 20 a 200
 				distanceMin = distance;
 				selectionnee = courant;
 			}
