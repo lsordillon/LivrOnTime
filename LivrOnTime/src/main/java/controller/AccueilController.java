@@ -24,6 +24,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -34,16 +35,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.util.Callback;
 import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
@@ -77,8 +85,8 @@ public class AccueilController{
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
-
-
+  
+    private DescriptifController dController = new DescriptifController();
     
     
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
@@ -131,7 +139,17 @@ public class AccueilController{
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
 			    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
-			    ListerLivraisons(dl.getLivraisons());
+			    //ListerLivraisons(dl.getLivraisons());
+			     
+	
+			    VBox vBox3 = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
+		   		vBox3.setSpacing(10);
+		   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl, plan));
+		   		
+		   		vBox2.setSpacing(40);
+		   		vBox2.setLayoutX(30);
+		        vBox2.setLayoutY(100);
+			    VueDescriptif.getChildren().add(vBox2);
 			    CalculTournee.setDisable(false);
 	    	}else{
 	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
@@ -154,21 +172,16 @@ public class AccueilController{
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
-	    for (Chemin chemin : tournee.getItineraire()){
-	    	for(Livraison l : dl2){
-	    		if(l.getDestination().getId() == chemin.getOrigine().getId() && premireFois){
-	    			livraisons.add(0,l);
-	    			System.out.println("origine");
-	    		}else if(l.getDestination().getId() == chemin.getDestination().getId()){
-	    			livraisons.add(l);
-	    			System.out.println("destination");
-	    		}
-	    	}
-	    premireFois=false;
-	    }
-
+	    
 	    GenererFeuille.setDisable(false);
-	    ListerLivraisons(livraisons);
+	    VBox vBox3 = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
+   		vBox3.setSpacing(10);
+   		VBox vBox2 = new VBox(vBox3,dController.ListerTournee(tournee, dl, plan));
+   		
+   		vBox2.setSpacing(40);
+   		vBox2.setLayoutX(30);
+        vBox2.setLayoutY(100);
+	    VueDescriptif.getChildren().add(vBox2);
 		this.tournee = tournee ;	    
 	}
 	
@@ -216,7 +229,7 @@ public class AccueilController{
 	}   
 
 	
-	public void ListerLivraisons(ArrayList<Livraison> livraisons){
+	/*public void ListerLivraisons(ArrayList<Livraison> livraisons){
 		data.clear();
 		table = new TableView<Row>();
 		for(Livraison item : livraisons){
@@ -245,8 +258,64 @@ public class AccueilController{
 	     TableColumn<Row, String> dureeCol = new TableColumn<Row, String>("Duree");
 	     dureeCol.setMinWidth(60);
 	     dureeCol.setCellValueFactory(new PropertyValueFactory<Row,String>("duree"));
-	     
-	     
+	     table.setEditable(true);
+	     table.setRowFactory(new Callback<TableView<Row>, TableRow<Row>>() {
+			public TableRow<Row> call(TableView<Row> tv) {
+			        final TableRow<Row> row = new TableRow<Row>();
+
+			        row.setOnDragDetected(new EventHandler<MouseEvent>() {
+						public void handle(MouseEvent event) {
+						    if (! row.isEmpty()) {
+						        Integer index = row.getIndex();
+						        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+						        db.setDragView(row.snapshot(null, null));
+						        ClipboardContent cc = new ClipboardContent();
+						        cc.put(SERIALIZED_MIME_TYPE, index);
+						        db.setContent(cc);
+						        event.consume();
+						    }
+						}
+					});
+
+			        row.setOnDragOver(new EventHandler<DragEvent>() {
+						public void handle(DragEvent event) {
+						    Dragboard db = event.getDragboard();
+						    if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+						        if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
+						            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+						            event.consume();
+						        }
+						    }
+						}
+					});
+
+			        row.setOnDragDropped(new EventHandler<DragEvent>() {
+						public void handle(DragEvent event) {
+						    Dragboard db = event.getDragboard();
+						    if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+						        int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+						        Row draggedPerson = table.getItems().remove(draggedIndex);
+
+						        int dropIndex ; 
+
+						        if (row.isEmpty()) {
+						            dropIndex = table.getItems().size() ;
+						        } else {
+						            dropIndex = row.getIndex();
+						        }
+
+						        table.getItems().add(dropIndex, draggedPerson);
+
+						        event.setDropCompleted(true);
+						        table.getSelectionModel().select(dropIndex);
+						        event.consume();
+						    }
+						}
+					});
+
+			        return row ;
+			    }
+		});
 	     
 	
 			table.setItems(data);
@@ -279,7 +348,8 @@ public class AccueilController{
 		VueDescriptif.getChildren().add(vBox2);
     
 
-	}
+	}*/
+
 
 	//mettre seconde en format heure minutes secondes
 	public static String convertSecondsToHMmSs(long seconds) {

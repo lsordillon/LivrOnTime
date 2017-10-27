@@ -17,7 +17,9 @@ public class Livraison {
 	public Date getDebutPlageHoraire() {
 		return this.debutPlageHoraire;
 	}
+	public Livraison(){
 		
+	}
 	public Livraison (int duree, Intersection destination ) {
 		this.duree = duree;	
 		this.debutPlageHoraire = null;
