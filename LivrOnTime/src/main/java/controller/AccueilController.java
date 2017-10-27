@@ -170,7 +170,7 @@ public class AccueilController{
 
 	    GenererFeuille.setDisable(false);
 	    ListerLivraisons(livraisons);
-		this.tournee = tournee ;	    
+		this.tournee = tournee;	    
 	}
 	
 	public void GenererFeuille(ActionEvent actionEvent) {
