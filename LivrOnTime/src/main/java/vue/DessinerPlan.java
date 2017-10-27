@@ -276,7 +276,12 @@ public class DessinerPlan {
          
          //Centrage
          circle1.relocate(y + sizeCanvas/2, -x+sizeCanvas);
-         
+         circle1.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() {
+             @Override
+             public void handle(MouseEvent e) {
+            	 circle1.setFill(Color.RED);
+             }
+             });
         //Mise a l'echelle
         x= (int)((O.getX() - minusX)*sizeCanvas/ divX);
         y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
@@ -284,6 +289,12 @@ public class DessinerPlan {
     	circle2.setRadius(widthStroke/2);
         circle2.setStroke(Color.BLACK);
         circle2.setFill(Color.BLACK);
+        circle2.addEventFilter(MouseEvent.MOUSE_CLICKED,  new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+           	 circle1.setFill(Color.RED);
+            }
+            });
         
         //Centrage
         circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
