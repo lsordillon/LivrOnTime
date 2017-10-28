@@ -9,12 +9,12 @@ public class TSP2 extends TSP1 {
 	@Override
 	protected int bound(Integer sommetCourant, ArrayList<Integer> nonVus, long[][] cout, long[] duree) {
 		int borne=0;
-		long min=cout[sommetCourant][0]+duree[sommetCourant];
+		long min=Long.MAX_VALUE;
 		for(int i=0;i<cout[sommetCourant].length;i++)
 		{
-			if((cout[sommetCourant][i])+duree[sommetCourant]<min&&sommetCourant!=i)
+			if((cout[sommetCourant][i])<min&&sommetCourant!=i)
 			{
-				min=cout[sommetCourant][i]+duree[sommetCourant];
+				min=cout[sommetCourant][i];
 			}
 		}
 		borne+=min;
@@ -22,7 +22,7 @@ public class TSP2 extends TSP1 {
 		for(Integer nonVu : nonVus)
 		{
 		
-			min=cout[nonVu][0]+duree[nonVu];
+			min=Long.MAX_VALUE;
 			for(int i=0;i<cout[nonVu].length;i++)
 			{
 				if((cout[nonVu][i])<min&&nonVu!=i)
