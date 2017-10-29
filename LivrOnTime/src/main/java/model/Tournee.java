@@ -8,14 +8,14 @@ public class Tournee {
 
         final static double VITESSE=(double)15/3.6; //TODO 15KM/h ATTENTION il faudra peut �tre changer cette foutue vitesse
 		private Date heureDepart;
-		private Date heureArrive;
+		private Date heureArrivee;
 		private ArrayList <Chemin> itineraire;
 		private ArrayList <Livraison> listeLivraison;
 		
 		public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
 		    this.heureDepart=dl.getHeureDepart();
 			this.itineraire=itineraire2;
-			double dureeTotale=0;
+			long dureeTotale=0;
 			this.setListeLivraison(dl.getLivraisons());
 			
 			for(int i=0;i<dl.getLivraisons().size();i++) {
@@ -24,22 +24,22 @@ public class Tournee {
 			
 			System.out.println("Temps d'attente : "+dureeTotale);
 			
-			double dureeTrajets=0;
+			long dureeTrajets=0;
 			for(int i=0; i<itineraire2.size();i++){
 				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTrajets+=(long) itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Dur�e des trajets en seconde
+					dureeTrajets+= itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 				}
 			}
 			System.out.println("Temps de trajet : "+dureeTrajets);
 			
 			dureeTotale+=dureeTrajets;
-			heureArrive=new Date(heureDepart.getTime()+(long)dureeTotale);
-			Date duree = new Date(heureArrive.getTime()-heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (?)
+			heureArrivee=new Date(heureDepart.getTime()+dureeTotale);
+			Date duree = new Date(heureArrivee.getTime()-heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (?)
 			
 			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 			SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 			
-		    System.out.println("Dur�e : "+dureeHms.format(duree)+"\nD�part : "+dateJhms.format(heureDepart)+"\nArriv�e : "+dateJhms.format(heureArrive));
+		    System.out.println("Duree : "+dureeHms.format(duree)+"\nDepart : "+dateJhms.format(heureDepart)+"\nArrivee : "+dateJhms.format(heureArrivee));
 			
 			
 	}
@@ -53,10 +53,10 @@ public class Tournee {
 			this.heureDepart = heureDepart;
 		}
 		public Date getHeureArrive() {
-			return heureArrive;
+			return heureArrivee;
 		}
 		private void setHeureArrive(Date heureArrive) {
-			this.heureArrive = heureArrive;
+			this.heureArrivee = heureArrive;
 		}
 		private void setListeLivraison(ArrayList <Livraison> liste) {
 			this.listeLivraison=liste;

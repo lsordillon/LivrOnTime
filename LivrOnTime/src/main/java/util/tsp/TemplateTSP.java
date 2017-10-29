@@ -69,11 +69,11 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
 	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, int tpsLimite, long[][] time){
-		 /*if (System.currentTimeMillis() - tpsDebut > tpsLimite){
+		 if (System.currentTimeMillis() - tpsDebut > tpsLimite){
 			 tempsLimiteAtteint = true;
 			 System.err.println("Temps limite atteint !");
 			 return;
-		 }*/
+		 }
 	    if (nonVus.size() == 0){ // tous les sommets ont ete visites
 	    	coutVus += cout[sommetCrt][0];
 	    	if (coutVus < coutMeilleureSolution){ // on a trouve une solution meilleure que meilleureSolution
@@ -96,7 +96,7 @@ public abstract class TemplateTSP implements TSP {
 	    			}
 	        	}
 	        	//Si la plage horaire est respectée, on fait le branchement.
-	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand même un iti avec des plages non respectées.
+	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand même un iti avec des plages non respectées (en fait juste coder le 'else').
 	        	
 	        	vus.remove(prochainSommet);
 	        	nonVus.add(prochainSommet);
