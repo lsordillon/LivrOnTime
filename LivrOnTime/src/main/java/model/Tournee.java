@@ -61,7 +61,7 @@ public class Tournee {
 		private void setListeLivraison(ArrayList <Livraison> liste) {
 			this.listeLivraison=liste;
 		}
-		private ArrayList <Livraison> getListeLivraison() {
+		public ArrayList <Livraison> getListeLivraison() {
 			return listeLivraison;
 		}
 		
