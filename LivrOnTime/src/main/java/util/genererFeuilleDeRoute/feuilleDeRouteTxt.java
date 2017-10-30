@@ -171,11 +171,16 @@ public class feuilleDeRouteTxt {
 	private static String ruesDelIntersection (Intersection intersection){
 		ArrayList <Troncon> troncons = intersection.getTronconsVersVoisins();
 		String rues = null;
+		String rue2 = null;
 		
 		String rue1 = troncons.get(0).getNomRue();
-		String rue2 = troncons.get(1).getNomRue();
-
-		rues = rue1 +" "+ rue2;
+		
+		if (troncons.size()>1) {
+			rue2 = troncons.get(1).getNomRue();
+			rues = rue1 +" "+ rue2;
+		}
+		else
+		rues = rue1;
 
 		return rues;
 	}
