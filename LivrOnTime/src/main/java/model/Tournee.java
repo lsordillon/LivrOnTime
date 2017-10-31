@@ -11,12 +11,15 @@ public class Tournee {
 		private Date heureArrivee;
 		private ArrayList <Chemin> itineraire;
 		private ArrayList <Livraison> listeLivraisons;
+		/**
+		 * Ce tableau correspond aux temps de passage estimés de la livraison aux différents points de livraison. Plus d'explication avec la fonction {@link Tournee#getTempsPassage}
+		 */
 		private Date[][] tempsPassage;
 		
 		public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
 		    this.heureDepart=dl.getHeureDepart();
 			this.itineraire=itineraire2;
-			long dureeTotale=0;
+			long dureeTotale=heureDepart.getTime();
 			
 			listeLivraisons = new ArrayList<Livraison>();
 			for (Chemin chemin : itineraire2){
@@ -27,30 +30,58 @@ public class Tournee {
 		    	}
 		    }
 			
-			tempsPassage = new Date[itineraire2.size()][3];
+			tempsPassage = new Date[itineraire2.size()][2];
 			
-			double dureeTrajets=0;
 			for(int i=0;i<itineraire2.size();i++){
 				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTrajets+= itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
+					dureeTotale+= itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 				}
-				
-				if (i<listeLivraisons.size())
+				if (i<listeLivraisons.size()) {
+					if (listeLivraisons.get(i).getDebutPlageHoraire()!=null && listeLivraisons.get(i).getDebutPlageHoraire().getTime()>dureeTotale) {
+						tempsPassage[i][0] = new Date(dureeTotale);
+						tempsPassage[i][1] = new Date(listeLivraisons.get(i).getDebutPlageHoraire().getTime());
+						dureeTotale = listeLivraisons.get(i).getDebutPlageHoraire().getTime();
+					}
+					else {
+						tempsPassage[i][0] = new Date(dureeTotale);
+					}
 					dureeTotale+=listeLivraisons.get(i).getDuree()*1000; // duree de livraison en ms
+				}
+				else {
+					tempsPassage[i][0]=new Date(dureeTotale);
+				}
 			}
-			System.out.println("Temps de trajet : "+dureeTrajets);
-			System.out.println("Temps d'attente : "+dureeTotale);
 			
-			dureeTotale+=dureeTrajets;
-			heureArrivee=new Date(heureDepart.getTime()+dureeTotale);
-			Date duree = new Date(dureeTotale- 3600000);// Soustraire 1 heure en millisecondes (problème avec la date absolue par rapport à une durée brute en ms)
+			
+			heureArrivee=new Date(dureeTotale);
+			Date duree = new Date(dureeTotale- heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (problème avec la date absolue par rapport à une durée brute en ms)
 			
 			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 			SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 			
 		    System.out.println("Duree : "+dureeHms.format(duree)+"\nDepart : "+dateJhms.format(heureDepart)+"\nArrivee : "+dateJhms.format(heureArrivee));
+		    
+		    for (Date[] tmp:tempsPassage) {
+		    	System.out.print("Trajet : heure d'arrivée = "+dateJhms.format(tmp[0]));
+		    	System.out.println((tmp[1]==null?"":("     Temps d'attente = "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min, livraison à "+dureeHms.format(tmp[1]))));
+		    	
+		    }
 			
 			
+	}
+		
+	/**
+	 * <p>Getter de l'attribut tempsPassage qui recense les temps de passage estimés aux différents points de livraison. Il s'agit d'un tableau 2D contenant :</p>
+	 * <ul>
+	 * <li> en première colonne (tempsPassage[i][0]) la date d'arrivée sur le point de livraison d'index i</li>
+	 * <li> en deuxième colonne (tempsPassage[i][1]) la date de début de livraison</li>
+	 * </ul>
+	 * <p>Toutes les dates du tableau sont au format normal. On peut les traiter avec la classe {@link SimpleDateFormat} qui permet de formater facilement l'affichage.
+	 * @return le tableau 2D avec les temps de passage
+	 * @see Tournee#tempsPassage
+	 */
+	public Date[][] getTempsPassage(){
+		return tempsPassage;
 	}
 		
 	public ArrayList <Chemin> getItineraire(){
@@ -61,24 +92,26 @@ public class Tournee {
 		return heureDepart;
 	}
 	
-	private void setHeureDepart(Date heureDepart) {
-		this.heureDepart = heureDepart;
-	}
-	
 	public Date getHeureArrive() {
 		return heureArrivee;
 	}
 	
-	private void setHeureArrive(Date heureArrive) {
+	public ArrayList <Livraison> getListeLivraison() {
+		return listeLivraisons;
+	}
+	
+	
+	//Unused setters (yet)
+	/*private void setHeureArrive(Date heureArrive) {
 		this.heureArrivee = heureArrive;
 	}
 	
 	private void setListeLivraison(ArrayList <Livraison> liste) {
 		this.listeLivraisons=liste;
 	}
+	private void setHeureDepart(Date heureDepart) {
+		this.heureDepart = heureDepart;
+	}*/
 	
-	public ArrayList <Livraison> getListeLivraison() {
-		return listeLivraisons;
-	}
 		
 }

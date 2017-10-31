@@ -120,13 +120,14 @@ public class AccueilController{
 			     
 	
 			    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-			    					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())));
+			    					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+			    					  new Label ("Heure de Retour :      "));
 		   		vBox3.setSpacing(10);
-		   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl.getLivraisons(), plan));
+		   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl.getLivraisons(), plan, null));
 		   		
 		   		vBox2.setSpacing(40);
 		   		vBox2.setLayoutX(30);
-		        vBox2.setLayoutY(100);
+		        vBox2.setLayoutY(50);
 			    VueDescriptif.getChildren().add(vBox2);
 			    CalculTournee.setDisable(false);
 	    	}else{
@@ -148,14 +149,15 @@ public class AccueilController{
 	    GenererFeuille.setDisable(false);
 
 		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())));
+							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
 		vBox3.setSpacing(10);
 		
-		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan));
+		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan, tournee));
 	
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);
-		vBox2.setLayoutY(100);
+		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
 
 	}

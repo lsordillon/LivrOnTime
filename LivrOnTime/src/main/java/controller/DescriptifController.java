@@ -2,6 +2,8 @@ package controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,6 +18,7 @@ import javafx.util.Callback;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
+import model.Tournee;
 import model.Troncon;
 import vue.DessinerPlan;
 
@@ -33,7 +36,7 @@ public class DescriptifController {
 
 	    }
 	   // ************ ListesLivraison *********************
-	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan){
+	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
 		this.plan = plan;
 		
 		data.clear();
@@ -49,6 +52,7 @@ public class DescriptifController {
 					@Override
 					protected void updateItem(Livraison item, boolean bln) {
 						String plageHoraire;
+						
 
 						SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm");
 						
@@ -60,15 +64,33 @@ public class DescriptifController {
 							}else {
 								plageHoraire="--:-- - --:--";
 							}
+							
+							
+							
 							super.updateItem(item, bln);
+							
 
 							VBox vBox = new VBox(new Text(getAdresse(item.getDestination())), new Text(plageHoraire));
-
-
+							
+							if (tournee!=null) {
+								String heureArrivee="";
+								String attente="";
+								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
+						    	heureArrivee="Arrivée à "+dureeHms.format(tmp[0]);
+						    	attente=(tmp[1]==null?"    Pas d'attente":("    Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
+						    	VBox vBox2 = new VBox();
+						    	Text txt = new Text(heureArrivee+attente);
+						    	
+						    	//La couleur !!
+						    	txt.setFill(tmp[1]==null?Color.RED:Color.GREEN);
+						    	vBox2.getChildren().addAll(vBox,new VBox(txt));
+						    	vBox2.setSpacing(15);
+						    	setGraphic(vBox2);
+							}
 
 							// HBox hBox = new HBox(new ImageView, vBox);
 							// hBox.setSpacing(10);
-							setGraphic(vBox);
+							else setGraphic(vBox);
 
 
 						}
