@@ -122,7 +122,7 @@ public class AccueilController{
 			    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
 			    					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())));
 		   		vBox3.setSpacing(10);
-		   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl, plan));
+		   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl.getLivraisons(), plan));
 		   		
 		   		vBox2.setSpacing(40);
 		   		vBox2.setLayoutX(30);
@@ -153,7 +153,7 @@ public class AccueilController{
 							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())));
 		vBox3.setSpacing(10);
 		
-		VBox vBox2 = new VBox(vBox3,dController.ListerTournee(tournee, dl, plan));
+		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan));
 	
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);

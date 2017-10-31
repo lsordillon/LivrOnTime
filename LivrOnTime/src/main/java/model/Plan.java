@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
@@ -10,7 +9,6 @@ import org.w3c.dom.NodeList;
 
 import util.tsp.Dijkstra;
 import util.tsp.TSP;
-import util.tsp.TSP1;
 import util.tsp.TSP2;
 
 /**
@@ -95,7 +93,6 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 	//charge la liste des points de livraison + entrepot
 	ArrayList <Intersection> origines=new ArrayList<Intersection>(dl.getIntersections());
 
-	Date hDepart=dl.getHeureDepart();
 
 	// Pour chaque point de livraison
 	for (int j=0; j<origines.size();j++) {
@@ -211,8 +208,8 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 
 	System.out.println("LA TOURNEE");
 	Tournee tournee = new Tournee(itineraire,dl);
-	for(int j=0;j<tournee.getItineraire().size();j++) {
-		System.out.println(tournee.getItineraire().get(j).toString());
+	for(Chemin che:tournee.getItineraire()) {
+		System.out.println(che);
 	}
 
 	
