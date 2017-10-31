@@ -11,6 +11,7 @@ public class Tournee {
 		private Date heureArrivee;
 		private ArrayList <Chemin> itineraire;
 		private ArrayList <Livraison> listeLivraisons;
+		private Date[][] tempsPassage;
 		
 		public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
 		    this.heureDepart=dl.getHeureDepart();
@@ -22,24 +23,23 @@ public class Tournee {
 		    	for(Livraison l : dl.getLivraisons()){
 		    		if(l.getDestination().getId() == chemin.getDestination().getId()){
 		    			listeLivraisons.add(l);
-		    			System.out.println("destination");
 		    		}
 		    	}
 		    }
 			
-			for(Livraison livr:dl.getLivraisons()) {
-				dureeTotale+=livr.getDuree()*1000; // duree de livraison en seconde
-			}
-			
-			System.out.println("Temps d'attente : "+dureeTotale);
+			tempsPassage = new Date[itineraire2.size()][3];
 			
 			double dureeTrajets=0;
-			for(Chemin chem:itineraire2){
-				for(Troncon tron :chem.getTroncons()){
-					dureeTrajets+= tron.getLongueur()*1000/VITESSE;//Duree des trajets en seconde
+			for(int i=0;i<itineraire2.size();i++){
+				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
+					dureeTrajets+= itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 				}
+				
+				if (i<listeLivraisons.size())
+					dureeTotale+=listeLivraisons.get(i).getDuree()*1000; // duree de livraison en ms
 			}
 			System.out.println("Temps de trajet : "+dureeTrajets);
+			System.out.println("Temps d'attente : "+dureeTotale);
 			
 			dureeTotale+=dureeTrajets;
 			heureArrivee=new Date(heureDepart.getTime()+dureeTotale);

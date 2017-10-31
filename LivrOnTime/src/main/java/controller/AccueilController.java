@@ -132,9 +132,7 @@ public class AccueilController{
 	    	}else{
 	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
 	    		alert.showAndWait();
-	    	}
-			
-			
+	    	}	
 		}
 		
 	}

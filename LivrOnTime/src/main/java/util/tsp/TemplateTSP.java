@@ -87,8 +87,8 @@ public abstract class TemplateTSP implements TSP {
 	        	vus.add(prochainSommet);
 	        	nonVus.remove(prochainSommet);
 	        	//Code simple permettant de savoir si la plage horaire est respectée
-	        	if ((time[prochainSommet][1])>coutVus) {
-		        	if ((time[prochainSommet][0])>coutVus) {
+	        	if ((time[prochainSommet][1])>coutVus+cout[sommetCrt][prochainSommet]) {
+		        	if ((time[prochainSommet][0])>coutVus+cout[sommetCrt][prochainSommet]) {
 	    				branchAndBound(prochainSommet, nonVus, vus,time[prochainSommet][0], cout, duree, tpsDebut, tpsLimite,time);
 	    			}
 	    			else {
