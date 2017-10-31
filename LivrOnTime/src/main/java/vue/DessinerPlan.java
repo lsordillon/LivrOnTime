@@ -201,6 +201,7 @@ public class DessinerPlan {
 	PannableCanvas canvas = new PannableCanvas();
 	public static HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
 	
+	MouseGestures mg;
 
     public static HashMap<Long, Circle> getDessine() {
 		return dessine;
@@ -237,7 +238,6 @@ public class DessinerPlan {
         //Centrage
         circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
         //Rendre les circles clickable
-        MouseGestures mg = new MouseGestures(plan);
         mg.makeClickable(circle1);
         mg.makeClickable(circle2);
         
@@ -307,6 +307,8 @@ public class DessinerPlan {
         divX=maxX-minusX;
         minusY=minY;
         divY=maxY-minusY;
+        
+        mg = new MouseGestures(plan, canvas);
        
         for (Troncon T: plan.getTroncons()){
         	
