@@ -86,7 +86,7 @@ public abstract class TemplateTSP implements TSP {
 	        	Integer prochainSommet = it.next();
 	        	vus.add(prochainSommet);
 	        	nonVus.remove(prochainSommet);
-	        	//Code simple permettant de savoir si la plage horaire est respectée
+	        	//Code simple permettant de savoir si la plage horaire est respectï¿½e
 	        	if ((time[prochainSommet][1])>coutVus) {
 		        	if ((time[prochainSommet][0])>coutVus) {
 	    				branchAndBound(prochainSommet, nonVus, vus,time[prochainSommet][0], cout, duree, tpsDebut, tpsLimite,time);
@@ -95,8 +95,8 @@ public abstract class TemplateTSP implements TSP {
 	    				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time);
 	    			}
 	        	}
-	        	//Si la plage horaire est respectée, on fait le branchement.
-	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand même un iti avec des plages non respectées.
+	        	//Si la plage horaire est respectï¿½e, on fait le branchement.
+	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand mï¿½me un iti avec des plages non respectï¿½es.
 	        	
 	        	vus.remove(prochainSommet);
 	        	nonVus.add(prochainSommet);
