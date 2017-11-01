@@ -107,21 +107,7 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 		
 		for (int i=0; i<destinations.size();i++) {
 			// Pour chaque trajet reliant deux points de livraison, je cree un chemin
-			Chemin chemin = new Chemin();
-			chemin.setOrigine(ptDepart);
-			chemin.setDestination(destinations.get(i));
-			
-			// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
-			Intersection courante = destinations.get(i);
-			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-			while (courante!=ptDepart) {
-				Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
-				if(troncon!=null) {
-					troncons.add(0, troncon);
-				}
-				courante=courante.getPredecesseur();
-			}
-			chemin.setTroncons(troncons);
+			Chemin chemin = this.creerChemin(ptDepart, destinations.get(i));
 			chemins.add(chemin);
 		}
 	} 	
@@ -163,6 +149,31 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
 }
 
 /**
+ * Permet de crÃ©er un chemin suite Ã  la rÃ©alisation d'un dijkstra (attention indispensable)
+ * @param ptDepart
+ * @param courante
+ * @return le chemin correspondant
+ */
+public Chemin creerChemin (Intersection ptDepart,Intersection courante) {
+	// Pour chaque trajet reliant deux points de livraison, je cree un chemin
+	Chemin chemin = new Chemin();
+	chemin.setOrigine(ptDepart);
+	chemin.setDestination(courante);
+				
+	// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
+	ArrayList<Troncon> troncons=new ArrayList<Troncon>();
+	while (courante!=ptDepart) {
+		Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
+		if(troncon!=null) {
+			troncons.add(0, troncon);
+		}
+		courante=courante.getPredecesseur();
+	}
+	chemin.setTroncons(troncons);
+	return chemin;
+}
+
+/**
  * Calcul l'ensemble de la tournee a partir de la demande de livraison
  * realise tout d'abord des Dijkstra pour trouver les plus courts chemins entre chaque point
  * construit un graphe complet oriente
@@ -172,7 +183,7 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
  */
 public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
-	//Mesure du temps nécessaire à l'algorithme Dijkstra
+	//Mesure du temps nï¿½cessaire ï¿½ l'algorithme Dijkstra
 	long debutDijkstra = System.currentTimeMillis();
 	deroulerLesDijkstra(dl);
 	long tpLimite = System.currentTimeMillis()-debutDijkstra;

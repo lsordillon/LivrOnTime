@@ -1,7 +1,7 @@
 package vue;
 
 
-import java.awt.Canvas;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -13,6 +13,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import model.Intersection;
 import model.Plan;
+import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
 
 
 	public class MouseGestures {
@@ -75,10 +77,10 @@ import model.Plan;
 	                	}
 	                	Intersection intersectionClicked = plan.getIntersections().get(key);
 	                	System.out.println("Intersecrion ID "+intersectionClicked.getId());
-
+	                	
 	            } 
 	            
-	            else {
+	            /*else {
 
 	                Node p = ((Node) (t.getSource()));
 
@@ -86,7 +88,7 @@ import model.Plan;
 	                orgTranslateY = p.getTranslateY();
 	               
 
-	            }
+	            }*/
 	        }
 	    };
 	    
