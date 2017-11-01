@@ -14,6 +14,7 @@ import javax.xml.validation.Validator;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import model.Livraison;
 
@@ -29,9 +30,10 @@ public class XmlParserLivraison {
 	static Document doc;
 	public static NodeList entrepot;
 	public static NodeList livraisons;
+	private String messageErreur;
 	
 		/**
-		 * Méthode parcourant un fichier xml pour en tirer les 
+		 * MÃ©thode parcourant un fichier xml pour en tirer les 
 		 * informations necessaires a la creation de l'objet
 		 * demande de livraison
 		 * @param file_name, le nom du fichier a parser
@@ -81,50 +83,22 @@ public class XmlParserLivraison {
 	            validator.validate(new StreamSource(xml));
 	            return true;
 	        }
+	        catch(SAXParseException ex)
+	        {
+	        	messageErreur = "Erreur a la ligne "+ ex.getLineNumber()+" : " + ex.getMessage();
+	            return false;
+	        }
 	        catch(Exception ex)
 	        {
 	            return false;
 	        }
 	    }
-	    /*
-	    public void AjouterLivraison(Livraison liv){
-	    	
-	    	Element livE=doc.createElement("Livraison");
-	    	Element root = doc.getDocumentElement();
-	    	root.appendChild(livE);
-	    	
-	    	Node adresse=doc.createAttribute("adresse");
-	    	adresse.setNodeValue(String.valueOf(liv.getDestination().getId()));
-	        livE.appendChild(adresse);
-	        
-	    	if(liv.getDebutPlageHoraire()!=null){
-	    		Node DPH=doc.createAttribute("debutPlage");
-	    		DPH.setNodeValue(liv.getDebutPlageHoraire().toString());
-	    		livE.appendChild(DPH);
-	    	}
-	    	
-	    	Node duree=doc.createAttribute("duree");
-	    	duree.setNodeValue(String.valueOf(liv.getDuree()));
-	    	livE.appendChild(duree);
-	    	
-	    	if(liv.getFinPlageHoraire()!=null){
-	    		Node FPH=doc.createAttribute("finPlage");
-	    		FPH.setNodeValue(liv.getFinPlageHoraire().toString());
-	    		livE.appendChild(FPH);
-	    	}
-	 
-	    	
-	    }
-	    
-	    
-	  public void supprimerLivraison(Livraison liv){
-		  for (int i = 0; i <livraisons.getLength(); i++) {       
-	            Element livE = (Element)livraisons.item(i);
-	            String adresse = livE.getAttribute("adresse");
-	            if(adresse.equals(String.valueOf(liv.getDestination().getId())))
-	                livE.getParentNode().removeChild(livE);
-		  }
-	  }  */
+		public String getMessageErreur() {
+			return messageErreur;
+		}
+		public void setMessageErreur(String messageErreur) {
+			this.messageErreur = messageErreur;
+		}
 
 	 
 }

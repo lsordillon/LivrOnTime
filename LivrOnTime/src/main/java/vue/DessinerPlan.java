@@ -359,15 +359,15 @@ public class DessinerPlan {
     public Group afficherChemin(Tournee tournee){
 		Group group = new Group();
 		
+		if(!tournee.getItineraire().isEmpty()){
 		
-		//On affiche l'entrepot en vert
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
     	canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
     	circle1.setFill(Color.GREEN);
     	circle1.setRadius(widthStroke*4);
     	canvas.getChildren().add(circle1);
-    
+    	circle1.toFront();
     	Circle circle2;
     	for (Chemin c : tournee.getItineraire()){
     		for(Troncon t: c.getTroncons()){
@@ -379,13 +379,16 @@ public class DessinerPlan {
     			 line.setStroke(Color.GREEN);
     			line.setFill(Color.GREEN);
     		        line.setStrokeWidth(widthStroke*4);
-
+    		      
     		        canvas.getChildren().add(line);
-
+    		        circle1.toFront();
+    		        circle2.toFront();
     		}
     		    
     	}
-    	
+		}else{
+			
+		}
     	
     	return group;
     }
