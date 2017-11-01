@@ -25,6 +25,7 @@ public class feuilleDeRouteTxt {
 	public static String genererFeuilleDeRoute(Tournee tournee){
 		String contenu = "";
 		int nbChemin = tournee.getItineraire().size();
+		//TODO utilise plutôt SimpleDateFormat
 		int heureDep = tournee.getHeureDepart().getHours();
 		int minDep = tournee.getHeureDepart().getMinutes();
 		int heureArr = tournee.getHeureArrive().getHours();
@@ -37,9 +38,9 @@ public class feuilleDeRouteTxt {
 
 		//Pour tous les chemins, on recup adress dep adress arr
 		//ainsi que heure arrivee au depart et heure de depart apres livraison
-		for (int numChemin = 0; numChemin < nbChemin; numChemin++) {
-			Chemin cheminActuel = ((tournee.getItineraire()).get(numChemin));
-			contenu = contenu + retranscriptionDunChemin(cheminActuel, tournee);
+		for (int index = 0; index < nbChemin; index++) {
+			contenu = contenu + retranscriptionDunChemin(tournee, index);
+			contenu +=retranscriptionLivraison(tournee, index);
 		}
 		
 	    return contenu;
@@ -53,7 +54,8 @@ public class feuilleDeRouteTxt {
 		return identique;
 	}
 
-	private static String retranscriptionDunChemin (Chemin cheminActuel, Tournee tourneeEnCours) {
+	private static String retranscriptionDunChemin (Tournee tourneeEnCours, int index) {
+		Chemin cheminActuel = tourneeEnCours.getItineraire().get(index);
 		String contenu = "";
 		long idEntrepot = (tourneeEnCours.getItineraire()).get(0).getOrigine().getId();
 		int nbTroncons = (cheminActuel.getTroncons().size());
@@ -152,6 +154,12 @@ public class feuilleDeRouteTxt {
 			}
 		
 		return contenu;
+	}
+	
+	//TODO Bon courage Perrine ! :)
+	private static String retranscriptionLivraison(Tournee tournee, int index) {
+		Date[] tempsPassage = tournee.getTempsPassage()[index];
+		return "";
 	}
 
 	private static Livraison combinaisonPointDeLivraison (ArrayList <Livraison> livraisons, Intersection intersection) {
