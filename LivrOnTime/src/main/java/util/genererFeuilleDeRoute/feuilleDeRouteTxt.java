@@ -73,7 +73,7 @@ public class feuilleDeRouteTxt {
 		
 		long tempsAttente = 0 ;
 		if (heureDebutLiv != null) {
-			tempsAttente= heureDebutLiv.getTime() - heureDarriveePDL.getTime();
+			tempsAttente= heureDebutLiv.getTime() - heureDarriveePDL.getTime()-3600000;
 		}
 		
 		//tmp[1] == null si 0 plage horaire
