@@ -87,7 +87,7 @@ public class feuilleDeRouteTxt {
 			Troncon tronconActuel = cheminActuel.getTroncons().get(0);
 			String rueAPrendre = tronconActuel.getNomRue();
 			double distanceTroncon = tronconActuel.getLongueur();
-			contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres test1 \r\n";
+			contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
 		}
 		
 		//si 2 troncons petit test
@@ -97,7 +97,7 @@ public class feuilleDeRouteTxt {
 			if (testIdentique(tronconActuel, tronconSuivant)) {
 				String rueAPrendre = tronconActuel.getNomRue();
 				double distanceTroncon = tronconActuel.getLongueur() + tronconSuivant.getLongueur();;
-				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres test2.1\r\n";
+				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres\r\n";
 			}
 			else {
 				String rueAPrendre1 = tronconActuel.getNomRue();
@@ -105,8 +105,8 @@ public class feuilleDeRouteTxt {
 				double distanceTroncon1 = tronconActuel.getLongueur();
 				double distanceTroncon2 = tronconSuivant.getLongueur();
 				
-				contenu = contenu + "Prendre "+ rueAPrendre1 + " sur " + (int)distanceTroncon1+ " metres test 2.2 \r\n";
-				contenu = contenu + "Prendre "+ rueAPrendre2 + " sur " + (int)distanceTroncon2+ " metres test 2.3 \r\n";
+				contenu = contenu + "Prendre "+ rueAPrendre1 + " sur " + (int)distanceTroncon1+ " metres \r\n";
+				contenu = contenu + "Prendre "+ rueAPrendre2 + " sur " + (int)distanceTroncon2+ " metres \r\n";
 				
 
 			}
@@ -126,7 +126,7 @@ public class feuilleDeRouteTxt {
 			else {
 				String rueAPrendre = tronconActuel.getNomRue();
 				double distanceTroncon = tronconActuel.getLongueur();
-				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres  test 3.1 \r\n";
+				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
 			}
 		
 		}
@@ -138,13 +138,13 @@ public class feuilleDeRouteTxt {
 			lastTroncon.setLongueur(preLastTroncon.getLongueur() + lastTroncon.getLongueur());
 			double LastDistanceTroncon = lastTroncon.getLongueur();
 			String LastRueAPrendre = lastTroncon.getNomRue();
-			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres test 3.2\r\n";
+			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres \r\n";
 		
 		}
 		else {
 			double LastDistanceTroncon = lastTroncon.getLongueur();
 			String LastRueAPrendre = lastTroncon.getNomRue();
-			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres test 3.3\r\n";
+			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres\r\n";
 		}
 		}
 		
