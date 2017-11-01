@@ -2,6 +2,7 @@ package LivrOnTime;
 
 
 
+import controller.AccueilController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,12 +10,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	/* cette classe ne fait que charger le fichier fxml (notre première fenetre)
-	 *
-	 */
+	public static AccueilController aController;
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../fxml/Accueil.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Accueil.fxml"));
+    	Parent root = loader.load();
+    	aController = loader.getController();
         primaryStage.setTitle("LivrOnTime");
         primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.show();

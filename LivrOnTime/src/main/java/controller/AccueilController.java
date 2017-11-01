@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.sound.midi.VoiceStatus;
+
 import javafx.event.ActionEvent;
 
 import javafx.scene.Group;
@@ -57,12 +59,12 @@ public class AccueilController{
 	
 
 	private static Plan plan;
-	private Tournee tournee;
+	private static Tournee tournee;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
   
-    private DescriptifController dController = new DescriptifController();
+    private static DescriptifController dController = new DescriptifController();
     
     
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
@@ -207,128 +209,6 @@ public class AccueilController{
 
 	}   
 
-	
-	/*public void ListerLivraisons(ArrayList<Livraison> livraisons){
-		data.clear();
-		table = new TableView<Row>();
-		for(Livraison item : livraisons){
-			String adresse = getAdresse(item.getDestination());
-			String plageHoraire = "";
-                              	  
-            if (item.getDebutPlageHoraire()!= null && item.getFinPlageHoraire()!=null){
-            String debut = String.format("%02d:%02d", item.getDebutPlageHoraire().getHours() , item.getDebutPlageHoraire().getMinutes());
-            String fin = String.format("%02d:%02d", item.getFinPlageHoraire().getHours() , item.getFinPlageHoraire().getMinutes());
-            plageHoraire=debut +" - "+fin;
-                  }else {
-                      plageHoraire="--:-- - --:--";
-					}
-             Row row = new Row(plageHoraire, adresse,convertSecondsToHMmSs(item.getDuree()));
-             data.add(row);
-             row.setId(item.getDestination().getId());
-             }
-		 TableColumn<Row, String> plageCol = new TableColumn<Row, String>("Plage Horaire");
-		 plageCol.setMinWidth(60);
-		 plageCol.setCellValueFactory(new PropertyValueFactory<Row,String>("plage"));
-		 
-	     TableColumn<Row, String> adresseCol = new TableColumn<Row, String>("Adresse");
-	     adresseCol.setMinWidth(200);
-	     adresseCol.setCellValueFactory(new PropertyValueFactory<Row,String>("adresse"));
-	     
-	     TableColumn<Row, String> dureeCol = new TableColumn<Row, String>("Duree");
-	     dureeCol.setMinWidth(60);
-	     dureeCol.setCellValueFactory(new PropertyValueFactory<Row,String>("duree"));
-	     table.setEditable(true);
-	     table.setRowFactory(new Callback<TableView<Row>, TableRow<Row>>() {
-			public TableRow<Row> call(TableView<Row> tv) {
-			        final TableRow<Row> row = new TableRow<Row>();
-
-			        row.setOnDragDetected(new EventHandler<MouseEvent>() {
-						public void handle(MouseEvent event) {
-						    if (! row.isEmpty()) {
-						        Integer index = row.getIndex();
-						        Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-						        db.setDragView(row.snapshot(null, null));
-						        ClipboardContent cc = new ClipboardContent();
-						        cc.put(SERIALIZED_MIME_TYPE, index);
-						        db.setContent(cc);
-						        event.consume();
-						    }
-						}
-					});
-
-			        row.setOnDragOver(new EventHandler<DragEvent>() {
-						public void handle(DragEvent event) {
-						    Dragboard db = event.getDragboard();
-						    if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-						        if (row.getIndex() != ((Integer)db.getContent(SERIALIZED_MIME_TYPE)).intValue()) {
-						            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-						            event.consume();
-						        }
-						    }
-						}
-					});
-
-			        row.setOnDragDropped(new EventHandler<DragEvent>() {
-						public void handle(DragEvent event) {
-						    Dragboard db = event.getDragboard();
-						    if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-						        int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-						        Row draggedPerson = table.getItems().remove(draggedIndex);
-
-						        int dropIndex ; 
-
-						        if (row.isEmpty()) {
-						            dropIndex = table.getItems().size() ;
-						        } else {
-						            dropIndex = row.getIndex();
-						        }
-
-						        table.getItems().add(dropIndex, draggedPerson);
-
-						        event.setDropCompleted(true);
-						        table.getSelectionModel().select(dropIndex);
-						        event.consume();
-						    }
-						}
-					});
-
-			        return row ;
-			    }
-		});
-	     
-	
-			table.setItems(data);
-			table.getColumns().addAll(plageCol, adresseCol, dureeCol);
-            
-            
-           
-           
-           //interaction TableView-Plan
-           table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Row>() {
-			public void changed(ObservableValue<? extends Row> observableValue, Row oldValue, Row newValue) {
-			       if (table.getSelectionModel().getSelectedItem() != null) {
-			    	   if (oldValue != null){
-			    	   ((Circle) dessinerPlan.dessine.get(oldValue.getId())).setFill(Color.BLUE);
-			    	   ((Circle) dessinerPlan.dessine.get(oldValue.getId())).setStroke(Color.BLUE);
-			    	   }
-			    	   long id = newValue.getId();
-			          ((Circle) dessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
-			          ((Circle) dessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
-			           
-			       }
-			   }
-		});
-       VBox vBox = new VBox(new Label ("Adresse Entrepot: "+ getAdresse(dl.getAdresseEntrepot())),new Label ("Heure de Depart: "+ dl.getHeureDepart().getHours()+":"+dl.getHeureDepart().getMinutes()+":"+dl.getHeureDepart().getSeconds()));
-   		vBox.setSpacing(10);
-   		VBox vBox2 = new VBox(vBox,table);
-   		vBox2.setSpacing(40);
-   		vBox2.setLayoutX(30);
-        vBox2.setLayoutY(100);
-		VueDescriptif.getChildren().add(vBox2);
-    
-
-	}*/
-
 
 	//mettre seconde en format heure minutes secondes
 	public static String convertSecondsToHMmSs(long seconds) {
@@ -401,11 +281,47 @@ public class AccueilController{
 		
 		return distance;
 	}
+
+	public void update(Tournee tournee){
+		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
+	    
+
+		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
+							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
+		vBox3.setSpacing(10);
+		
+		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan, tournee));
+	
+		vBox2.setSpacing(40);
+		vBox2.setLayoutX(30);
+		vBox2.setLayoutY(50);
+		VueDescriptif.getChildren().add(vBox2); 
+	}
 	public Intersection getIntersectionSelectionne() {
 		return intersectionSelectionne;
 	}
 	public void setIntersectionSelectionne(Intersection intersectionSelectionne) {
 		this.intersectionSelectionne = intersectionSelectionne;
+	}
+	public static Plan getPlan() {
+		return plan;
+	}
+	public static void setPlan(Plan plan) {
+		AccueilController.plan = plan;
+	}
+	public static Tournee getTournee() {
+		return tournee;
+	}
+	public static void setTournee(Tournee tournee) {
+		AccueilController.tournee = tournee;
+	}
+	public static DescriptifController getdController() {
+		return dController;
+	}
+	public static void setdController(DescriptifController dController) {
+		AccueilController.dController = dController;
 	}
 	
 	

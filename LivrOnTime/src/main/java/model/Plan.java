@@ -230,6 +230,55 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	return tournee;
 }
+public Tournee SupprimerLivraison(Intersection inter,DemandeLivraison dl, Tournee ancienne_tournee,Livraison l){
+	Intersection origine=null, distination=null;
+	int indice=-1;
+	if(dl.getLivraisons().contains(l)){
+		
+		ArrayList<Chemin> Nouveau_itineraire=ancienne_tournee.getItineraire();
+		for(int i=0;i<ancienne_tournee.getItineraire().size();i++){
+			Chemin chemin=ancienne_tournee.getItineraire().get(i);
+				if(chemin.getDestination()==inter){
+					origine=chemin.getOrigine();
+					Nouveau_itineraire.remove(chemin);
+					//indice=i;
+		     	}
+				if(chemin.getOrigine()==inter){
+					distination=chemin.getDestination();
+					Nouveau_itineraire.remove(chemin);
+				}
+		}
+		System.out.println(origine +" Origine   dist"+distination);
+		if(origine!=null && distination !=null){
+			
+			Chemin nouveau_chemin=trouverChemin(origine,distination);
+			Nouveau_itineraire.add( nouveau_chemin);
+			ancienne_tournee.setItineraire(Nouveau_itineraire);
+		}
+	}
+	ancienne_tournee.getListeLivraison().remove(l);
+	System.out.println("resultat fin"+ ancienne_tournee.getItineraire());
+	
+	return ancienne_tournee;
+}
+public Tournee AjouterLivraison(Intersection inter, DemandeLivraison dl,Tournee ancienne_tournee){
+	Intersection origine=null, distination=null;
+	
+	if(!dl.getLivraisons().contains(inter)){
+		ArrayList<Chemin> Nouveau_itineraire=ancienne_tournee.getItineraire();
+		Chemin dernier_chemin=Nouveau_itineraire.get(Nouveau_itineraire.size());
+	    Nouveau_itineraire.remove(Nouveau_itineraire.size());
+	    
+	    Chemin Nouveau_chemin=trouverChemin(dernier_chemin.getOrigine(),inter);
+	    Nouveau_itineraire.add(Nouveau_chemin);
+	    Nouveau_chemin=trouverChemin(inter,dernier_chemin.getDestination());
+	    Nouveau_itineraire.add(Nouveau_chemin);
+	    ancienne_tournee.setItineraire(Nouveau_itineraire);
+	    
+	}
+return ancienne_tournee;
+
+}
 
 
 
