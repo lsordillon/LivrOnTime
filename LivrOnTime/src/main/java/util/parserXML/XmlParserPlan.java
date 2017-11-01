@@ -14,13 +14,14 @@ import javax.xml.validation.Validator;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class XmlParserPlan {
 	
 	static Document doc;
 	public static NodeList noeuds;
 	public static NodeList troncons;
-	
+	private String messageErreur;
 	
 	    public Document Reader(String file_name) throws FileNotFoundException{
 	    	Document document= null;
@@ -64,9 +65,21 @@ public class XmlParserPlan {
 	            validator.validate(new StreamSource(xml));
 	            return true;
 	        }
+	        catch(SAXParseException ex)
+	        {
+	        	messageErreur = "Erreur a la ligne "+ ex.getLineNumber()+" : " + ex.getMessage();
+	            return false;
+	        }
 	        catch(Exception ex)
 	        {
 	            return false;
 	        }
 	    }
+	public String getMessageErreur() {
+		return messageErreur;
+	}
+	public void setMessageErreur(String messageErreur) {
+		this.messageErreur = messageErreur;
+	}
+	   
 }

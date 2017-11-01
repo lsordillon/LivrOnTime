@@ -93,11 +93,11 @@ public class AccueilController{
 				    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 				    ChargerLivraison.setDisable(false);
 		    }else{
-		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
+		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
 	    		alert.showAndWait();
 		    }
 		   
-		   
+		 
 		   
 		}
 		else {
@@ -136,7 +136,7 @@ public class AccueilController{
 			    VueDescriptif.getChildren().add(vBox2);
 			    CalculTournee.setDisable(false);
 	    	}else{
-	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide");
+	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
 	    		alert.showAndWait();
 	    	}	
 		}
@@ -292,8 +292,9 @@ public class AccueilController{
 	    VuePlan.getChildren().clear();
 	    VuePlan.getChildren().add(group);
 	    VuePlan.getChildren().add(group2);
+	    
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-		
+	    
 		
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    

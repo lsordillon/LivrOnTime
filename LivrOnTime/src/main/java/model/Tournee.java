@@ -37,7 +37,7 @@ public class Tournee {
 	public void initTempsPassage() {
 		long dureeTotale=heureDepart.getTime();
 		tempsPassage = new Date[itineraire.size()][2];
-		
+	
 		for(int i=0;i<itineraire.size();i++){
 			for(int j=0;j<itineraire.get(i).getTroncons().size();j++){
 				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
