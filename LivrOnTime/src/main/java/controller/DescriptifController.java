@@ -47,12 +47,13 @@ public class DescriptifController {
 			public ListCell<Livraison> call(ListView<Livraison> arg0) {
 				return new ListCell<Livraison>() {
 
-					@Override
+			@Override
 					protected void updateItem(Livraison item, boolean bln) {
 						String plageHoraire;
 						
 
 						SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm");
+						SimpleDateFormat dureeM = new SimpleDateFormat("mm");
 						
 						if (item != null) {
 							if (item.getDebutPlageHoraire()!= null && item.getFinPlageHoraire()!=null){
@@ -75,15 +76,38 @@ public class DescriptifController {
 								String heureArrivee="";
 								String attente="";
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
-						    	heureArrivee="Arrivée à "+dureeHms.format(tmp[0]);
-						    	attente=(tmp[1]==null?"    Pas d'attente":("    Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
+						    	heureArrivee="Arrivee a� "+dureeHms.format(tmp[0]);
+						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 						    	VBox vBox2 = new VBox();
-						    	Text txt = new Text(heureArrivee+attente);
+						    	Text txt = new Text();	   
 						    	
-						    	//La couleur !!
-						    	txt.setFill(tmp[1]==null?Color.RED:Color.GREEN);
+						    	//si pas de plage horaire+ couleur
+						    	if (item.getDebutPlageHoraire() == null || item.getFinPlageHoraire()==null) {
+						    		txt = new Text(heureArrivee);
+						    		txt.setFill(Color.BLACK);		
+						    	}
+						    	//si plage + couleur
+						    	else {
+							    	txt = new Text(heureArrivee+ attente);
+							    	if (tmp[1] != null) { // s'il y a de l'attente
+							    		txt.setFill(Color.RED);
+							    	}
+							    	else { //sinon on teste si c'est une plage horaire tendue 
+							    		String plageTendue = dureeM.format(item.getFinPlageHoraire().getTime() - 3600000 - tmp[0].getTime());
+							    		int plageTendueMin = Integer.parseInt(plageTendue);
+							    		if (plageTendueMin <= 15 ) {// if heure fin de plage horaire - heure arrivee <= 15 min
+							    			txt.setFill(Color.ORANGE);
+							    		}
+							    		else {
+							    			txt.setFill(Color.BLACK);
+							    		}
+							    	}
+							    	txt.setFill(tmp[1]==null?Color.BLACK:Color.RED);
+
+							    	
+						    	}
 						    	
-						    	//Cr�ation d'une nouvelle vBox
+						    	//Creation d'une nouvelle vBox
 						    	vBox2.getChildren().addAll(vBox,new VBox(txt));
 						    	vBox2.setSpacing(15);
 						    	setGraphic(vBox2);
