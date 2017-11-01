@@ -71,11 +71,11 @@ public class LivraisonController implements Initializable {
 	}
 	public void SupprimerLivraison(){
 		plan = AccueilController.getPlan();
-		Tournee nouvelleTrounee = plan.SupprimerLivraison(intersection, demandeL, AccueilController.getTournee(), livraison);
+		AccueilController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
 		DescriptifController dController = AccueilController.getdController();
 		AccueilController aController = Main.aController;
 		//dController.ListerLivraisons(demandeL.getLivraisons(), plan, nouvelleTrounee);
-		aController.update(nouvelleTrounee);
+		aController.update(AccueilController.getTournee());
 		
 	
 	}

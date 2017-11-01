@@ -30,12 +30,12 @@ public class CdeAjout implements Commande {
 
 	@Override
 	public void redoCde() {
-		plan.AjouterLivraison(intersection,dl,tournee);
+		tournee.AjouterLivraison(plan,intersection);
 	}
 
 	@Override
 	public void undoCde() {
-		plan.SupprimerLivraison(intersection,dl,tournee,livraison);
+		tournee.SupprimerLivraison(plan,intersection,livraison);
 	}
 
 }

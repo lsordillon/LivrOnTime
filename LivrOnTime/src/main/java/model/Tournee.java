@@ -112,6 +112,59 @@ public class Tournee {
 		return listeLivraisons;
 	}
 	
+	public boolean SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+		Intersection origine=null, destination=null;
+		if(getListeLivraison().contains(l)){
+			
+			ArrayList<Chemin> nouvelItineraire=getItineraire();
+			for(int i=0;i<getItineraire().size();i++){
+				Chemin chemin=getItineraire().get(i);
+					if(chemin.getDestination()==inter){
+						origine=chemin.getOrigine();
+						nouvelItineraire.remove(chemin);
+						//indice=i;
+			     	}
+					if(chemin.getOrigine()==inter){
+						destination=chemin.getDestination();
+						nouvelItineraire.remove(chemin);
+					}
+			}
+			System.out.println(origine +" Origine   dist"+destination);
+			if(origine!=null && destination !=null){
+				
+				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
+				nouvelItineraire.add( nouveau_chemin);
+				setItineraire(nouvelItineraire);
+			}
+			getListeLivraison().remove(l);
+		}
+		else {
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			return false;
+		}
+		this.initTempsPassage();
+		System.out.println("resultat fin"+ getItineraire());
+		return true;
+	}
+	public boolean AjouterLivraison(Plan plan,Intersection inter){
+		Intersection origine=null, distination=null;
+		
+		if(!getListeLivraison().contains(inter)){
+			ArrayList<Chemin> nItineraire=getItineraire();
+			Chemin dernier_chemin=nItineraire.get(nItineraire.size());
+		    nItineraire.remove(nItineraire.size());
+		    
+		    Chemin nChemin=plan.trouverChemin(dernier_chemin.getOrigine(),inter);
+		    nItineraire.add(nChemin);
+		    nChemin=plan.trouverChemin(inter,dernier_chemin.getDestination());
+		    nItineraire.add(nChemin);
+		    setItineraire(nItineraire);
+		    
+		}
+	return true;
+
+	}
+	
 	
 	//Unused setters (yet)
 	/*private void setHeureArrive(Date heureArrive) {

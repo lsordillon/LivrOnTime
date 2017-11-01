@@ -28,12 +28,12 @@ public class CdeSuppression implements Commande {
 
 	@Override
 	public void undoCde() {
-		plan.AjouterLivraison(intersection,dl,tournee);
+		tournee.AjouterLivraison(plan,intersection);
 	}
 
 	@Override
 	public void redoCde() {
-		plan.SupprimerLivraison(intersection,dl,tournee,livraison);
+		tournee.SupprimerLivraison(plan,intersection,livraison);
 	}
 
 }
