@@ -172,11 +172,15 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
  */
 public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
+	//Mesure du temps nécessaire à l'algorithme Dijkstra
+	long debutDijkstra = System.currentTimeMillis();
 	deroulerLesDijkstra(dl);
+	long tpLimite = System.currentTimeMillis()-debutDijkstra;
+	System.out.println("Algorithme Dijkstra : "+tpLimite+" ms");
+	
 	
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	
-	int tpLimite = 10;
 	TSP etape2 = new TSP2 ();
 	int nbSommet=dl.getLivraisons().size()+1;
 	
