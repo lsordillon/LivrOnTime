@@ -359,8 +359,6 @@ public class DessinerPlan {
     public Group afficherChemin(Tournee tournee){
 		Group group = new Group();
 		
-		
-		
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
     	canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
