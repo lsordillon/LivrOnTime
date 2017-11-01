@@ -367,7 +367,7 @@ public class DessinerPlan {
     	circle1.setFill(Color.GREEN);
     	circle1.setRadius(widthStroke*4);
     	canvas.getChildren().add(circle1);
-    
+    	circle1.toFront();
     	Circle circle2;
     	for (Chemin c : tournee.getItineraire()){
     		for(Troncon t: c.getTroncons()){
@@ -379,9 +379,10 @@ public class DessinerPlan {
     			 line.setStroke(Color.GREEN);
     			line.setFill(Color.GREEN);
     		        line.setStrokeWidth(widthStroke*4);
-
+    		      
     		        canvas.getChildren().add(line);
-
+    		        circle1.toFront();
+    		        circle2.toFront();
     		}
     		    
     	}
