@@ -40,6 +40,7 @@ public class feuilleDeRouteTxt {
 		//ainsi que heure arrivee au depart et heure de depart apres livraison
 		for (int index = 0; index < nbChemin; index++) {
 			contenu = contenu + retranscriptionDunChemin(tournee, index);
+			//TODO Tu peux même fusionner les 2 méthodes maintenant ! Comme tu veux
 			contenu +=retranscriptionLivraison(tournee, index);
 		}
 		
