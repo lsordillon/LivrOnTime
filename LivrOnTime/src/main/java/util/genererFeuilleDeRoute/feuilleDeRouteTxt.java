@@ -164,7 +164,7 @@ public class feuilleDeRouteTxt {
 		
 		if (tempsAttente >1) {
 
-			SimpleDateFormat dureeM = new SimpleDateFormat("mm");
+			SimpleDateFormat dureeM = new SimpleDateFormat("HH'h 'mm");
 			contenu = contenu + "Attente pendant "+ dureeM.format(tempsAttente) + " minutes \r\n";
 		}
 		
