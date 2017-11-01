@@ -162,7 +162,7 @@ public class feuilleDeRouteTxt {
 		String heureFinCheminActuelFormat = dureeHm.format(heureFinCheminActuel);
 		contenu = contenu + "\r"+"Arrivee au point de livraison "+ adresse + " a " + heureFinCheminActuelFormat + "\r\n";
 		
-		if (tempsAttente >1) {
+		if (heureDebutLiv!=null) {
 
 			SimpleDateFormat dureeM = new SimpleDateFormat("HH'h 'mm");
 			contenu = contenu + "Attente pendant "+ dureeM.format(tempsAttente) + " minutes \r\n";
