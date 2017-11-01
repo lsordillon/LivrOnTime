@@ -114,15 +114,13 @@ public class Tournee {
 	
 	public boolean SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
 		Intersection origine=null, destination=null;
-		if(getListeLivraison().contains(l)){
+		if(listeLivraisons.contains(l)){
 			
-			ArrayList<Chemin> nouvelItineraire=getItineraire();
-			for(int i=0;i<getItineraire().size();i++){
-				Chemin chemin=getItineraire().get(i);
+			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
+			for(Chemin chemin:itineraire){
 					if(chemin.getDestination()==inter){
 						origine=chemin.getOrigine();
 						nouvelItineraire.remove(chemin);
-						//indice=i;
 			     	}
 					if(chemin.getOrigine()==inter){
 						destination=chemin.getDestination();
@@ -136,13 +134,14 @@ public class Tournee {
 				nouvelItineraire.add( nouveau_chemin);
 				setItineraire(nouvelItineraire);
 			}
-			getListeLivraison().remove(l);
+			listeLivraisons.remove(l);
+			this.initTempsPassage();
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
 			return false;
 		}
-		this.initTempsPassage();
+		
 		System.out.println("resultat fin"+ getItineraire());
 		return true;
 	}

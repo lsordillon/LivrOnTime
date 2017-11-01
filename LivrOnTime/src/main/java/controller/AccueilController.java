@@ -148,6 +148,7 @@ public class AccueilController{
 		tournee.initTempsPassage();
 	
 
+		
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    
@@ -284,6 +285,10 @@ public class AccueilController{
 	}
 
 	public void update(Tournee tournee){
+		Group group = dessinerPlan.Dessiner(plan);
+	    
+	    VuePlan.getChildren().clear();
+	    VuePlan.getChildren().add(group);
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    
