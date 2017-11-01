@@ -32,6 +32,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 import model.DemandeLivraison;
 import model.Intersection;
+import model.Livraison;
 import model.Plan;
 import model.Tournee;
 import model.Troncon;
@@ -284,14 +285,19 @@ public class AccueilController{
 		return distance;
 	}
 
-	public void update(Tournee tournee){
+	public void update(Tournee tournee,Livraison livraison){
 		Group group = dessinerPlan.Dessiner(plan);
-	    
+		dl.getLivraisons().remove(livraison);
+		Group group2 = dessinerPlan.Dessiner(dl);
 	    VuePlan.getChildren().clear();
 	    VuePlan.getChildren().add(group);
+	    VuePlan.getChildren().add(group2);
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+		
+		
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    
+	    VueDescriptif.getChildren().clear();
 
 		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
 							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),

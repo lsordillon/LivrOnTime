@@ -269,7 +269,7 @@ public class DessinerPlan {
     }
 
     public Group Dessiner(Plan plan) {
-       
+    	canvas = new PannableCanvas();
     	Group group = new Group();
         	
     	int minX,minY,maxX=0,maxY=0;
@@ -365,7 +365,7 @@ public class DessinerPlan {
     	canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
     	circle1.setFill(Color.GREEN);
-    	circle1.setRadius(widthStroke*10);
+    	circle1.setRadius(widthStroke*4);
     	canvas.getChildren().add(circle1);
     
     	Circle circle2;

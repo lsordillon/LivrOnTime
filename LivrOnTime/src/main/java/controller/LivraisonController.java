@@ -74,7 +74,7 @@ public class LivraisonController implements Initializable {
 		AccueilController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
 		AccueilController aController = Main.aController;
 		//dController.ListerLivraisons(demandeL.getLivraisons(), plan, nouvelleTrounee);
-		aController.update(AccueilController.getTournee());
+		aController.update(AccueilController.getTournee(),livraison);
 		
 	
 	}
