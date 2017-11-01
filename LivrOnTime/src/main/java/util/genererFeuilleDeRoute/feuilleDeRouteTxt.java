@@ -30,7 +30,6 @@ public class feuilleDeRouteTxt {
 		
 		SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 		String heureDep = dureeHms.format(tournee.getHeureDepart());
-		String heureArr = dureeHms.format(tournee.getHeureArrive());
 		
 		Intersection entrepotAd = (tournee.getItineraire()).get(0).getOrigine();
 		
@@ -151,20 +150,22 @@ public class feuilleDeRouteTxt {
 
 		//Derniere ligne d'arrivee	
 		if (idEntrepot == destinationCheminActuel.getId()) {
-			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
-			String heureArr = dureeHms.format(tourneeEnCours.getHeureArrive());
+			SimpleDateFormat dureeHm = new SimpleDateFormat("HH:mm");
+			String heureArr = dureeHm.format(tourneeEnCours.getHeureArrive());
 			contenu = contenu + "\r"+"Arrivee a l'entrepot a " + heureArr +"\r\n";;
 		}
 		
 		else {
 		Livraison livraisonActuelle = combinaisonPointDeLivraison(tourneeEnCours.getListeLivraison(), destinationCheminActuel);
 		String adresse = ruesDelIntersection(destinationCheminActuel);
-		SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
-		String heureFinCheminActuelFormat = dureeHms.format(heureFinCheminActuel);
+		SimpleDateFormat dureeHm = new SimpleDateFormat("HH:mm");
+		String heureFinCheminActuelFormat = dureeHm.format(heureFinCheminActuel);
 		contenu = contenu + "\r"+"Arrivee au point de livraison "+ adresse + " a " + heureFinCheminActuelFormat + "\r\n";
 		
 		if (tempsAttente >1) {
-			contenu = contenu + "Attente pendant "+ tempsAttente/3600 + " minutes \r\n";
+
+			SimpleDateFormat dureeM = new SimpleDateFormat("mm");
+			contenu = contenu + "Attente pendant "+ dureeM.format(tempsAttente) + " minutes \r\n";
 		}
 		
 			contenu = contenu + "Livraison pendant "+ livraisonActuelle.getDuree()/60 + " minutes \r\n";
@@ -176,11 +177,6 @@ public class feuilleDeRouteTxt {
 		return contenu;
 	}
 	
-	//TODO Bon courage Perrine ! :)
-	private static String retranscriptionLivraison(Tournee tournee, int index) {
-		Date[] tempsPassage = tournee.getTempsPassage()[index];
-		return "";
-	}
 
 	private static Livraison combinaisonPointDeLivraison (ArrayList <Livraison> livraisons, Intersection intersection) {
 
