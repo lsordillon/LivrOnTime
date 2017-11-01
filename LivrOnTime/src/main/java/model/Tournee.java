@@ -19,7 +19,7 @@ public class Tournee {
 		public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
 		    this.heureDepart=dl.getHeureDepart();
 			this.itineraire=itineraire2;
-			long dureeTotale=heureDepart.getTime();
+			
 			
 			listeLivraisons = new ArrayList<Livraison>();
 			for (Chemin chemin : itineraire2){
@@ -30,44 +30,48 @@ public class Tournee {
 		    	}
 		    }
 			
-			tempsPassage = new Date[itineraire2.size()][2];
 			
-			for(int i=0;i<itineraire2.size();i++){
-				for(int j=0;j<itineraire2.get(i).getTroncons().size();j++){
-					dureeTotale+= itineraire2.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
-				}
-				if (i<listeLivraisons.size()) {
-					if (listeLivraisons.get(i).getDebutPlageHoraire()!=null && listeLivraisons.get(i).getDebutPlageHoraire().getTime()>dureeTotale) {
-						tempsPassage[i][0] = new Date(dureeTotale);
-						tempsPassage[i][1] = new Date(listeLivraisons.get(i).getDebutPlageHoraire().getTime());
-						dureeTotale = listeLivraisons.get(i).getDebutPlageHoraire().getTime();
-					}
-					else {
-						tempsPassage[i][0] = new Date(dureeTotale);
-					}
-					dureeTotale+=listeLivraisons.get(i).getDuree()*1000; // duree de livraison en ms
+			
+	}
+		
+	public void initTempsPassage() {
+		long dureeTotale=heureDepart.getTime();
+		tempsPassage = new Date[itineraire.size()][2];
+		
+		for(int i=0;i<itineraire.size();i++){
+			for(int j=0;j<itineraire.get(i).getTroncons().size();j++){
+				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
+			}
+			if (i<listeLivraisons.size()) {
+				if (listeLivraisons.get(i).getDebutPlageHoraire()!=null && listeLivraisons.get(i).getDebutPlageHoraire().getTime()>dureeTotale) {
+					tempsPassage[i][0] = new Date(dureeTotale);
+					tempsPassage[i][1] = new Date(listeLivraisons.get(i).getDebutPlageHoraire().getTime());
+					dureeTotale = listeLivraisons.get(i).getDebutPlageHoraire().getTime();
 				}
 				else {
-					tempsPassage[i][0]=new Date(dureeTotale);
+					tempsPassage[i][0] = new Date(dureeTotale);
 				}
+				dureeTotale+=listeLivraisons.get(i).getDuree()*1000; // duree de livraison en ms
 			}
-			
-			
-			heureArrivee=new Date(dureeTotale);
-			Date duree = new Date(dureeTotale- heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (probl�me avec la date absolue par rapport � une dur�e brute en ms)
-			
-			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
-			SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-			
-		    System.out.println("Duree : "+dureeHms.format(duree)+"\nDepart : "+dateJhms.format(heureDepart)+"\nArrivee : "+dateJhms.format(heureArrivee));
-		    
-		    for (Date[] tmp:tempsPassage) {
-		    	System.out.print("Trajet : heure d'arriv�e = "+dateJhms.format(tmp[0]));
-		    	System.out.println((tmp[1]==null?"":("     Temps d'attente = "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min, livraison � "+dureeHms.format(tmp[1]))));
-		    	
-		    }
-			
-			
+			else {
+				tempsPassage[i][0]=new Date(dureeTotale);
+			}
+		}
+		
+		
+		heureArrivee=new Date(dureeTotale);
+		Date duree = new Date(dureeTotale- heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (probl�me avec la date absolue par rapport � une dur�e brute en ms)
+		
+		SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
+		SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		
+	    System.out.println("Duree : "+dureeHms.format(duree)+"\nDepart : "+dateJhms.format(heureDepart)+"\nArrivee : "+dateJhms.format(heureArrivee));
+	    
+	    for (Date[] tmp:tempsPassage) {
+	    	System.out.print("Trajet : heure d'arriv�e = "+dateJhms.format(tmp[0]));
+	    	System.out.println((tmp[1]==null?"":("     Temps d'attente = "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min, livraison � "+dureeHms.format(tmp[1]))));
+	    	
+	    }
 	}
 		
 	/**

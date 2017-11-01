@@ -145,6 +145,7 @@ public class AccueilController{
 	
 	public void CalculTournee(ActionEvent actionEvent) {
 		tournee=plan.calculerLaTournee(dl);
+		tournee.initTempsPassage();
 	
 
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
