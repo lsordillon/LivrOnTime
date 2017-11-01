@@ -64,6 +64,8 @@ public class DescriptifController {
 								plageHoraire="--:-- - --:--";
 							}
 							
+							plageHoraire+= "        Duree : "+item.getDuree()/60+" min";
+							
 							
 							
 							super.updateItem(item, bln);
@@ -79,37 +81,34 @@ public class DescriptifController {
 						    	heureArrivee="Arrivee a "+dureeHms.format(tmp[0]);
 						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 						    	VBox vBox2 = new VBox();
-						    	Text txt = new Text();	   
+						    	Text txt = new Text(heureArrivee+ attente);
 						    	
-						    	//si pas de plage horaire+ couleur
-						    	if (item.getDebutPlageHoraire() == null || item.getFinPlageHoraire()==null) {
-						    		txt = new Text(heureArrivee);
-						    		txt.setFill(Color.BLACK);		
+						    	//COULEUR
+						    	if (item.getFinPlageHoraire()==null) {
+						    		txt.setFill(Color.BLACK);
 						    	}
-						    	//si plage + couleur
 						    	else {
-							    	txt = new Text(heureArrivee+ attente);
-							    	if (tmp[1] != null) { // s'il y a de l'attente
-							    		txt.setFill(Color.RED);
+							    	if (tmp[1] != null) { //s'il n'y a pas d'attente
+							    		txt.setFill(Color.GREEN);
 							    	}
 							    	else { //sinon on teste si c'est une plage horaire tendue 
-							    		String plageTendue = dureeM.format(item.getFinPlageHoraire().getTime() - 3600000 - tmp[0].getTime());
-							    		int plageTendueMin = Integer.parseInt(plageTendue);
-							    		if (plageTendueMin <= 15 ) {// if heure fin de plage horaire - heure arrivee <= 15 min
-							    			txt.setFill(Color.ORANGE);
+							    		
+							    		long plageTendueMin = item.getFinPlageHoraire().getTime() - 3600000 - tmp[0].getTime();
+							    		if (plageTendueMin <= 15*60000){
+							    			txt.setFill(Color.RED);//Plage tendue !!
+							    		}
+							    		else if (plageTendueMin <= 45*60000) {
+							    			txt.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
 							    		}
 							    		else {
-							    			txt.setFill(Color.BLACK);
+							    			txt.setFill(Color.GREEN);//Détendue
 							    		}
 							    	}
-							    	txt.setFill(tmp[1]==null?Color.BLACK:Color.RED);
-
-							    	
 						    	}
 						    	
 						    	//Creation d'une nouvelle vBox
 						    	vBox2.getChildren().addAll(vBox,new VBox(txt));
-						    	vBox2.setSpacing(15);
+						    	vBox2.setSpacing(10);
 						    	setGraphic(vBox2);
 							}
 
