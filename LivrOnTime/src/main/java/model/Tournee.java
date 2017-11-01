@@ -76,7 +76,11 @@ public class Tournee {
 	 * <li> en première colonne (tempsPassage[i][0]) la date d'arrivée sur le point de livraison d'index i</li>
 	 * <li> en deuxième colonne (tempsPassage[i][1]) la date de début de livraison</li>
 	 * </ul>
-	 * <p>Toutes les dates du tableau sont au format normal. On peut les traiter avec la classe {@link SimpleDateFormat} qui permet de formater facilement l'affichage.
+	 * <p>Toutes les dates du tableau sont au format normal. On peut les traiter avec la classe {@link SimpleDateFormat} qui permet de formater facilement l'affichage.</p>
+	 * <p>Pour récupérer le temps d'attente à partir de ce tableau, il suffit de faire la soustraction entre la date de livraison et la date d'arrivée sur le point de livraison :</p>
+	 * <p>tempsPassage[i][1].getTime()-tempsPassage[i][0].getTime()</p>
+	 * <p>ATTENTION : La durée obtenue doit être transformée pour être utilisée par la classe SimpleDateFormat (pas d'explication) en lui soustrayant 1 heure en millisecondes (3 600 000).
+	 * Vous pouvez retrouver un exemple simple à la fin du constructeur de {@link Tournee#Tournee(ArrayList, DemandeLivraison)}.
 	 * @return le tableau 2D avec les temps de passage
 	 * @see Tournee#tempsPassage
 	 */
