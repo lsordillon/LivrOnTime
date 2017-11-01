@@ -12,7 +12,7 @@ public class Tournee {
 		private ArrayList <Chemin> itineraire;
 		private ArrayList <Livraison> listeLivraisons;
 		/**
-		 * Ce tableau correspond aux temps de passage estimés de la livraison aux différents points de livraison. Plus d'explication avec la fonction {@link Tournee#getTempsPassage}
+		 * Ce tableau correspond aux temps de passage estimï¿½s de la livraison aux diffï¿½rents points de livraison. Plus d'explication avec la fonction {@link Tournee#getTempsPassage}
 		 */
 		private Date[][] tempsPassage;
 		
@@ -54,7 +54,7 @@ public class Tournee {
 			
 			
 			heureArrivee=new Date(dureeTotale);
-			Date duree = new Date(dureeTotale- heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (problème avec la date absolue par rapport à une durée brute en ms)
+			Date duree = new Date(dureeTotale- heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (problï¿½me avec la date absolue par rapport ï¿½ une durï¿½e brute en ms)
 			
 			SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 			SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
@@ -62,8 +62,8 @@ public class Tournee {
 		    System.out.println("Duree : "+dureeHms.format(duree)+"\nDepart : "+dateJhms.format(heureDepart)+"\nArrivee : "+dateJhms.format(heureArrivee));
 		    
 		    for (Date[] tmp:tempsPassage) {
-		    	System.out.print("Trajet : heure d'arrivée = "+dateJhms.format(tmp[0]));
-		    	System.out.println((tmp[1]==null?"":("     Temps d'attente = "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min, livraison à "+dureeHms.format(tmp[1]))));
+		    	System.out.print("Trajet : heure d'arrivï¿½e = "+dateJhms.format(tmp[0]));
+		    	System.out.println((tmp[1]==null?"":("     Temps d'attente = "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min, livraison ï¿½ "+dureeHms.format(tmp[1]))));
 		    	
 		    }
 			
@@ -71,16 +71,16 @@ public class Tournee {
 	}
 		
 	/**
-	 * <p>Getter de l'attribut tempsPassage qui recense les temps de passage estimés aux différents points de livraison. Il s'agit d'un tableau 2D contenant :</p>
+	 * <p>Getter de l'attribut tempsPassage qui recense les temps de passage estimï¿½s aux diffï¿½rents points de livraison. Il s'agit d'un tableau 2D contenant :</p>
 	 * <ul>
-	 * <li> en première colonne (tempsPassage[i][0]) la date d'arrivée sur le point de livraison d'index i</li>
-	 * <li> en deuxième colonne (tempsPassage[i][1]) la date de début de livraison</li>
+	 * <li> en premiï¿½re colonne (tempsPassage[i][0]) la date d'arrivï¿½e sur le point de livraison d'index i</li>
+	 * <li> en deuxiï¿½me colonne (tempsPassage[i][1]) la date de dï¿½but de livraison</li>
 	 * </ul>
 	 * <p>Toutes les dates du tableau sont au format normal. On peut les traiter avec la classe {@link SimpleDateFormat} qui permet de formater facilement l'affichage.</p>
-	 * <p>Pour récupérer le temps d'attente à partir de ce tableau, il suffit de faire la soustraction entre la date de livraison et la date d'arrivée sur le point de livraison :</p>
+	 * <p>Pour rï¿½cupï¿½rer le temps d'attente ï¿½ partir de ce tableau, il suffit de faire la soustraction entre la date de livraison et la date d'arrivï¿½e sur le point de livraison :</p>
 	 * <p>tempsPassage[i][1].getTime()-tempsPassage[i][0].getTime()</p>
-	 * <p>ATTENTION : La durée obtenue doit être transformée pour être utilisée par la classe SimpleDateFormat (pas d'explication) en lui soustrayant 1 heure en millisecondes (3 600 000).
-	 * Vous pouvez retrouver un exemple simple à la fin du constructeur de {@link Tournee#Tournee(ArrayList, DemandeLivraison)}.
+	 * <p>ATTENTION : La durï¿½e obtenue doit ï¿½tre transformï¿½e pour ï¿½tre utilisï¿½e par la classe SimpleDateFormat (pas d'explication) en lui soustrayant 1 heure en millisecondes (3 600 000).
+	 * Vous pouvez retrouver un exemple simple ï¿½ la fin du constructeur de {@link Tournee#Tournee(ArrayList, DemandeLivraison)}.
 	 * @return le tableau 2D avec les temps de passage
 	 * @see Tournee#tempsPassage
 	 */
@@ -92,6 +92,10 @@ public class Tournee {
 		return itineraire;
 	}
 	
+	public void setItineraire(ArrayList<Chemin> itineraire) {
+		this.itineraire = itineraire;
+	}
+
 	public Date getHeureDepart() {
 		return heureDepart;
 	}

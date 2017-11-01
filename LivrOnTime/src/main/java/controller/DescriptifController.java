@@ -23,9 +23,7 @@ import model.Troncon;
 import vue.DessinerPlan;
 
 public class DescriptifController {
-	
-    //private final ObservableList<Row> data = FXCollections.observableArrayList();
-    //private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
+
 	public Plan plan;
 	 ObservableList<Livraison> data = FXCollections.observableArrayList();
 	   final ListView<Livraison> listView = new ListView<Livraison>(data);

@@ -3,17 +3,20 @@ package controller;
 
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
-
+import LivrOnTime.Main;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
+import model.Plan;
+import model.Tournee;
 
 public class LivraisonController implements Initializable {
 	public TextField adresseField;
@@ -27,6 +30,8 @@ public class LivraisonController implements Initializable {
 	public Button ajoutBtn;
 	private static Intersection intersection;
 	private static DemandeLivraison demandeL;
+	private Livraison livraison;
+	private Plan plan;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		adresseField.setDisable(true);
@@ -43,7 +48,7 @@ public class LivraisonController implements Initializable {
 			adresseField.setText(AccueilController.getAdresse(intersection));
 			for(Livraison l : demandeL.getLivraisons()){
 				if(l.getDestination().getId() == intersection.getId()){
-					ajoutBtn.setDisable(true);
+					livraison = l;
 					exist = true;
 					if(l.getDebutPlageHoraire()!=null){
 					comboDeHeur.getSelectionModel().select(l.getDebutPlageHoraire().getHours());
@@ -65,7 +70,14 @@ public class LivraisonController implements Initializable {
 		
 	}
 	public void SupprimerLivraison(){
+		plan = AccueilController.getPlan();
+		Tournee nouvelleTrounee = plan.SupprimerLivraison(intersection, demandeL, AccueilController.getTournee(), livraison);
+		DescriptifController dController = AccueilController.getdController();
+		AccueilController aController = Main.aController;
+		//dController.ListerLivraisons(demandeL.getLivraisons(), plan, nouvelleTrounee);
+		aController.update(nouvelleTrounee);
 		
+	
 	}
 	public void AjouterLivraison(){
 		
@@ -76,6 +88,7 @@ public class LivraisonController implements Initializable {
 	public static void setDL(DemandeLivraison dl){
 		demandeL = dl;
 	}
+
 
 	public static DemandeLivraison getDemandeL() {
 		return demandeL;
