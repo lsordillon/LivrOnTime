@@ -72,6 +72,7 @@ public class DescriptifController {
 
 							VBox vBox = new VBox(new Text(getAdresse(item.getDestination())), new Text(plageHoraire));
 							
+							//Affichage des temps de passage
 							if (tournee!=null) {
 								String heureArrivee="";
 								String attente="";
@@ -83,6 +84,8 @@ public class DescriptifController {
 						    	
 						    	//La couleur !!
 						    	txt.setFill(tmp[1]==null?Color.RED:Color.GREEN);
+						    	
+						    	//Création d'une nouvelle vBox
 						    	vBox2.getChildren().addAll(vBox,new VBox(txt));
 						    	vBox2.setSpacing(15);
 						    	setGraphic(vBox2);
