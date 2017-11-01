@@ -77,7 +77,7 @@ public class DescriptifController {
 								String heureArrivee="";
 								String attente="";
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
-						    	heureArrivee="Arrivée à "+dureeHms.format(tmp[0]);
+						    	heureArrivee="ArrivÃ©e Ã  "+dureeHms.format(tmp[0]);
 						    	attente=(tmp[1]==null?"    Pas d'attente":("    Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 						    	VBox vBox2 = new VBox();
 						    	Text txt = new Text(heureArrivee+attente);
@@ -85,7 +85,7 @@ public class DescriptifController {
 						    	//La couleur !!
 						    	txt.setFill(tmp[1]==null?Color.RED:Color.GREEN);
 						    	
-						    	//Création d'une nouvelle vBox
+						    	//Crï¿½ation d'une nouvelle vBox
 						    	vBox2.getChildren().addAll(vBox,new VBox(txt));
 						    	vBox2.setSpacing(15);
 						    	setGraphic(vBox2);

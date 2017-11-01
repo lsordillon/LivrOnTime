@@ -1,16 +1,23 @@
 package vue;
 
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Objects;
+
+import controller.LivraisonController;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import model.Intersection;
 import model.Plan;
 import javafx.scene.layout.StackPane;
@@ -77,8 +84,24 @@ import javafx.scene.control.Button;
 	                	}
 	                	Intersection intersectionClicked = plan.getIntersections().get(key);
 	                	System.out.println("Intersecrion ID "+intersectionClicked.getId());
+	                	LivraisonController.setIntersection(intersectionClicked);
+	                	if(LivraisonController.getDemandeL()!=null){
+	                	Parent root;
+	    		        try {
+	    		        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
+	    		            Stage stage = new Stage();
+	    		            stage.setTitle("Modifier Livraison");
+	    		            stage.setScene(new Scene(root));
+	    		            
+	    		            stage.show();
+	    		            
+	    		        }
+	    		        catch (IOException e) {
+	    		            e.printStackTrace();
+	    		        }
 	                	
 	            } 
+	            }
 	            
 	            /*else {
 

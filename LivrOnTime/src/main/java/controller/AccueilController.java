@@ -56,7 +56,7 @@ public class AccueilController{
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
 
-	private Plan plan;
+	private static Plan plan;
 	private Tournee tournee;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
@@ -82,6 +82,7 @@ public class AccueilController{
 	        
 		    if (parserPlan.validationXSD(xml, xsd)){
 		    	 plan = CreerPlan(selectedFile.getAbsolutePath());
+	
 		    	 Group group = dessinerPlan.Dessiner(plan);
 				    
 				    VuePlan.getChildren().clear();
@@ -114,6 +115,7 @@ public class AccueilController{
 	    	if(parserLivraison.validationXSD(xml, xsd)){
 	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
+				LivraisonController.setDL(dl);
 				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
 			    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
 			    //ListerLivraisons(dl.getLivraisons());
@@ -338,7 +340,7 @@ public class AccueilController{
 	
 	
 	//Methode pour retourner l'adresse d'une intersection
-	public String getAdresse(Intersection item){
+	public static String getAdresse(Intersection item){
 		  for(Troncon troncon : plan.getTroncons()){
           	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
           		return troncon.getNomRue();

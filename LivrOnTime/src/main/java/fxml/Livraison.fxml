@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="204.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LivraisonController">
+   <children>
+      <Label layoutX="3.0" layoutY="40.0" text="Addresse" />
+      <TextField fx:id="adresseField" layoutX="106.0" layoutY="36.0" prefHeight="25.0" prefWidth="281.0" />
+      <Label layoutX="3.0" layoutY="77.0" text="Plage Horaire" />
+      <ComboBox fx:id="comboDeHeur" layoutX="107.0" layoutY="73.0" prefHeight="25.0" prefWidth="57.0" />
+      <Label layoutX="87.0" layoutY="77.0" text="De" />
+      <Label layoutX="167.0" layoutY="77.0" text=":" />
+      <ComboBox fx:id="comboDeMinute" layoutX="174.0" layoutY="73.0" prefHeight="25.0" prefWidth="57.0" />
+      <Label layoutX="241.0" layoutY="77.0" text="A" />
+      <ComboBox fx:id="comboAHeur" layoutX="255.0" layoutY="73.0" prefHeight="25.0" prefWidth="57.0" />
+      <ComboBox fx:id="comboAMinute" layoutX="330.0" layoutY="73.0" prefHeight="25.0" prefWidth="57.0" />
+      <Button fx:id="modifBtn" layoutX="269.0" layoutY="161.0" mnemonicParsing="false" onAction="#ModifierLivraison" prefHeight="25.0" prefWidth="121.0" text="Modifier Livraison" />
+      <Button fx:id="suppBtn" layoutX="14.0" layoutY="161.0" mnemonicParsing="false" onAction="#SupprimerLivraison" text="Supprimer Livraison" />
+      <Button fx:id="ajoutBtn" layoutX="142.0" layoutY="161.0" mnemonicParsing="false" onAction="#AjouterLivraison" prefHeight="25.0" prefWidth="121.0" text="Ajouter Livraison" />
+      <Label layoutX="319.0" layoutY="77.0" text=":" />
+   </children>
+</AnchorPane>
