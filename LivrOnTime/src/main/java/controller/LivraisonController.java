@@ -3,7 +3,9 @@ package controller;
 
 
 import java.net.URL;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import LivrOnTime.Main;
@@ -83,6 +85,27 @@ public class LivraisonController implements Initializable {
 	}
 	public void AjouterLivraison(){
 		
+		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){
+		Date debut = new java.util.Date();
+		debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
+		debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());
+		Date fin = new java.util.Date();
+		fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
+		fin.setMinutes(comboAMinute.getSelectionModel().getSelectedItem());
+		livraison = new Livraison(0, intersection, debut, fin);
+		}else{
+			livraison = new Livraison(0,intersection);
+		}
+		
+		AccueilController aController = Main.aController;
+		plan = aController.getPlan();
+		aController.getDl().getLivraisons().add(livraison);
+		if (aController.getTournee()==null){
+			aController.update(null);
+		}else{
+		aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		aController.update(AccueilController.getTournee());
+		}
 	}
 	public static void setIntersection(Intersection intersect){
 		intersection = intersect;
