@@ -154,7 +154,7 @@ public class AccueilController{
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    
 	    GenererFeuille.setDisable(false);
-
+	    VueDescriptif.getChildren().clear();
 		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
 							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
 							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
@@ -285,32 +285,37 @@ public class AccueilController{
 		return distance;
 	}
 
-	public void update(Tournee tournee,Livraison livraison){
+	public void update(Tournee tournee){
+		ArrayList<Livraison> livraisons = new ArrayList<>();
 		Group group = dessinerPlan.Dessiner(plan);
-		dl.getLivraisons().remove(livraison);
 		Group group2 = dessinerPlan.Dessiner(dl);
-	    VuePlan.getChildren().clear();
+		VuePlan.getChildren().clear();
 	    VuePlan.getChildren().add(group);
 	    VuePlan.getChildren().add(group2);
-	    
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-	    
-		
-	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
-	    
 	    VueDescriptif.getChildren().clear();
-
-		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
-							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
+	    VBox vBox3;
+		if(tournee != null){
+		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+	    livraisons = tournee.getListeLivraison();
+		vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
+				  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+				  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
 		vBox3.setSpacing(10);
-		
-		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan, tournee));
+		}else{
+			livraisons = dl.getLivraisons();
+			vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
+					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+					  new Label ("Heure de Retour :      "));
+		}
 	
+
+		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(livraisons, plan, tournee));
+
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
+		dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	}
 	public Intersection getIntersectionSelectionne() {
 		return intersectionSelectionne;
@@ -335,6 +340,12 @@ public class AccueilController{
 	}
 	public static void setdController(DescriptifController dController) {
 		AccueilController.dController = dController;
+	}
+	public DemandeLivraison getDl() {
+		return dl;
+	}
+	public void setDl(DemandeLivraison dl) {
+		this.dl = dl;
 	}
 	
 	

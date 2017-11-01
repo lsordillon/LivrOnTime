@@ -76,7 +76,7 @@ public class DescriptifController {
 								String heureArrivee="";
 								String attente="";
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
-						    	heureArrivee="Arrivee a  "+dureeHms.format(tmp[0]);
+						    	heureArrivee="Arrivee a "+dureeHms.format(tmp[0]);
 						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 						    	VBox vBox2 = new VBox();
 						    	Text txt = new Text();	   
