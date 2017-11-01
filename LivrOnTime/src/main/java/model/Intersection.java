@@ -55,7 +55,7 @@ public class Intersection {
 
 	public String toString() {
 		
-		String affichage = "ID ="+id+"NbTroncons"+tronconsVersVoisins.size();
+		String affichage = "[ID ="+id+", NbTroncons"+tronconsVersVoisins.size()+"]";
 		return affichage;
 	}
 

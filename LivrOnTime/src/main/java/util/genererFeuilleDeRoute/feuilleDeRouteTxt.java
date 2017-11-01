@@ -6,27 +6,6 @@ import model.*;
 
 
 
-/*
-Dï¿½part de lï¿½entrepot rue st mort - rue sainte cathy ï¿½ 8h00
-Prendre rue sainte cathy sur 800 metres
-Prendre rue des maches sur 1200 metres
-Arrivï¿½e au point de livraison rue des maches - rue caroline ï¿½ 8h15
-Livraison pendant 10 minutes
-Dï¿½part du point de livraison rue des maches - rue Caroline ï¿½ 8h25
-Prendre rue Caroline sur 800 metres
-Prendre avenue des Arts sur 800 metres
-Prendre rue des sports sur 200 metres
-Prendre chemin des Coquelicots sur 100 metres
-Arrivï¿½e au point de livraison avenue jean jaures - chemin de coquelicot ï¿½ 8h45
-Attente pendant 15 minutes 
-Livraison pendant 10 minutes
-Dï¿½part du point de livraison avenue jean jaures - chemin de coquelicot ï¿½ 9h10
-Prendre avenue Jean Jaures sur 30 metres
-Prendre rue st mort sur 200 metres
-Arrivï¿½e ï¿½ lï¿½entrepot rue st mort - rue sainte cathy ï¿½ 9h25
-*/
-
-
 /** Cette classe est une classe utilitaire permettant
  * la creation de la feuille de route de la tournee
  * calculee en format txt
@@ -43,31 +22,28 @@ public class feuilleDeRouteTxt {
 	// Constructeur vide
 	}
 	
-	
 	public static String genererFeuilleDeRoute(Tournee tournee){
 		String contenu = "";
 		int nbChemin = tournee.getItineraire().size();
-		Date heureDep = tournee.getHeureDepart(); //a quoi ressemble cette date de merde? Fri Oct 27 08:00:00 CEST 2017
-		Date heureArr = tournee.getHeureArrive(); // Fri Oct 27 09:12:08 CEST 2017
+		//TODO utilise plutôt SimpleDateFormat
+		int heureDep = tournee.getHeureDepart().getHours();
+		int minDep = tournee.getHeureDepart().getMinutes();
+		int heureArr = tournee.getHeureArrive().getHours();
+		int minArr = tournee.getHeureArrive().getMinutes();
 		Intersection entrepotAd = (tournee.getItineraire()).get(0).getOrigine(); // rend ID =25303798NbTroncons2
 		
 		//Premiere ligne de depart 
-		contenu = contenu + "Depart de l'entrepot "+ entrepotAd+ " a " + heureDep+ "\r\n";
-		
+		contenu = contenu + "Depart de l'entrepot "+ ruesDelIntersection(entrepotAd) +" a " + heureDep+ ":"+ minDep +"\r\n\r\n";
 		
 
 		//Pour tous les chemins, on recup adress dep adress arr
 		//ainsi que heure arrivee au depart et heure de depart apres livraison
-		for (int numChemin = 0; numChemin < nbChemin; numChemin++) {
-			Chemin cheminActuel = ((tournee.getItineraire()).get(numChemin));
-			contenu = contenu + retranscriptionDunChemin(cheminActuel);
+		for (int index = 0; index < nbChemin; index++) {
+			contenu = contenu + retranscriptionDunChemin(tournee, index);
+			//TODO Tu peux même fusionner les 2 méthodes maintenant ! Comme tu veux
+			contenu +=retranscriptionLivraison(tournee, index);
 		}
 		
-
-	
-		//Derniere ligne d'arrivee
-		contenu = contenu + "Arrivee a l'entrepot " + entrepotAd + " a " + heureArr +"\r\n";
-	
 	    return contenu;
 	}
 	
@@ -79,14 +55,14 @@ public class feuilleDeRouteTxt {
 		return identique;
 	}
 
-	private static String retranscriptionDunChemin (Chemin cheminActuel) {
+	private static String retranscriptionDunChemin (Tournee tourneeEnCours, int index) {
+		Chemin cheminActuel = tourneeEnCours.getItineraire().get(index);
 		String contenu = "";
+		long idEntrepot = (tourneeEnCours.getItineraire()).get(0).getOrigine().getId();
 		int nbTroncons = (cheminActuel.getTroncons().size());
 		Intersection destinationCheminActuel = cheminActuel.getDestination() ;
 		Date heureFinCheminActuel = cheminActuel.getHeureArrivee() ; 
 		int tempsAttente = 0;
-		System.out.println("Test4 : test chemin actuel et heure fin chemin actuel"+destinationCheminActuel+ "heure"+ heureFinCheminActuel);
-		
 		
 		//On recupere chaque troncon (nom de rue et longueur du troncon) SAUF LE DERNIER
 		//et le temps de la livraison d'arrivee de l'it
@@ -97,8 +73,7 @@ public class feuilleDeRouteTxt {
 			Troncon tronconActuel = cheminActuel.getTroncons().get(0);
 			String rueAPrendre = tronconActuel.getNomRue();
 			double distanceTroncon = tronconActuel.getLongueur();
-			contenu = contenu + "Prendre "+ rueAPrendre + " sur " + distanceTroncon+ " metres \r\n";
-			System.out.println("Test5 troncon unique : test rue troncon actuel et taille" + rueAPrendre + distanceTroncon);
+			contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
 		}
 		
 		//si 2 troncons petit test
@@ -108,8 +83,7 @@ public class feuilleDeRouteTxt {
 			if (testIdentique(tronconActuel, tronconSuivant)) {
 				String rueAPrendre = tronconActuel.getNomRue();
 				double distanceTroncon = tronconActuel.getLongueur() + tronconSuivant.getLongueur();;
-				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + distanceTroncon+ " metres \r\n";
-				System.out.println("Test5 troncon double1 : test rue troncon actuel et taille" + rueAPrendre + distanceTroncon);
+				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
 			}
 			else {
 				String rueAPrendre1 = tronconActuel.getNomRue();
@@ -117,11 +91,10 @@ public class feuilleDeRouteTxt {
 				double distanceTroncon1 = tronconActuel.getLongueur();
 				double distanceTroncon2 = tronconSuivant.getLongueur();
 				
-				contenu = contenu + "Prendre "+ rueAPrendre1 + " sur " + distanceTroncon1+ " metres \r\n";
-				contenu = contenu + "Prendre "+ rueAPrendre2 + " sur " + distanceTroncon2+ " metres \r\n";
+				contenu = contenu + "Prendre "+ rueAPrendre1 + " sur " + (int)distanceTroncon1+ " metres \r\n";
+				contenu = contenu + "Prendre "+ rueAPrendre2 + " sur " + (int)distanceTroncon2+ " metres \r\n";
 				
-				System.out.println("Test5 troncon double2: test rue troncon actuel et taille" + rueAPrendre1 + " 2  " + rueAPrendre2 + distanceTroncon1);
-			
+
 			}
 		}
 
@@ -139,8 +112,7 @@ public class feuilleDeRouteTxt {
 			else {
 				String rueAPrendre = tronconActuel.getNomRue();
 				double distanceTroncon = tronconActuel.getLongueur();
-				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + distanceTroncon+ " metres \r\n";
-				System.out.println("Test5 : test rue troncon actuel et taille" + rueAPrendre + distanceTroncon);
+				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
 			}
 		
 		}
@@ -153,36 +125,74 @@ public class feuilleDeRouteTxt {
 			double LastDistanceTroncon = lastTroncon.getLongueur();
 			String LastRueAPrendre = lastTroncon.getNomRue();
 			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + LastDistanceTroncon+ " metres \r\n";
-			System.out.println("Test5 : test rue troncon actuel et taille" + LastRueAPrendre + LastDistanceTroncon);
 		
 		}
 		else {
 			double LastDistanceTroncon = lastTroncon.getLongueur();
 			String LastRueAPrendre = lastTroncon.getNomRue();
 			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + LastDistanceTroncon+ " metres \r\n";
-			System.out.println("Test5 : test rue troncon actuel et taille" + LastRueAPrendre + LastDistanceTroncon);
 		}
 		}
 		
-		contenu = contenu + "Arrivee au point de livraison "+ destinationCheminActuel+ " a " + heureFinCheminActuel+ "\r\n";
-		System.out.println("Test6 : test arrivee au pdl " + destinationCheminActuel + heureFinCheminActuel);
+		if (idEntrepot == destinationCheminActuel.getId()) {
+			//Derniere ligne d'arrivee
+			contenu = contenu + "\r"+"Arrivee a l'entrepot a " + tourneeEnCours.getHeureArrive().getHours() + ":"+ tourneeEnCours.getHeureArrive().getMinutes() +"\r\n";;
+		}
+		
+		else {
+		Livraison livraisonActuelle = combinaisonPointDeLivraison(tourneeEnCours.getListeLivraison(), destinationCheminActuel);
+		String adresse = ruesDelIntersection(destinationCheminActuel);
+		contenu = contenu + "\r"+"Arrivee au point de livraison "+ adresse + " a " + heureFinCheminActuel+ "\r\n";
 		
 		if (tempsAttente >0) {
-			contenu = contenu + "Attente pendant "+ tempsAttente+ " minutes \r\n";
+			contenu = contenu + "Attente pendant "+ tempsAttente/60 + " minutes \r\n";
 		}
 		
-		//relier mon la destination de mon chemin actuel avec la destination de la livraison
-		
-		
-		contenu = contenu + "Livraison pendant "+ " TEMPS DE LIVRAISON" + " minutes \r\n";
-		//heureDepartPoint = heureFinCheminActuel + TEMPS DE LIVRAISON;
-		//contenu = contenu + "Depart du point de livraison "+ destinationCheminActuel + " a " + heureDepartPoint+ "\r\n";
-		contenu = contenu + "Depart du point de livraison "+ destinationCheminActuel + "\r\n";	
-		System.out.println("Test7 : test depart du pdl " + destinationCheminActuel);
+			contenu = contenu + "Livraison pendant "+ livraisonActuelle.getDuree()/60 + " minutes \r\n";
+			//heureDepartPoint = heureFinCheminActuel + livraisonActuelle.getDuree();
+			//contenu = contenu + "Depart du point de livraison "+ destinationCheminActuel + " a " + heureDepartPoint+ "\r\n";
+			contenu = contenu + "Depart du point de livraison "+ adresse + "\r\n\r\n";	
+			}
 		
 		return contenu;
 	}
 	
+	//TODO Bon courage Perrine ! :)
+	private static String retranscriptionLivraison(Tournee tournee, int index) {
+		Date[] tempsPassage = tournee.getTempsPassage()[index];
+		return "";
+	}
+
+	private static Livraison combinaisonPointDeLivraison (ArrayList <Livraison> livraisons, Intersection intersection) {
+
+		long idInter = intersection.getId();
+		int nLiv = 0;
+		Livraison livraisonGagnante = null;
+
+		 while (idInter != livraisons.get(nLiv).getDestination().getId()) {			 
+			 nLiv++;
+		 }
+		
+		livraisonGagnante = livraisons.get(nLiv);
+		return livraisonGagnante;
+	}
 	
+	private static String ruesDelIntersection (Intersection intersection){
+		ArrayList <Troncon> troncons = intersection.getTronconsVersVoisins();
+		String rues = null;
+		String rue2 = null;
+		
+		String rue1 = troncons.get(0).getNomRue();
+		
+		if (troncons.size()>1) {
+			rue2 = troncons.get(1).getNomRue();
+			rues = rue1 +" "+ rue2;
+		}
+		else
+		rues = rue1;
+
+		return rues;
+	}
+
 
 }

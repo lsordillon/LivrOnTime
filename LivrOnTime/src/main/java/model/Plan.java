@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.w3c.dom.Element;
@@ -10,7 +9,6 @@ import org.w3c.dom.NodeList;
 
 import util.tsp.Dijkstra;
 import util.tsp.TSP;
-import util.tsp.TSP1;
 import util.tsp.TSP2;
 
 /**
@@ -95,7 +93,6 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 	//charge la liste des points de livraison + entrepot
 	ArrayList <Intersection> origines=new ArrayList<Intersection>(dl.getIntersections());
 
-	Date hDepart=dl.getHeureDepart();
 
 	// Pour chaque point de livraison
 	for (int j=0; j<origines.size();j++) {
@@ -175,11 +172,15 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
  */
 public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
+	//Mesure du temps nécessaire à l'algorithme Dijkstra
+	long debutDijkstra = System.currentTimeMillis();
 	deroulerLesDijkstra(dl);
+	long tpLimite = System.currentTimeMillis()-debutDijkstra;
+	System.out.println("Algorithme Dijkstra : "+tpLimite+" ms");
+	
 	
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	
-	int tpLimite = 10;
 	TSP etape2 = new TSP2 ();
 	int nbSommet=dl.getLivraisons().size()+1;
 	
@@ -211,8 +212,8 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 
 	System.out.println("LA TOURNEE");
 	Tournee tournee = new Tournee(itineraire,dl);
-	for(int j=0;j<tournee.getItineraire().size();j++) {
-		System.out.println(tournee.getItineraire().get(j).toString());
+	for(Chemin che:tournee.getItineraire()) {
+		System.out.println(che);
 	}
 
 	

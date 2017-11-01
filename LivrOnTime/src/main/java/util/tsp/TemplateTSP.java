@@ -13,7 +13,7 @@ public abstract class TemplateTSP implements TSP {
 		return tempsLimiteAtteint;
 	}
 	
-	public void chercheSolution(int tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] time){
+	public void chercheSolution(long tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] time){
 		
 		
 		tempsLimiteAtteint = false;
@@ -68,12 +68,12 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
-	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, int tpsLimite, long[][] time){
-		 /*if (System.currentTimeMillis() - tpsDebut > tpsLimite){
+	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, long tpsLimite, long[][] time){
+		 if (System.currentTimeMillis() - tpsDebut > tpsLimite){
 			 tempsLimiteAtteint = true;
 			 System.err.println("Temps limite atteint !");
 			 return;
-		 }*/
+		 }
 	    if (nonVus.size() == 0){ // tous les sommets ont ete visites
 	    	coutVus += cout[sommetCrt][0];
 	    	if (coutVus < coutMeilleureSolution){ // on a trouve une solution meilleure que meilleureSolution
@@ -86,17 +86,21 @@ public abstract class TemplateTSP implements TSP {
 	        	Integer prochainSommet = it.next();
 	        	vus.add(prochainSommet);
 	        	nonVus.remove(prochainSommet);
+
 	        	//Code simple permettant de savoir si la plage horaire est respect�e
-	        	if ((time[prochainSommet][1])>coutVus) {
-		        	if ((time[prochainSommet][0])>coutVus) {
+	        	if ((time[prochainSommet][1])>coutVus+cout[sommetCrt][prochainSommet]) {
+		        	if ((time[prochainSommet][0])>coutVus+cout[sommetCrt][prochainSommet]) {
+
 	    				branchAndBound(prochainSommet, nonVus, vus,time[prochainSommet][0], cout, duree, tpsDebut, tpsLimite,time);
 	    			}
 	    			else {
 	    				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time);
 	    			}
 	        	}
+
 	        	//Si la plage horaire est respect�e, on fait le branchement.
-	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand m�me un iti avec des plages non respect�es.
+	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand m�me un iti avec des plages non respect�es (en fait juste coder le 'else').
+
 	        	
 	        	vus.remove(prochainSommet);
 	        	nonVus.add(prochainSommet);

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Livraison {
 	 
-	private int duree;
+	private int duree; // en secondes 
 	private Date debutPlageHoraire;
 	private Date finPlageHoraire;
 	private Intersection destination;
