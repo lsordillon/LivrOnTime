@@ -156,7 +156,6 @@ public class Tournee {
 	    itineraire.remove(index);
 	    
 
-	    
 	    d.algoDijkstra(plan, rChemin.getOrigine());
 	    Chemin begChemin=plan.creerChemin(rChemin.getOrigine(),inter);
 	    itineraire.add(index,begChemin);
