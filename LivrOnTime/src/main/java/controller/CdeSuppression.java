@@ -1,6 +1,5 @@
 package controller;
 
-import model.DemandeLivraison;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
@@ -10,30 +9,30 @@ public class CdeSuppression implements Commande {
 	
 	private Plan plan;
 	private Intersection intersection;
-	private DemandeLivraison dl;
+	private int index;
 	private Tournee tournee;
 	private Livraison livraison;
 	
 	
 	
 
-	public CdeSuppression(Plan plan, Intersection intersection, DemandeLivraison dl, Tournee tournee,Livraison livraison) {
+	public CdeSuppression(Plan plan, Intersection intersection, Tournee tournee,Livraison livraison, int index) {
 		super();
 		this.plan = plan;
 		this.intersection = intersection;
-		this.dl = dl;
+		this.index = index;
 		this.tournee = tournee;
 		this.livraison=livraison;
 	}
 
 	@Override
 	public void undoCde() {
-		tournee.AjouterLivraison(plan,intersection);
+		tournee.AjouterLivraison(plan,intersection,livraison,index);
 	}
 
 	@Override
 	public void redoCde() {
-		tournee.SupprimerLivraison(plan,intersection,livraison);
+		index =tournee.SupprimerLivraison(plan,intersection,livraison);
 	}
 
 }

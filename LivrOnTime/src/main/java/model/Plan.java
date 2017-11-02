@@ -32,6 +32,7 @@ public class Plan {
 	public void setId_intersections(ArrayList<Long> id_intersections) {
 		this.id_intersections = id_intersections;
 	}
+	
 public void CreerIntersections(NodeList noeuds) {
 	  final int nbNoeuds = noeuds.getLength();
       for(int j = 0; j<nbNoeuds; j++) {

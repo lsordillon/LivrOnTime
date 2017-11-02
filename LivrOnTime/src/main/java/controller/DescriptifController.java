@@ -53,7 +53,6 @@ public class DescriptifController {
 						
 
 						SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm");
-						SimpleDateFormat dureeM = new SimpleDateFormat("mm");
 						
 						if (item != null) {
 							if (item.getDebutPlageHoraire()!= null && item.getFinPlageHoraire()!=null){

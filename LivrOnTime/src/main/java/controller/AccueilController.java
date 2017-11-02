@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.sound.midi.VoiceStatus;
 
 import javafx.event.ActionEvent;
 
@@ -93,8 +92,8 @@ public class AccueilController{
 				    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 				    ChargerLivraison.setDisable(false);
 		    }else{
-		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
-	    		alert.showAndWait();
+		    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
+		    		alert.showAndWait();
 		    }
 		   
 		 
@@ -197,6 +196,11 @@ public class AccueilController{
 	    ChargerLivraison.setDisable(true);
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
+	    plan=null;
+	    tournee=null;
+	    dl=null;
+	    dessinerPlan=null;
+	    intersectionSelectionne=null;
 	}
 	
 	
