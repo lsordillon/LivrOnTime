@@ -224,6 +224,7 @@ public class Tournee {
 	}
 	
 	
+	
 	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
 		
 		for(int i=0;i<listeLivraisons.size();i++){
