@@ -92,8 +92,8 @@ public class AccueilController{
 				    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 				    ChargerLivraison.setDisable(false);
 		    }else{
-		    	Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
-	    		alert.showAndWait();
+		    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
+		    		alert.showAndWait();
 		    }
 		   
 		 
