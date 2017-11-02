@@ -98,13 +98,13 @@ public class LivraisonController implements Initializable {
 		}
 		
 		AccueilController aController = Main.aController;
-		plan = aController.getPlan();
+		plan = AccueilController.getPlan();
 		aController.getDl().getLivraisons().add(livraison);
-		if (aController.getTournee()==null){
+		if (AccueilController.getTournee()==null){
 			aController.update(null);
 		}else{
-		aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
-		aController.update(AccueilController.getTournee());
+			AccueilController.getTournee().AjouterLivraison(plan,intersection,livraison, 2);
+			aController.update(AccueilController.getTournee());
 		}
 	}
 	public static void setIntersection(Intersection intersect){

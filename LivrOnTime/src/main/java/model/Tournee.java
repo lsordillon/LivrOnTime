@@ -3,6 +3,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import util.tsp.Dijkstra;
+
 public class Tournee {
 
 
@@ -112,7 +114,8 @@ public class Tournee {
 		return listeLivraisons;
 	}
 	
-	public boolean SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+	public int SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+		int index=-1;
 		Intersection origine=null, destination=null;
 		if(listeLivraisons.contains(l)){
 			
@@ -134,35 +137,40 @@ public class Tournee {
 				nouvelItineraire.add( nouveau_chemin);
 				setItineraire(nouvelItineraire);
 			}
+			index=listeLivraisons.indexOf(l);
 			listeLivraisons.remove(l);
 			this.initTempsPassage();
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-			return false;
 		}
 		
 		System.out.println("resultat fin"+ getItineraire());
-		return true;
+		return index;
 	}
-	public boolean AjouterLivraison(Plan plan,Intersection inter){
-		Intersection origine=null, distination=null;
+	public boolean AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
+		Dijkstra d = new Dijkstra();
 		
-		if(!getListeLivraison().contains(inter)){
-			ArrayList<Chemin> nItineraire=getItineraire();
-			Chemin dernier_chemin=nItineraire.get(nItineraire.size());
-		    nItineraire.remove(nItineraire.size());
-		    
-		    Chemin nChemin=plan.trouverChemin(dernier_chemin.getOrigine(),inter);
-		    nItineraire.add(nChemin);
-		    nChemin=plan.trouverChemin(inter,dernier_chemin.getDestination());
-		    nItineraire.add(nChemin);
-		    setItineraire(nItineraire);
-		    
-		}
-	return true;
+		
+		Chemin rChemin=itineraire.get(index);
+	    itineraire.remove(index);
+	    
+
+	    d.algoDijkstra(plan, inter);
+	    d.algoDijkstra(plan, rChemin.getOrigine());
+	    
+	    Chemin begChemin=plan.creerChemin(rChemin.getOrigine(),inter);
+	    itineraire.add(index,begChemin);
+	    Chemin endChemin=plan.creerChemin(inter,rChemin.getDestination());
+	    itineraire.add(index+1,endChemin);
+	    
+	    
+	    listeLivraisons.add(index,l);
+	    
+	    return true;
 
 	}
+	
 	
 	
 	//Unused setters (yet)

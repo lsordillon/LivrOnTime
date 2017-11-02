@@ -36,7 +36,6 @@ public class ListeDeCdes {
 	
 	public void annule(){
 		if (indiceCrt >= 0){
-			Commande cde = liste.get(indiceCrt);
 			liste.remove(indiceCrt);
 			indiceCrt--;
 		}
