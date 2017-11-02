@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 
 import util.tsp.Dijkstra;
 import util.tsp.TSP;
-import util.tsp.TSP2;
+import util.tsp.TSP3;
 
 /**
  * Cette classe gère le chargement du plan et le lancement du calcul de la tournée
@@ -107,7 +107,21 @@ public void deroulerLesDijkstra (DemandeLivraison dl) {
 		
 		for (int i=0; i<destinations.size();i++) {
 			// Pour chaque trajet reliant deux points de livraison, je cree un chemin
-			Chemin chemin = this.creerChemin(ptDepart, destinations.get(i));
+			Chemin chemin = new Chemin();
+			chemin.setOrigine(ptDepart);
+			chemin.setDestination(destinations.get(i));
+			
+			// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
+			Intersection courante = destinations.get(i);
+			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
+			while (courante!=ptDepart) {
+				Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
+				if(troncon!=null) {
+					troncons.add(0, troncon);
+				}
+				courante=courante.getPredecesseur();
+			}
+			chemin.setTroncons(troncons);
 			chemins.add(chemin);
 		}
 	} 	
@@ -149,31 +163,6 @@ public Chemin trouverChemin (Intersection origine, Intersection destination) {
 }
 
 /**
- * Permet de créer un chemin suite à la réalisation d'un dijkstra (attention indispensable)
- * @param ptDepart
- * @param courante
- * @return le chemin correspondant
- */
-public Chemin creerChemin (Intersection ptDepart,Intersection courante) {
-	// Pour chaque trajet reliant deux points de livraison, je cree un chemin
-	Chemin chemin = new Chemin();
-	chemin.setOrigine(ptDepart);
-	chemin.setDestination(courante);
-				
-	// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
-	ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-	while (courante!=ptDepart) {
-		Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
-		if(troncon!=null) {
-			troncons.add(0, troncon);
-		}
-		courante=courante.getPredecesseur();
-	}
-	chemin.setTroncons(troncons);
-	return chemin;
-}
-
-/**
  * Calcul l'ensemble de la tournee a partir de la demande de livraison
  * realise tout d'abord des Dijkstra pour trouver les plus courts chemins entre chaque point
  * construit un graphe complet oriente
@@ -183,16 +172,12 @@ public Chemin creerChemin (Intersection ptDepart,Intersection courante) {
  */
 public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
-	//Mesure du temps n�cessaire � l'algorithme Dijkstra
-	long debutDijkstra = System.currentTimeMillis();
 	deroulerLesDijkstra(dl);
-	long tpLimite = System.currentTimeMillis()-debutDijkstra;
-	System.out.println("Algorithme Dijkstra : "+tpLimite+" ms");
-	
 	
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	
-	TSP etape2 = new TSP2 ();
+	int tpLimite = 10;
+	TSP etape2 = new TSP3 ();
 	int nbSommet=dl.getLivraisons().size()+1;
 	
 	//Gestion des plages horaires dans un tableau 2d
@@ -211,6 +196,7 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 		//on déroule le tableau MeilleureSolution du TSP pour creer l'itineraire
 		//Pour chaque element du tableau, on cherche l'intersection correspondante. il s'agira a tour de role d'une origine et d'une destination
 		//on cherche le chemin joignant ces deux intersections
+		System.out.println(etape2.getCoutMeilleureSolution());
 		Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(i));
 		Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(i+1));
 		itineraire.add(trouverChemin(origine,destination));
@@ -230,7 +216,6 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	
 	return tournee;
 }
-
 
 
 
