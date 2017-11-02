@@ -196,6 +196,11 @@ public class AccueilController{
 	    ChargerLivraison.setDisable(true);
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
+	    plan=null;
+	    tournee=null;
+	    dl=null;
+	    dessinerPlan=null;
+	    intersectionSelectionne=null;
 	}
 	
 	
