@@ -148,7 +148,7 @@ public class Tournee {
 		System.out.println("resultat fin"+ getItineraire());
 		return true;
 	}
-	/*public boolean AjouterLivraison(Plan plan,Intersection inter){
+	public boolean AjouterLivraison(Plan plan,Intersection inter){
 		Intersection origine=null, distination=null;
 		
 		if(!getListeLivraison().contains(inter)){
@@ -179,7 +179,7 @@ public class Tournee {
 	
 	
 	
-	/*public boolean ModifierLivraison(Plan plan,Livraison liv,Intersection inter){
+	public boolean ModifierLivraison(Plan plan,Livraison liv,Intersection inter){
 		Intersection origine=null, distination=null;
 		//si cette livraison n'appartient pas déja a DL
 		if(!this.getListeLivraison().contains(inter)){
@@ -211,7 +211,7 @@ public class Tournee {
 	
 	
 	
-	/*public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
+	public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
 		
 		for(int i=0;i<listeLivraisons.size();i++){
 			if(listeLivraisons.get(i)==liv) {
@@ -224,7 +224,7 @@ public class Tournee {
 	}
 	
 	
-	/*public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
+	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
 		
 		for(int i=0;i<listeLivraisons.size();i++){
 			if(listeLivraisons.get(i)==liv) {
