@@ -1,9 +1,15 @@
 package model;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.Date;
 
 
-public class Livraison {
+public class Livraison implements Serializable {
 	 
+	
 	private int duree; // en secondes 
 	private Date debutPlageHoraire;
 	private Date finPlageHoraire;
@@ -63,6 +69,6 @@ public class Livraison {
 	public void setDebutPlageHoraire(Date debutPlageHoraire) {
 		this.debutPlageHoraire = debutPlageHoraire;
 	}
-	
+
 	
 }

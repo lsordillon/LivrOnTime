@@ -3,13 +3,21 @@ package controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,16 +31,12 @@ import model.Troncon;
 import vue.DessinerPlan;
 
 public class DescriptifController {
+	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
 
 	public Plan plan;
 	 ObservableList<Livraison> data = FXCollections.observableArrayList();
 	   final ListView<Livraison> listView = new ListView<Livraison>(data);
 	
-	
-	public class CustomListView {
-	  
-
-	    }
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
 		this.plan = plan;
@@ -68,12 +72,18 @@ public class DescriptifController {
 							
 							
 							super.updateItem(item, bln);
-							
+							 //setItem(item);
+			                    
 
 							VBox vBox = new VBox(new Text(getAdresse(item.getDestination())), new Text(plageHoraire));
 							
 							//Affichage des temps de passage
 							if (tournee!=null) {
+								for(Livraison l : tournee.getListeLivraison()){
+									if(l.toString().equals(item.toString())){
+										item = l;
+									}
+								}
 								String heureArrivee="";
 								String attente="";
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
@@ -100,7 +110,7 @@ public class DescriptifController {
 							    			txt.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
 							    		}
 							    		else {
-							    			txt.setFill(Color.GREEN);//Détendue
+							    			txt.setFill(Color.GREEN);//DÃ©tendue
 							    		}
 							    	}
 						    	}
@@ -114,7 +124,74 @@ public class DescriptifController {
 							// HBox hBox = new HBox(new ImageView, vBox);
 							// hBox.setSpacing(10);
 							else setGraphic(vBox);
+							setOnDragDetected(new EventHandler<MouseEvent>(){
+		                        @Override
+		                        public void handle(MouseEvent event) {
+					            	 if (getItem() == null) {
+					                     return;
+					                 }
+					                System.out.println( "listcell setOnDragDetected" );
+					                Dragboard db = startDragAndDrop( TransferMode.MOVE );
+					                ClipboardContent content = new ClipboardContent();
+					                content.put(dataFormat, getItem());
+					                
+					                db.setContent( content );
+					                event.consume();
+					                System.out.println( "listcell setOnDragDetected" );
+					            }} );
+					            setOnDragEntered(new EventHandler<DragEvent>(){
+			                        @Override
+			                        public void handle(DragEvent event) {
+					                setStyle( "-fx-background-color: PaleGreen;" );
+					            }} );
 
+					            setOnDragExited( ( DragEvent event ) ->
+					            {
+					                setStyle( "" );
+					            } );
+
+					           setOnDragOver(new EventHandler<DragEvent>(){
+			                        @Override
+			                        public void handle(DragEvent event) {
+					    
+					                Dragboard db = event.getDragboard();
+					                if ( db.hasContent(dataFormat) )
+					                {
+					                    event.acceptTransferModes( TransferMode.MOVE );
+					                }
+					                event.consume();
+					            } });
+					            setOnDragDropped(new EventHandler<DragEvent>(){
+			                        @Override
+			                        public void handle(DragEvent event) {
+					            	 if (getItem() == null) {
+					                     return;
+					                 }
+					                System.out.println( "listCell.setOnDragDropped" );
+					                Dragboard db = event.getDragboard();
+					                boolean success = false;
+					                if ( db.hasContent(dataFormat))
+					                {
+					                	System.out.println( "listCell.setOnDragDropped TRUE" );
+					                    ObservableList<Livraison> items = listView.getItems();					               
+					                    //int draggedIdx = items.indexOf(db.getContent(dataFormat));
+					                    int draggedIdx = getListView().getSelectionModel().getSelectedIndex();
+					                    int thisIdx = items.indexOf(getItem());
+					                    System.out.println(draggedIdx+"**"+thisIdx);
+					                    System.out.println(((Livraison) db.getContent(dataFormat)).toString());
+					                    items.remove(draggedIdx);
+					                    items.add(thisIdx,(Livraison) db.getContent(dataFormat) );
+					                    
+					                    //items.set(thisIdx, (Livraison) db.getContent(dataFormat));
+
+					                    List<Livraison> itemscopy = new ArrayList<>(items);
+					                    listView.getItems().setAll(itemscopy);
+
+					                    success = true;
+					                }
+					                event.setDropCompleted( success );
+					                event.consume();
+					            }} );
 
 						}
 
@@ -129,7 +206,7 @@ public class DescriptifController {
 
 		});
 
-		interaction(listView);
+		//interaction(listView);
 		return listView;
 	}
 	
@@ -175,6 +252,9 @@ public class DescriptifController {
 
 
 		});
+	}
+	public void setDraggable(ListView<String> list){
+		
 	}
   
 }

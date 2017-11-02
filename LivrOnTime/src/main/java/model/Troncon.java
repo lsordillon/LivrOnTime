@@ -1,6 +1,8 @@
 package model;
 
-public class Troncon {
+import java.io.Serializable;
+
+public class Troncon implements Serializable {
 	private Intersection destination;
 	private double longueur ;
 	private String nomRue;

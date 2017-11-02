@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Intersection {
+public class Intersection implements Serializable{
 	private long id;
 	private int x;
 	private int y;
