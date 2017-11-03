@@ -18,7 +18,9 @@ public class Intersection implements Serializable{
 		this.y = y;
 		tronconsVersVoisins = new ArrayList<Troncon>();
 	}
-	
+	public Intersection(){
+		
+	}
 	
 	
 	public Intersection getPredecesseur() {
