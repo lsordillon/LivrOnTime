@@ -9,11 +9,15 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import LivrOnTime.Main;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.SplitPane.Divider;
 import javafx.stage.Stage;
 import model.Chemin;
@@ -140,8 +144,9 @@ public class LivraisonController implements Initializable {
 		if (AccueilController.getTournee()==null){
 			aController.update(null);
 		}else{
-			AccueilController.getTournee().AjouterLivraison(plan,intersection,livraison, 2);
-			aController.update(AccueilController.getTournee());
+			    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex();
+					AccueilController.getTournee().AjouterLivraison(plan,intersection,livraison, idx);
+					aController.update(AccueilController.getTournee());
 		}
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();

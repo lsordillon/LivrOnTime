@@ -145,7 +145,8 @@ public class Tournee {
 			index=listeLivraisons.indexOf(l);
 			listeLivraisons.remove(l);
 			this.initTempsPassage();
-
+			
+			
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
@@ -201,7 +202,10 @@ public class Tournee {
 			
 		    nItineraire.add(nChemin);
 		    setItineraire(nItineraire);
-		    
+		    getListeLivraison().add(index, l);
+		    /*index=listeLivraisons.indexOf(l);
+			listeLivraisons.add(index, l);
+			this.initTempsPassage();*/
 		}else {
 			System.err.println("ERREUR ! La livraison fait partie de la tournee actuelle");
 			return false;
@@ -239,7 +243,7 @@ public class Tournee {
 	public boolean ModifierLivraison(Plan plan,Livraison liv,Intersection inter){
 		Intersection origine=new Intersection(); 
 		Intersection distination=new Intersection();
-		//si cette livraison n'appartient pas déja a DL
+		//si cette livraison n'appartient pas dï¿½ja a DL
 		if(!this.getListeLivraison().contains(inter)){
 			ArrayList<Chemin> nItineraire=getItineraire();
 			Dijkstra d=new Dijkstra();
