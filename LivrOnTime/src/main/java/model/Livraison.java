@@ -51,6 +51,7 @@ public class Livraison implements Serializable {
 	}
 
 	public void setFinPlageHoraire(Date finPlageHoraire) {
+		if(finPlageHoraire!=null)
 		this.finPlageHoraire = finPlageHoraire;
 	}
 
@@ -67,6 +68,7 @@ public class Livraison implements Serializable {
 	}
 
 	public void setDebutPlageHoraire(Date debutPlageHoraire) {
+		if(debutPlageHoraire!=null)
 		this.debutPlageHoraire = debutPlageHoraire;
 	}
 

@@ -178,7 +178,7 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 	
 	int tpLimite = 10;
-	TSP etape2 = new TSP3 ();
+	TSP etape2 = new TSP3();
 	int nbSommet=dl.getLivraisons().size()+1;
 	
 	//Gestion des plages horaires dans un tableau 2d

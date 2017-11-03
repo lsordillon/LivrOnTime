@@ -206,7 +206,7 @@ public class DescriptifController {
 
 		});
 
-		//interaction(listView);
+		interaction(listView);
 		return listView;
 	}
 	

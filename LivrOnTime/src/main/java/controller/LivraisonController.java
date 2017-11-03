@@ -10,9 +10,12 @@ import java.util.ResourceBundle;
 
 import LivrOnTime.Main;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.SplitPane.Divider;
+import javafx.stage.Stage;
 import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
@@ -22,6 +25,7 @@ import model.Tournee;
 
 public class LivraisonController implements Initializable {
 	public TextField adresseField;
+	public TextField dureeField;
 	public ComboBox<Integer> comboDeHeur;
 	public ComboBox<Integer> comboDeMinute;
 	public ComboBox<Integer> comboAHeur;
@@ -30,6 +34,7 @@ public class LivraisonController implements Initializable {
 	public Button modifBtn;
 	public Button suppBtn;
 	public Button ajoutBtn;
+	
 	private static Intersection intersection;
 	private static DemandeLivraison demandeL;
 	private Livraison livraison;
@@ -52,6 +57,8 @@ public class LivraisonController implements Initializable {
 				if(l.getDestination().getId() == intersection.getId()){
 					livraison = l;
 					exist = true;
+					
+					dureeField.setText( String.valueOf(livraison.getDuree() / 60));
 					if(l.getDebutPlageHoraire()!=null){
 					comboDeHeur.getSelectionModel().select(l.getDebutPlageHoraire().getHours());
 					comboDeMinute.getSelectionModel().select(l.getDebutPlageHoraire().getMinutes());
@@ -69,8 +76,37 @@ public class LivraisonController implements Initializable {
 	}
 	
 	public void ModifierLivraison(){
+		AccueilController aController = Main.aController;
+		plan = AccueilController.getPlan();
+		Date debut = new Date();
+		Date fin = new Date();
 		
+		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){			
+			debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
+			debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());			
+			fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
+			fin.setMinutes(comboAMinute.getSelectionModel().getSelectedItem());			
+			}else{
+				debut = null;
+				fin = null;
+			}
+		
+			if (AccueilController.getTournee()==null){
+				int idx = aController.getDl().getLivraisons().indexOf(livraison);
+				livraison.setDebutPlageHoraire(debut);
+				livraison.setFinPlageHoraire(fin);
+				livraison.setDuree(Integer.parseInt(dureeField.getText()) * 60);
+				aController.getDl().getLivraisons().set(idx, livraison);
+				aController.update(null);
+			}else{
+				AccueilController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
+				AccueilController.getTournee().ModifierLivraison(plan, livraison, Integer.parseInt(dureeField.getText()) * 60);
+				aController.update(AccueilController.getTournee());
+			}
+			Stage stage = (Stage) modifBtn.getScene().getWindow();
+		    stage.close();
 	}
+	
 	public void SupprimerLivraison(){
 		AccueilController aController = Main.aController;
 		plan = aController.getPlan();
@@ -81,7 +117,8 @@ public class LivraisonController implements Initializable {
 		aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
 		aController.update(AccueilController.getTournee());
 		}
-	
+		Stage stage = (Stage) suppBtn.getScene().getWindow();
+	    stage.close();
 	}
 	public void AjouterLivraison(){
 		
@@ -106,6 +143,8 @@ public class LivraisonController implements Initializable {
 			AccueilController.getTournee().AjouterLivraison(plan,intersection,livraison, 2);
 			aController.update(AccueilController.getTournee());
 		}
+		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
+	    stage.close();
 	}
 	public static void setIntersection(Intersection intersect){
 		intersection = intersect;
