@@ -156,6 +156,8 @@ public class Tournee {
 	}
 	
 	
+	
+	
 	public boolean AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
 		Dijkstra d = new Dijkstra();
 		
@@ -165,12 +167,38 @@ public class Tournee {
 			Chemin dernier_chemin=nItineraire.get(nItineraire.size()-1);
 		    nItineraire.remove(nItineraire.size()-1);
 		    
-		    Chemin nChemin=plan.trouverChemin(dernier_chemin.getOrigine(),inter);
+		    Chemin nChemin=new Chemin();
+		    d.algoDijkstra(plan, dernier_chemin.getOrigine());
+			nChemin.setOrigine(dernier_chemin.getOrigine());
+			nChemin.setDestination(inter);
+            Intersection courante = inter;
+			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
+			while (courante!=dernier_chemin.getOrigine()) {
+				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
+				if(troncon!=null) {
+					troncons.add(0, troncon);
+				}
+				courante=courante.getPredecesseur();
+			}
+			nChemin.setTroncons(troncons);
 		    nItineraire.add(nChemin);
 		    
-		  
+		    nChemin=new Chemin();
 		    d.algoDijkstra(plan, inter);
-		    nChemin=plan.creerChemin(inter, dernier_chemin.getDestination());
+			nChemin.setOrigine(inter);
+			nChemin.setDestination(dernier_chemin.getDestination());
+		
+			 courante = dernier_chemin.getDestination();
+		     troncons=new ArrayList<Troncon>();
+			while (courante!=inter) {
+				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
+				if(troncon!=null) {
+					troncons.add(0, troncon);
+				}
+				courante=courante.getPredecesseur();
+			}
+			nChemin.setTroncons(troncons);
+			
 		    nItineraire.add(nChemin);
 		    setItineraire(nItineraire);
 		    
@@ -209,22 +237,54 @@ public class Tournee {
 	
 	
 	public boolean ModifierLivraison(Plan plan,Livraison liv,Intersection inter){
-		Intersection origine=null, distination=null;
+		Intersection origine=new Intersection(); 
+		Intersection distination=new Intersection();
 		//si cette livraison n'appartient pas déja a DL
 		if(!this.getListeLivraison().contains(inter)){
 			ArrayList<Chemin> nItineraire=getItineraire();
 			Dijkstra d=new Dijkstra();
-			d.algoDijkstra(plan, inter);
 			
-			for(int i=0;i<itineraire.size();i++){
-				if(itineraire.get(i).getDestination()==liv.getDestination()) origine=itineraire.get(i).getOrigine();
-				if(itineraire.get(i).getOrigine()==liv.getDestination()) origine=itineraire.get(i).getDestination();
+			int i=0;
+			for(i=0;i<nItineraire.size();i++){
+				if(nItineraire.get(i).getDestination()==liv.getDestination()) origine=nItineraire.get(i).getOrigine();
+				if(nItineraire.get(i).getOrigine()==liv.getDestination()) origine=nItineraire.get(i).getDestination();
+				break;
 			}
+			nItineraire.remove(i);
+			Chemin nChemin=new Chemin();
+		    d.algoDijkstra(plan, origine);
+			nChemin.setOrigine(origine);
+			nChemin.setDestination(inter);
+		
+			Intersection courante = inter;
+			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
+			while (courante!=origine) {
+				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
+				if(troncon!=null) {
+					troncons.add(0, troncon);
+				}
+				courante=courante.getPredecesseur();
+			}
+			nChemin.setTroncons(troncons);
+		    nItineraire.add(i, nChemin);
+		    
+		    nChemin=new Chemin();
+		    d.algoDijkstra(plan, inter);
+			nChemin.setOrigine(inter);
+			nChemin.setDestination(distination);
+		
+			 courante =distination;
+		     troncons=new ArrayList<Troncon>();
+			while (courante!=inter) {
+				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
+				if(troncon!=null) {
+					troncons.add(0, troncon);
+				}
+				courante=courante.getPredecesseur();
+			}
+			nChemin.setTroncons(troncons);
+			nItineraire.add(++i,nChemin);
 			
-			Chemin nChemin=plan.trouverChemin(origine, inter);
-			 nItineraire.add(nChemin);
-			 nChemin=plan.creerChemin(inter, distination);
-			 nItineraire.add(nChemin);
 			 setItineraire(nItineraire);
 			 liv.setDestination(inter);
 		}else {
@@ -242,12 +302,14 @@ public class Tournee {
 	
 	public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
 		
-		for(int i=0;i<listeLivraisons.size();i++){
-			if(listeLivraisons.get(i)==liv) {
-				listeLivraisons.get(i).setDuree(duree);
-				break;
-			}
-		}
+		if(this.getListeLivraison().contains(liv)){
+			int i=this.getListeLivraison().indexOf(liv);
+			liv.setDuree(duree);
+			this.getListeLivraison().set(i, liv);
+		}else {
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			return false;
+		}	
 		this.initTempsPassage();
 		return true;
 	}
@@ -256,16 +318,19 @@ public class Tournee {
 	
 	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
 		
-		for(int i=0;i<listeLivraisons.size();i++){
-			if(listeLivraisons.get(i)==liv) {
-				if(DPH!=null) listeLivraisons.get(i).setDebutPlageHoraire(DPH);
-				if(FPH!=null) listeLivraisons.get(i).setDebutPlageHoraire(FPH);
-				break;
-			}
-		}
+		if(this.getListeLivraison().contains(liv)){
+			int i=this.getListeLivraison().indexOf(liv);
+			if(DPH!= null) liv.setDebutPlageHoraire(DPH);
+			if(FPH!=null) liv.setFinPlageHoraire(FPH);
+			this.getListeLivraison().set(i, liv);
+		}else {
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			return false;
+		}	
 		this.initTempsPassage();
 		return true;
 	}
+	
 	
 
 	//Unused setters (yet)
