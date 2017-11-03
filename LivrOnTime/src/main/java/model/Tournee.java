@@ -244,13 +244,23 @@ public class Tournee {
 			ArrayList<Chemin> nItineraire=getItineraire();
 			Dijkstra d=new Dijkstra();
 			
-			int i=0;
-			for(i=0;i<nItineraire.size();i++){
-				if(nItineraire.get(i).getDestination()==liv.getDestination()) origine=nItineraire.get(i).getOrigine();
-				if(nItineraire.get(i).getOrigine()==liv.getDestination()) origine=nItineraire.get(i).getDestination();
-				break;
+			int index=0;
+		
+			for(int i=0;i<nItineraire.size();i++){
+				if(nItineraire.get(i).getDestination()==liv.getDestination()){
+					origine=nItineraire.get(i).getOrigine();
+					nItineraire.remove(nItineraire.get(i));;
+					index=i;
+				}
+				if(nItineraire.get(i).getOrigine()==liv.getDestination()){
+					origine=nItineraire.get(i).getDestination();
+					nItineraire.remove(nItineraire.get(i));
+				}
+				
 			}
-			nItineraire.remove(i);
+			
+			
+			
 			Chemin nChemin=new Chemin();
 		    d.algoDijkstra(plan, origine);
 			nChemin.setOrigine(origine);
@@ -262,11 +272,14 @@ public class Tournee {
 				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
 				if(troncon!=null) {
 					troncons.add(0, troncon);
+				}else{
+					System.err.println("un point inaccessible !");
 				}
 				courante=courante.getPredecesseur();
 			}
 			nChemin.setTroncons(troncons);
-		    nItineraire.add(i, nChemin);
+			
+		    nItineraire.add(index, nChemin);
 		    
 		    nChemin=new Chemin();
 		    d.algoDijkstra(plan, inter);
@@ -279,16 +292,19 @@ public class Tournee {
 				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
 				if(troncon!=null) {
 					troncons.add(0, troncon);
+				}else{
+					System.err.println("un point inaccessible !");
 				}
 				courante=courante.getPredecesseur();
 			}
 			nChemin.setTroncons(troncons);
-			nItineraire.add(++i,nChemin);
+			
+			nItineraire.add(++index,nChemin);
 			
 			 setItineraire(nItineraire);
 			 liv.setDestination(inter);
 		}else {
-			System.err.println("ERREUR ! La livraison fait partie de la tournee actuelle");
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
 			return false;
 		}
 		this.initTempsPassage();
