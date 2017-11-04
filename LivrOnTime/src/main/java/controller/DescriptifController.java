@@ -128,7 +128,7 @@ public class DescriptifController {
 						    	}
 						    	else {
 						    		long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
-						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHms.format(new Date(dureeTrajet)+" min"));
+						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHms.format(new Date(dureeTrajet))+" min");
 							    	
 						    	}
 						    	txtDureeTrajet.setFill(Color.BLUE);
