@@ -62,12 +62,12 @@ public class DescriptifController {
 							if (item.getDebutPlageHoraire()!= null && item.getFinPlageHoraire()!=null){
 								String debut = dureeHms.format(item.getDebutPlageHoraire());
 								String fin = dureeHms.format(item.getFinPlageHoraire());
-								plageHoraire=debut +" - "+fin;
+								plageHoraire=debut +" - "+fin + "        ";
 							}else {
-								plageHoraire="--:-- - --:--";
+								plageHoraire="";
 							}
 							
-							plageHoraire+= "        Duree : "+item.getDuree()/60+" min";
+							plageHoraire+= "Duree : "+item.getDuree()/60+" min";
 							
 							
 							
@@ -90,14 +90,16 @@ public class DescriptifController {
 						    	heureArrivee="Arrivee a "+dureeHms.format(tmp[0]);
 						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 						    	VBox vBox2 = new VBox();
-						    	Text txt = new Text(heureArrivee+ attente);
+						    	Text txt;
 						    	
 						    	//COULEUR
 						    	if (item.getFinPlageHoraire()==null) {
+						    		txt = new Text(heureArrivee);
 						    		txt.setFill(Color.BLACK);
 						    	}
 						    	else {
-							    	if (tmp[1] != null) { //s'il n'y a pas d'attente
+						    		txt = new Text(heureArrivee+ attente);
+							    	if (tmp[1] == null) { //s'il n'y a pas d'attente
 							    		txt.setFill(Color.GREEN);
 							    	}
 							    	else { //sinon on teste si c'est une plage horaire tendue 
@@ -110,7 +112,7 @@ public class DescriptifController {
 							    			txt.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
 							    		}
 							    		else {
-							    			txt.setFill(Color.GREEN);//Détendue
+							    			txt.setFill(Color.ORANGE);//Détendue mais attente quand meme..
 							    		}
 							    	}
 						    	}
