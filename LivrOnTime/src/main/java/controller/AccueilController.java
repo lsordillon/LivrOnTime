@@ -176,7 +176,8 @@ public class AccueilController{
 			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
 			fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
 			fichierGenere.close();	
-			System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt "); 
+			//System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt ");
+			feuilleDeRouteTxt.Open();
 			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
     		alert.showAndWait();
 			

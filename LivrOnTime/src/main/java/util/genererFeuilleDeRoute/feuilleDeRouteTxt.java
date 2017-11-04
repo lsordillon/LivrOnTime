@@ -1,7 +1,12 @@
 package util.genererFeuilleDeRoute;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+
 
 import model.*;
 
@@ -18,7 +23,7 @@ import model.*;
 
 public class feuilleDeRouteTxt {
 
-	
+    
 	public feuilleDeRouteTxt(){
 	// Constructeur vide
 	}
@@ -208,6 +213,14 @@ public class feuilleDeRouteTxt {
 
 		return rues;
 	}
+    public static void Open() throws IOException {
+        Desktop desktop = Desktop.getDesktop();
+        if (desktop.isSupported(Desktop.Action.OPEN)) {
+            desktop.open(new File("src/main/resources/FeuilleDeRoute.txt"));
+        } else {
+            System.out.println("Open is not supported");
+        }
+}
 
 
 }
