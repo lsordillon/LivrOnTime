@@ -67,7 +67,7 @@ public class DescriptifController {
 								plageHoraire="";
 							}
 							
-							plageHoraire+= "Duree : "+item.getDuree()/60+" min";
+							plageHoraire+= "Duree livraison : "+item.getDuree()/60+" min";
 							
 							
 							
@@ -89,37 +89,47 @@ public class DescriptifController {
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
 						    	heureArrivee="Arrivee a "+dureeHms.format(tmp[0]);
 						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
-						    	VBox vBox2 = new VBox();
-						    	Text txt;
+
+						    	Text txtHeureArrivee;
 						    	
 						    	//COULEUR
 						    	if (item.getFinPlageHoraire()==null) {
-						    		txt = new Text(heureArrivee);
-						    		txt.setFill(Color.BLACK);
+						    		txtHeureArrivee = new Text(heureArrivee);
+						    		txtHeureArrivee.setFill(Color.BLACK);
 						    	}
 						    	else {
-						    		txt = new Text(heureArrivee+ attente);
+						    		txtHeureArrivee = new Text(heureArrivee+ attente);
 							    	if (tmp[1] == null) { //s'il n'y a pas d'attente
-							    		txt.setFill(Color.GREEN);
+							    		txtHeureArrivee.setFill(Color.GREEN);
 							    	}
 							    	else { //sinon on teste si c'est une plage horaire tendue 
 							    		
 							    		long plageTendueMin = item.getFinPlageHoraire().getTime() - 3600000 - tmp[0].getTime();
 							    		if (plageTendueMin <= 15*60000){
-							    			txt.setFill(Color.RED);//Plage tendue !!
+							    			txtHeureArrivee.setFill(Color.RED);//Plage tendue !!
 							    		}
 							    		else if (plageTendueMin <= 45*60000) {
-							    			txt.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
+							    			txtHeureArrivee.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
 							    		}
 							    		else {
-							    			txt.setFill(Color.ORANGE);//DÃ©tendue mais attente quand meme..
+							    			txtHeureArrivee.setFill(Color.GREEN);//DÃ©tendue mais attente quand meme..
 							    		}
 							    	}
 						    	}
 						    	
-						    	//Creation d'une nouvelle vBox
-						    	vBox2.getChildren().addAll(vBox,new VBox(txt));
-						    	vBox2.setSpacing(10);
+						    	//2e vBox qui affiche la durée et l'heure d'arrivée
+						    	Text txtDureeTrajet;
+						    	int index = tournee.getListeLivraison().indexOf(item);
+						    	if (index ==0) {
+						    		txtDureeTrajet = new Text("Duree du trajet : "+dureeHms.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
+						    	}
+						    	else {
+						    		long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
+						    		txtDureeTrajet = new Text("Duree du trajet : "+dureeHms.format(new Date(dureeTrajet)));
+							    	
+						    	}
+						    	VBox vBox2 = new VBox(vBox,new VBox(txtDureeTrajet,txtHeureArrivee));
+						    	//vBox2.setSpacing(10); (????)
 						    	setGraphic(vBox2);
 							}
 
