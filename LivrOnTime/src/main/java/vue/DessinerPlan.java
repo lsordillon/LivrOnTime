@@ -19,6 +19,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
@@ -246,8 +247,31 @@ public class DessinerPlan {
     	
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         
-        line.setStrokeWidth(widthStroke);
-        //line.setId(O.getId()+""+D.getId());
+        line.setStrokeWidth(2);
+        line.setFill(Color.WHITE);
+        line.setStroke(Color.WHITE);
+        String adress = "";
+        for(Troncon troncon : AccueilController.getPlan().getTroncons()){
+        	if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
+        		adress = troncon.getNomRue();
+        	}
+        		
+        }
+        Tooltip tp = new Tooltip(adress);
+        line.setOnMouseEntered(new EventHandler<MouseEvent>() {
+             @Override
+             public void handle(MouseEvent t) {
+                  Node  node =(Node)t.getSource();
+                  tp.show(node, line.getLayoutX()+t.getSceneX(), line.getLayoutY()+t.getSceneY());
+                }
+            });
+        line.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                 
+                 tp.hide();
+               }
+           });
 
         canvas.getChildren().add(line);
         
