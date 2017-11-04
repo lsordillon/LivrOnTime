@@ -119,16 +119,22 @@ public class DescriptifController {
 						    	
 						    	//2e vBox qui affiche la durée et l'heure d'arrivée
 						    	Text txtDureeTrajet;
+						    	Text spaceTxt = new Text("|");
+						    	Text spaceTxt2 = new Text("|");
+						    	
 						    	int index = tournee.getListeLivraison().indexOf(item);
 						    	if (index ==0) {
-						    		txtDureeTrajet = new Text("Duree du trajet : "+dureeHms.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
+						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHms.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
 						    	}
 						    	else {
 						    		long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
-						    		txtDureeTrajet = new Text("Duree du trajet : "+dureeHms.format(new Date(dureeTrajet)));
+						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHms.format(new Date(dureeTrajet)+" min"));
 							    	
 						    	}
-						    	VBox vBox2 = new VBox(vBox,new VBox(txtDureeTrajet,txtHeureArrivee));
+						    	txtDureeTrajet.setFill(Color.BLUE);
+						    	spaceTxt.setFill(Color.BLUE);
+						    	spaceTxt2.setFill(Color.BLUE);
+						    	VBox vBox2 = new VBox(new VBox(spaceTxt,txtDureeTrajet,spaceTxt2),vBox,new VBox(txtHeureArrivee));
 						    	//vBox2.setSpacing(10); (????)
 						    	setGraphic(vBox2);
 							}
