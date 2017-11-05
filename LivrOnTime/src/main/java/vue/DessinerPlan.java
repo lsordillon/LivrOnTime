@@ -247,9 +247,9 @@ public class DessinerPlan {
     	
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         
-        line.setStrokeWidth(2);
-        line.setFill(Color.WHITE);
-        line.setStroke(Color.WHITE);
+        line.setStrokeWidth(widthStroke);
+        line.setFill(Color.BLACK);
+        line.setStroke(Color.BLACK);
         String adress = "";
         for(Troncon troncon : AccueilController.getPlan().getTroncons()){
         	if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){

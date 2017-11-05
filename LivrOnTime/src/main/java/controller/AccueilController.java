@@ -89,7 +89,7 @@ public class AccueilController{
 				    
 				    VuePlan.getChildren().clear();
 				    VuePlan.getChildren().add(group);
-				    VuePlan.setStyle("-fx-background-color: #f7f7d4");
+				   // VuePlan.setStyle("-fx-background-color: #f7f7d4");
 				    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 				    ChargerLivraison.setDisable(false);
 		    }else{
