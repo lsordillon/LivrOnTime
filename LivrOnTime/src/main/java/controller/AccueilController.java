@@ -118,7 +118,7 @@ public class AccueilController{
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
 	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
 	    	if(parserLivraison.validationXSD(xml, xsd)){
-	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
+	    		parserLivraison.lecteur(selectedFile.getAbsolutePath());
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 				LivraisonController.setDL(dl);
 				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
@@ -214,7 +214,7 @@ public class AccueilController{
 		XmlParserPlan parser = new XmlParserPlan();
 		Plan plan = new Plan();
 		
-		parser.Reader(chemin);
+		parser.lecteur(chemin);
 		plan.CreerIntersections(XmlParserPlan.noeuds);
 		plan.CreerTroncons(XmlParserPlan.troncons);
 		plan.TronconsVoisins();
