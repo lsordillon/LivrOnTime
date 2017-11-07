@@ -28,6 +28,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.*;
+import javafx.scene.layout.StackPane;
 
 class PannableCanvas extends Pane {
 
@@ -218,7 +220,7 @@ public class DessinerPlan {
     	int x,y;
     	   
     	
-    	Circle circle1 = new Circle(1);
+    	 Circle circle1 = new Circle(1);
     	 circle1.setStroke(Color.GREY);
          circle1.setFill(Color.GREY);
          
@@ -353,8 +355,8 @@ public class DessinerPlan {
         Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
         canvas.getChildren().remove(circle);
         
-    	circle.setStroke(Color.PURPLE);
-    	circle.setFill(Color.PURPLE);
+    	circle.setStroke(Color.PLUM);
+    	circle.setFill(Color.PLUM);
     	circle.setRadius(widthStroke*10);
     	 canvas.getChildren().add(circle);
         
@@ -386,29 +388,47 @@ public class DessinerPlan {
 		Group group = new Group();
 		
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
-    	/*canvas.getChildren().remove(circle1);
-    	circle1.setStroke(Color.GREEN);
-    	circle1.setFill(Color.GREEN);
-    	circle1.setRadius(widthStroke*4);
-    	canvas.getChildren().add(circle1);*/
-    	circle1.toFront();
+		//circle1.toFront();
+		
     	Circle circle2;
+    	int indice = 1;
+    	ArrayList<Text> textes = new ArrayList<Text>();
+    	
     	for (Chemin c : tournee.getItineraire()){
+    		
+    		Text precedent = new Text();
+    		
     		for(Troncon t: c.getTroncons()){
     			circle1=dessine.get(t.getOrigine().getId());
     			circle2=dessine.get(t.getDestination().getId());
     			
-    			 Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+    			Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
     		        
-    			 line.setStroke(Color.GREEN);
+    			line.setStroke(Color.GREEN);
     			line.setFill(Color.GREEN);
-    		        line.setStrokeWidth(widthStroke*4);
+    		    line.setStrokeWidth(widthStroke*4);
     		      
-    		        canvas.getChildren().add(line);
-    		        circle1.toFront();
-    		        circle2.toFront();
+		        canvas.getChildren().add(line);
+		        circle1.toFront();
+		        
     		}
+	    	
+	    	Text texteCercle1 = new Text(""+indice);
+	        texteCercle1.setFill(Color.BLACK);
+	        texteCercle1.setStroke(Color.BLACK);
+	        texteCercle1.setBoundsType(TextBoundsType.VISUAL); 
+	    	
+	        texteCercle1.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + widthStroke * 7);
+	        texteCercle1.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - widthStroke * 8);
+	    	canvas.getChildren().add(texteCercle1);
+	    	
+	    	indice++;
+	    	textes.add(texteCercle1);
     		    
+    	}
+   	 
+    	for ( int i =0; i <textes.size(); i++) {
+    		textes.get(i).toFront();
     	}
 		
     	
