@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javafx.scene.paint.Color;
 import util.tsp.Dijkstra;
 
 public class Tournee {
@@ -165,7 +166,6 @@ public class Tournee {
 		System.out.println("resultat fin"+ getItineraire());
 		return index;
 	}
-	
 	
 	
 	public boolean AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
@@ -374,9 +374,68 @@ public class Tournee {
 		return true;
 	}
 	
-	// verifier une fois modifiees les plages horaires violees
-	public boolean VerifierPlagesHoraires() {				
-		return true;
+	
+	// verifier si l'heure d'arrive a une livrasion correspond aux plages horaires 
+	public int VerifierPlagesHorairesUneLiv(Tournee tournee, Livraison liv) {
+		// juste checker si l'horaire d'arrivee fait partie de la ph
+		// valeur 0 : pas d'attente et pas tendu --> bleu
+		// valeur 1 : pas d'attente et tendu --> orange
+		// valeur 2 : attente --> orangered
+		// valeur 3 : plage horaire violee --> rouge 
+		// valeur 4 : test d'erreur
+		
+		int valeurPH = 4; 
+		
+		if (tournee!=null) {
+			for(Livraison l : tournee.getListeLivraison()){
+				if(l.toString().equals(liv.toString())){
+					liv = l;
+				}
+			}
+
+			Date[] tempsPassage=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(liv)];
+	
+			boolean attente = true;
+			Date horaireArr = tempsPassage[0];
+			Date debutPH = liv.getDebutPlageHoraire();
+			Date finPH = liv.getFinPlageHoraire(); 
+			long tempsRestantAvantFinPH = finPH.getTime() - 3600000 - horaireArr.getTime();
+			
+			//arrive apres DPH et avant FPH donc n'attend pas 
+			if (horaireArr.getTime() >= debutPH.getTime() && horaireArr.getTime() < finPH.getTime()) {
+				attente = false; 
+			}
+			
+			if (attente == false && tempsRestantAvantFinPH > 30*60000 + liv.getDuree()*1000 ) { // pas d'attente et pas tendu 
+				valeurPH = 0;
+			}
+			
+			if (attente == false && tempsRestantAvantFinPH <= 30*60000 + liv.getDuree()*1000) { // pas d'attente et tendu 
+				valeurPH = 1;
+			}
+			
+			if (attente == true && tempsRestantAvantFinPH >= liv.getDuree()*1000) { // attente
+				valeurPH = 2;
+			}
+			
+			if (tempsRestantAvantFinPH < liv.getDuree()*1000 ) {// plage violee 
+				valeurPH = 3;
+			}	
+		}
+		return valeurPH;
+	}
+	
+	
+	public int[] VerifierPlagesHorairesTournee(Tournee tournee) {
+		int nbLivraisons = tournee.getListeLivraison().size();
+		int[] tableauPlageHoraire = new int[nbLivraisons]  ;  // initialiser taille a nombre de liv 
+		
+		for (int i = 0; i < nbLivraisons; i++) {
+			int valeurPH = VerifierPlagesHorairesUneLiv(tournee, tournee.getListeLivraison().get(i));
+			tableauPlageHoraire[i]= valeurPH;
+		}
+		
+		return tableauPlageHoraire;
 	}
 	
 	
