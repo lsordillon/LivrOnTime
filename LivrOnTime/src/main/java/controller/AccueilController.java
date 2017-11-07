@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.javafx.runtime.VersionInfo;
 
 import javafx.event.ActionEvent;
 
@@ -53,7 +54,8 @@ public class AccueilController{
 	public Button CalculTournee;
 	public Button AccueilBouton;
 	public Button GenererFeuille; 
-	
+	public Button undoButton;
+	public Button redoButton;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
@@ -366,6 +368,15 @@ public class AccueilController{
 		AccueilController.listeDeCdes = listeDeCdes;
 	}
 	
+	public void Undo(){
+		listeDeCdes.undo();
+		System.out.println("Undo");
+		update(tournee);
+	}
+	public void Redo(){
+		listeDeCdes.redo();
+		update(tournee);
+	}
 	
 }  
 
