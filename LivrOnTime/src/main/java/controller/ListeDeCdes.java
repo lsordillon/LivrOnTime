@@ -19,9 +19,11 @@ public class ListeDeCdes {
         int i = indiceCrt+1;
         while(i<liste.size()){
             liste.remove(i);
+            indiceCrt++;
+        	liste.add(indiceCrt, c);
+        	c.redoCde();
         }
-       // indiceCrt++;
-        liste.add(indiceCrt, c);
+        
     }
 	
 	
@@ -50,7 +52,7 @@ public class ListeDeCdes {
 		}
 	}
 	
-	//ce fait à chaque ouverture du plan
+	//ce fait ï¿½ chaque ouverture du plan
 	   public void reset(){
 	        indiceCrt = -1;
 	        liste.clear();  

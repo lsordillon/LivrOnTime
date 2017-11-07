@@ -52,6 +52,7 @@ public class LivraisonController implements Initializable {
 			comboDeHeur.getItems().add(i);
 			comboAHeur.getItems().add(i);
 		}
+		
 		for(int i=0;i<60;i++){
 			comboDeMinute.getItems().add(i);
 			comboAMinute.getItems().add(i);
