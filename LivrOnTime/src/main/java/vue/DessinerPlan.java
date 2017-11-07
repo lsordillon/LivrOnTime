@@ -383,13 +383,15 @@ public class DessinerPlan {
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 		
 	}
-   
-    
+
+
     public Group afficherChemin(Tournee tournee){
 		Group group = new Group();
 		
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
 		//circle1.toFront();
+		
+		actualiserCouleurPoints(tournee);
 		
     	Circle circle2;
     	int indice = 1;
@@ -476,5 +478,41 @@ public class DessinerPlan {
 		this.sizeCanvas = sizeCanvas;
 	}
     
+	public void actualiserCouleurPoints(Tournee tournee) {
+	
+		for (int i = 0; i<tournee.getItineraire().size()-1; i++){
+			//retrouver lintersection correspondant a la livraison interLiv
+			Livraison liv = tournee.getListeLivraison().get(i);
+	        
+			int[] valeursPH = tournee.VerifierPlagesHorairesTournee();
+			
+				if (valeursPH[i] == 0) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.BLUE);
+					cercleActuel.setStroke(Color.BLUE);
+				}
+				if (valeursPH[i] == 1) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.ORANGE);
+					cercleActuel.setStroke(Color.ORANGE);
+				}
+				if (valeursPH[i] == 2) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.PURPLE);
+					cercleActuel.setStroke(Color.PURPLE);
+				}
+				if (valeursPH[i] == 3) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.RED);
+					cercleActuel.setStroke(Color.RED);
+				}
+				if (valeursPH[i] == 4) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.BLUEVIOLET);
+					cercleActuel.setStroke(Color.BLUEVIOLET);
+				}
+		
+		}
+	}
    
 }

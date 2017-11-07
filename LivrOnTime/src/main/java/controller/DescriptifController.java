@@ -116,7 +116,7 @@ public class DescriptifController {
 									if (valeurPH == 2) { //attente
 										txtHeureArrivee.setFill(Color.PURPLE);
 									}
-									if (valeurPH == 3) { //plage horaire violee
+									if (valeurPH == 3) { // plage horaire violee
 										txtHeureArrivee.setFill(Color.RED);
 									}
 									if (valeurPH == 4) { //erreur
