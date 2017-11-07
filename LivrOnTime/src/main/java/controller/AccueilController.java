@@ -57,7 +57,7 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-
+    private static ListeDeCdes listeDeCdes;
 	private static Plan plan;
 	private static Tournee tournee;
 	static DessinerPlan dessinerPlan;
@@ -135,6 +135,8 @@ public class AccueilController{
 		        vBox2.setLayoutY(50);
 			    VueDescriptif.getChildren().add(vBox2);
 			    CalculTournee.setDisable(false);
+			    
+			   listeDeCdes.reset();
 	    	}else{
 	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
 	    		alert.showAndWait();
@@ -232,7 +234,11 @@ public class AccueilController{
 	public static String getAdresse(Intersection item){
 		  for(Troncon troncon : plan.getTroncons()){
           	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
-          		return troncon.getNomRue();
+          		if(troncon.getNomRue().equals("")){
+          			return "Rue sans nom";
+          		}else{
+          			return troncon.getNomRue();
+          		}
                   }
           }  
 		  return "";
