@@ -44,6 +44,7 @@ public class Tournee {
 		tempsPassage = new Date[itineraire.size()][2];
 		
 		for(int i=0;i<itineraire.size();i++){
+			System.out.println("itineraire :"+itineraire.get(i));
 			for(int j=0;j<itineraire.get(i).getTroncons().size();j++){
 				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 			}
@@ -149,10 +150,10 @@ public class Tournee {
 				nouvelItineraire.add( nouveau_chemin);
 				setItineraire(nouvelItineraire);
 			}
-
+			index=getListeLivraison().indexOf(l);
 			getListeLivraison().remove(l);
 
-			index=listeLivraisons.indexOf(l);
+			
 			listeLivraisons.remove(l);
 			this.initTempsPassage();
 			
