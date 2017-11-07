@@ -91,6 +91,7 @@ import javafx.scene.control.Button;
 	    		        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
 	    		            Stage stage = new Stage();
 	    		            stage.setTitle("Modifier Livraison");
+	    		            stage.setAlwaysOnTop(true);
 	    		            stage.setScene(new Scene(root));
 	    		            
 	    		            stage.show();

@@ -301,9 +301,10 @@ public class AccueilController{
 
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
-		VuePlan.getChildren().clear();
+		
 		Group group = dessinerPlan.Dessiner(plan);
 		Group group2 = dessinerPlan.Dessiner(dl);
+		VuePlan.getChildren().clear();
 	    VuePlan.getChildren().add(group);
 	    VuePlan.getChildren().add(group2);
 	    VueDescriptif.getChildren().clear();
