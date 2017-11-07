@@ -49,7 +49,7 @@ import javafx.scene.control.Button;
 
 	        @Override
 	        public void handle(MouseEvent t) {
-	        	
+	        	 if (t.getClickCount() == 2) {
 
 	            orgSceneX = t.getSceneX();
 	            orgSceneY = t.getSceneY();
@@ -112,6 +112,7 @@ import javafx.scene.control.Button;
 	               
 
 	            }*/
+	        }
 	        }
 	    };
 	    

@@ -57,7 +57,7 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-
+    private static ListeDeCdes listeDeCdes;
 	private static Plan plan;
 	private static Tournee tournee;
 	static DessinerPlan dessinerPlan;
@@ -135,6 +135,8 @@ public class AccueilController{
 		        vBox2.setLayoutY(50);
 			    VueDescriptif.getChildren().add(vBox2);
 			    CalculTournee.setDisable(false);
+			    
+			   listeDeCdes.reset();
 	    	}else{
 	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
 	    		alert.showAndWait();

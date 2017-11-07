@@ -45,6 +45,7 @@ public class LivraisonController implements Initializable {
 	private Plan plan;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		dureeField.setText("10");
 		adresseField.setDisable(true);
 		for(int i=0;i<24;i++){
 			comboDeHeur.getItems().add(i);
