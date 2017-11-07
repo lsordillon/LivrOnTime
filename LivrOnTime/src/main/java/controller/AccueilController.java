@@ -91,14 +91,21 @@ public class AccueilController{
 	        
 		    if (parserPlan.validationXSD(xml, xsd)){
 		    	 plan = CreerPlan(selectedFile.getAbsolutePath());
-	
-		    	 Group group = dessinerPlan.Dessiner(plan);
+		    	 try{
+					Group group = dessinerPlan.Dessiner(plan);
+					VuePlan.getChildren().clear();
+					VuePlan.getChildren().add(group);
+					// VuePlan.setStyle("-fx-background-color: #f7f7d4");
+					dessinerPlan.PannableScene(VuePlan.getScene(), this);
+					ChargerLivraison.setDisable(false);
+			    }catch(Exception e){
+			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a été provoqué car certaines rues ne possedent pas d'intersection"+ "\n");
+	                   alert.showAndWait();
+		    	 }
+		    	 
+		    	
 				    
-				    VuePlan.getChildren().clear();
-				    VuePlan.getChildren().add(group);
-				   // VuePlan.setStyle("-fx-background-color: #f7f7d4");
-				    dessinerPlan.PannableScene(VuePlan.getScene(), this);
-				    ChargerLivraison.setDisable(false);
+				    
 		    }else{
 		    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
 		    		alert.showAndWait();
