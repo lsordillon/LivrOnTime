@@ -126,8 +126,9 @@ public class LivraisonController implements Initializable {
 		if (aController.getTournee()==null){
 			aController.update(null);
 		}else{
-		int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex();
-		aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		
+		int idx=aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		System.out.println("index suppresion"+ idx);
 		listeDeCdes.ajoute(new CdeSuppression(plan,intersection,AccueilController.getTournee(),livraison,idx));
 		aController.setListeDeCdes(listeDeCdes);
 		aController.update(AccueilController.getTournee());
