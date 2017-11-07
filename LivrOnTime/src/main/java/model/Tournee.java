@@ -147,7 +147,7 @@ public class Tournee {
 				
 				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
 				nouvelItineraire.add( nouveau_chemin);
-				setItineraire(nouvelItineraire);
+				this.itineraire = nouvelItineraire;
 			}
 
 			getListeLivraison().remove(l);
@@ -172,7 +172,7 @@ public class Tournee {
 		Dijkstra d = new Dijkstra();
 		
 
-		if(!getListeLivraison().contains(inter)){
+		if(!getListeLivraison().contains(l)){
 			ArrayList<Chemin> nouvelItineraire=getItineraire();
 			Chemin dernierChemin=nouvelItineraire.get(nouvelItineraire.size()-1);
 			nouvelItineraire.remove(nouvelItineraire.size()-1);
