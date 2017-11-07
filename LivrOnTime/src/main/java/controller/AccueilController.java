@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.javafx.runtime.VersionInfo;
 
 import javafx.event.ActionEvent;
 
@@ -25,7 +26,8 @@ import javafx.scene.control.Label;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -53,18 +55,24 @@ public class AccueilController{
 	public Button CalculTournee;
 	public Button AccueilBouton;
 	public Button GenererFeuille; 
-	
+	public Button undoButton;
+	public Button redoButton;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-
+    private static ListeDeCdes listeDeCdes;
 	private static Plan plan;
 	private static Tournee tournee;
-	static DessinerPlan dessinerPlan;
+	private DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
-  
-    private static DescriptifController dController = new DescriptifController();
+    private static DescriptifController dController;
+    
+    public AccueilController() {
+    	listeDeCdes=new ListeDeCdes();
+    	dessinerPlan = new DessinerPlan();
+    	dController = new DescriptifController(dessinerPlan);
+    }
     
     
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
@@ -75,9 +83,6 @@ public class AccueilController{
 		File selectedFile = fileChooser.showOpenDialog(null);
 		XmlParserPlan parserPlan = new XmlParserPlan();
 		if (selectedFile != null) {
-		  
-		    
-		    dessinerPlan = new DessinerPlan();
 		
 		    InputStream xsd = new FileInputStream("src/main/resources/ValidationPlan.xsd");
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
@@ -116,7 +121,7 @@ public class AccueilController{
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
 	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
 	    	if(parserLivraison.validationXSD(xml, xsd)){
-	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
+	    		parserLivraison.lecteur(selectedFile.getAbsolutePath());
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 				LivraisonController.setDL(dl);
 				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl,plan));
@@ -135,6 +140,8 @@ public class AccueilController{
 		        vBox2.setLayoutY(50);
 			    VueDescriptif.getChildren().add(vBox2);
 			    CalculTournee.setDisable(false);
+			    
+			   listeDeCdes.reset();
 	    	}else{
 	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
 	    		alert.showAndWait();
@@ -210,7 +217,7 @@ public class AccueilController{
 		XmlParserPlan parser = new XmlParserPlan();
 		Plan plan = new Plan();
 		
-		parser.Reader(chemin);
+		parser.lecteur(chemin);
 		plan.CreerIntersections(XmlParserPlan.noeuds);
 		plan.CreerTroncons(XmlParserPlan.troncons);
 		plan.TronconsVoisins();
@@ -232,67 +239,20 @@ public class AccueilController{
 	public static String getAdresse(Intersection item){
 		  for(Troncon troncon : plan.getTroncons()){
           	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
-          		return troncon.getNomRue();
+          		if(troncon.getNomRue().equals("")){
+          			return "Rue sans nom";
+          		}else{
+          			return troncon.getNomRue();
+          		}
                   }
           }  
 		  return "";
 	}
 	
-	
-	
-	/** Recupere une intersection du plan a partir des coordonnees
-	 * d un clic su le plan
-	 * @param x, l abscisse du point
-	 * @param y, l ordonnee du point
-	 * @return selectionne, l intersection la plus proche des coordonnees
-	 */
-	public void getIntersectionParCoordonnees (int x, int y) {
-		
-		Intersection selectionnee = null;
-		
-		ArrayList<Long> id_intersections= plan.getId_intersections();
-		HashMap<Long,Intersection> intersections = plan.getIntersections();
-		
-		Iterator<Long> it = id_intersections.iterator();
-		Long idCourant;
-		Intersection courant;
-		double distanceMin = Double.MAX_VALUE;
-		double distance;
-		
-		while(it.hasNext()) {
-			idCourant = it.next();
-			courant = intersections.get(idCourant);
-			
-			
-			distance = distancePoints(x, y, courant.getX(), courant.getY());
-			if (distance < distanceMin && distance <200) { //de 20 a 200
-				distanceMin = distance;
-				selectionnee = courant;
-			}
-			
-		}
-		
-		intersectionSelectionne = selectionnee;
-		
-	}
-	
-	/** Calcule la distance entre 2 points a partir de leurs
-	 * coordonnees
-	 * @param x1, l abscisse du point 1
-	 * @param y1, l ordonnee du point 1
-	 * @param x2, l abscisse du point 2
-	 * @param y2, l abscisse du point 2
-	 * @return distance, la distance entre les points
-	 */
-	public double distancePoints(int x1, int y1, int x2, int y2) {
-		
-		double distance = Math.sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-		
-		return distance;
-	}
 
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
+		
 		Group group = dessinerPlan.Dessiner(plan);
 		Group group2 = dessinerPlan.Dessiner(dl,plan);
 		VuePlan.getChildren().clear();
@@ -302,6 +262,8 @@ public class AccueilController{
 	    VBox vBox3;
 		if(tournee != null){
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+		dessinerPlan.actualiserCouleurPoints(tournee);
+		
 	    livraisons = tournee.getListeLivraison();
 		vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
 				  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
@@ -323,6 +285,7 @@ public class AccueilController{
 		VueDescriptif.getChildren().add(vBox2); 
 		dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	}
+	
 	public Intersection getIntersectionSelectionne() {
 		return intersectionSelectionne;
 	}
@@ -353,8 +316,23 @@ public class AccueilController{
 	public void setDl(DemandeLivraison dl) {
 		this.dl = dl;
 	}
+	public static ListeDeCdes getListeDeCdes() {
+		return listeDeCdes;
+	}
+	public static void setListeDeCdes(ListeDeCdes listeDeCdes) {
+		AccueilController.listeDeCdes = listeDeCdes;
+	}
 	
-	
+	public void Undo(){
+		listeDeCdes.undo();
+		System.out.println("Undo");
+		update(tournee);
+	}
+	public void Redo(){
+		listeDeCdes.redo();
+		update(tournee);
+	}
+
 }  
 
 

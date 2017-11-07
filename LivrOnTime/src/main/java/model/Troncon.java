@@ -39,7 +39,11 @@ public class Troncon implements Serializable {
 	}
 
 	public String getNomRue() {
-		return nomRue;
+		if(nomRue.equals("")){
+			return "Rue sans nom";
+		}else{
+			return nomRue;
+		}
 	}
 
 	public void setNomRue(String nomRue) {

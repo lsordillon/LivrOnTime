@@ -33,23 +33,22 @@ public class XmlParserLivraison {
 	private String messageErreur;
 	
 		/**
-		 * Méthode parcourant un fichier xml pour en tirer les 
+		 * Methode parcourant un fichier xml pour en tirer les 
 		 * informations necessaires a la creation de l'objet
 		 * demande de livraison
 		 * @param file_name, le nom du fichier a parser
 		 * @return doc, un document contenant les informations utiles extraites du xml
 		 * @throws FileNotFoundException
 		 */
-	    public Document Reader(String file_name) throws FileNotFoundException{
+	    public Document lecteur(String nomFichier) throws FileNotFoundException{
 	    	Document document= null;
-	    	
-	    
+	    		    
 	        try {
 	        
-	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	        			factory.setNamespaceAware(true);
-	        			DocumentBuilder builder = factory.newDocumentBuilder();
-	        			document= builder.parse(file_name);
+	        	DocumentBuilderFactory usine = DocumentBuilderFactory.newInstance();
+	        			usine.setNamespaceAware(true);
+	        			DocumentBuilder constructeur = usine.newDocumentBuilder();
+	        			document= constructeur.parse(nomFichier);
 	            
 	        }catch (final ParserConfigurationException e) {
 	        			    e.printStackTrace();
@@ -62,25 +61,21 @@ public class XmlParserLivraison {
 	        			}
 	            
 	        final Element racine = document.getDocumentElement();
-	        entrepot = racine.getElementsByTagName("entrepot");
-	      
-	        livraisons = racine.getElementsByTagName("livraison");
-
+	        entrepot = racine.getElementsByTagName("entrepot");      
+	        livraisons = racine.getElementsByTagName("livraison");	        
 	        
-	        
-	         return doc;
-	    	
+	         return doc;	    	
 }
 
 	    public boolean validationXSD(InputStream xml, InputStream xsd)
 	    {
 	        try
 	        {
-	            SchemaFactory factory = 
+	            SchemaFactory usine = 
 	                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	            Schema schema = factory.newSchema(new StreamSource(xsd));
-	            Validator validator = schema.newValidator();
-	            validator.validate(new StreamSource(xml));
+	            Schema schema = usine.newSchema(new StreamSource(xsd));
+	            Validator validateur = schema.newValidator();
+	            validateur.validate(new StreamSource(xml));
 	            return true;
 	        }
 	        catch(SAXParseException ex)

@@ -21,6 +21,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import model.Intersection;
@@ -28,18 +29,30 @@ import model.Livraison;
 import model.Plan;
 import model.Tournee;
 import model.Troncon;
+import model.Chemin;
 import vue.DessinerPlan;
 
 public class DescriptifController {
 	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
 
-	public Plan plan;
+	 private Plan plan;
+	 private Tournee tournee;
+	 private DessinerPlan dessinerPlan;
+	 private Chemin cheminSelectionne;
+	 
 	 ObservableList<Livraison> data = FXCollections.observableArrayList();
-	   final ListView<Livraison> listView = new ListView<Livraison>(data);
+	 final ListView<Livraison> listView;
+	   
+	   
+	   public DescriptifController(DessinerPlan dessinerPlan) {
+		   this.dessinerPlan = dessinerPlan;
+		   listView = new ListView<Livraison>(data);
+	   }
 	
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
 		this.plan = plan;
+		this.tournee = tournee;
 		
 		data.clear();
 
@@ -92,32 +105,37 @@ public class DescriptifController {
 
 						    	Text txtHeureArrivee;
 						    	
-						    	//COULEUR
+						    	int valeurPH = tournee.VerifierPlagesHorairesUneLiv(item);
+						    	
 						    	if (item.getFinPlageHoraire()==null) {
 						    		txtHeureArrivee = new Text(heureArrivee);
 						    		txtHeureArrivee.setFill(Color.BLACK);
 						    	}
-						    	else {
+						    	else {			
 						    		txtHeureArrivee = new Text(heureArrivee+ attente);
-							    	if (tmp[1] == null) { //s'il n'y a pas d'attente
+						    		txtHeureArrivee.setFill(Color.GREEN);
+						    		
+							    	if (valeurPH == 0) { // pas dattente et pas tendu 
 							    		txtHeureArrivee.setFill(Color.GREEN);
 							    	}
-							    	else { //sinon on teste si c'est une plage horaire tendue 
-							    		
-							    		long plageTendueMin = item.getFinPlageHoraire().getTime() - 3600000 - tmp[0].getTime();
-							    		if (plageTendueMin <= 15*60000){
-							    			txtHeureArrivee.setFill(Color.RED);//Plage tendue !!
-							    		}
-							    		else if (plageTendueMin <= 45*60000) {
-							    			txtHeureArrivee.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
-							    		}
-							    		else {
-							    			txtHeureArrivee.setFill(Color.GREEN);//Détendue mais attente quand meme..
-							    		}
-							    	}
+									if (valeurPH == 1) { //pas d'attente et tendu
+										txtHeureArrivee.setFill(Color.ORANGE);		    		
+									}
+									if (valeurPH == 2) { //attente
+										txtHeureArrivee.setFill(Color.PURPLE);
+									}
+									if (valeurPH == 3) { // plage horaire violee
+										txtHeureArrivee.setFill(Color.RED);
+									}
+									if (valeurPH == 4) { //erreur
+										txtHeureArrivee.setFill(Color.BLUEVIOLET);
+									}
 						    	}
 						    	
+
+						    	
 						    	//2e vBox qui affiche la dur�e et l'heure d'arriv�e
+
 						    	Text txtDureeTrajet;
 						    	Text spaceTxt = new Text("|");
 						    	Text spaceTxt2 = new Text("|");
@@ -253,14 +271,24 @@ public class DescriptifController {
 	
 	public void interaction(final ListView<Livraison> listView) {
 		listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
-			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,
-					Livraison newValue) {
+			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {
 				if (listView.getSelectionModel().getSelectedItem() != null) {
 					if (oldValue != null){
-						((Circle) DessinerPlan.dessine.get(oldValue.getDestination().getId())).setFill(Color.BLUE);
-						((Circle) DessinerPlan.dessine.get(oldValue.getDestination().getId())).setStroke(Color.BLUE);
+						dessinerPlan.actualiserCouleurPoints(tournee);
+						
+						for(Troncon t: cheminSelectionne.getTroncons()){
+			    			dessinerPlan.surlignerTroncon(t,Color.GREEN);
+			    		}
 					}
 					long id = newValue.getDestination().getId();
+					for ( Chemin c : tournee.getItineraire()) {
+						if (c.getDestination().getId()==id){
+							cheminSelectionne = c;
+							for(Troncon t: c.getTroncons()){
+				    			dessinerPlan.surlignerTroncon(t,Color.YELLOW);
+				    		}
+						}
+					}
 					((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
 					((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
 

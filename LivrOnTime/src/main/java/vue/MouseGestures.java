@@ -49,7 +49,7 @@ import javafx.scene.control.Button;
 
 	        @Override
 	        public void handle(MouseEvent t) {
-	        	
+	        	 if (t.getClickCount() == 2) {
 
 	            orgSceneX = t.getSceneX();
 	            orgSceneY = t.getSceneY();
@@ -91,6 +91,7 @@ import javafx.scene.control.Button;
 	    		        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
 	    		            Stage stage = new Stage();
 	    		            stage.setTitle("Modifier Livraison");
+	    		            stage.setAlwaysOnTop(true);
 	    		            stage.setScene(new Scene(root));
 	    		            
 	    		            stage.show();
@@ -112,6 +113,7 @@ import javafx.scene.control.Button;
 	               
 
 	            }*/
+	        }
 	        }
 	    };
 	    

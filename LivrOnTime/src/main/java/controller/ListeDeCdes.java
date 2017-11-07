@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 
 
+
+
 public class ListeDeCdes {
 	
 	
@@ -15,16 +17,19 @@ public class ListeDeCdes {
 		liste = new LinkedList<Commande>();
 	}
 	
+	
 	public void ajoute(Commande c){
         int i = indiceCrt+1;
         while(i<liste.size()){
             liste.remove(i);
         }
-       // indiceCrt++;
+        indiceCrt++;
         liste.add(indiceCrt, c);
+       //c.redoCde();
     }
 	
 	
+
 	public void undo(){
 		if (indiceCrt >= 0){
 			Commande cde = liste.get(indiceCrt);
@@ -33,11 +38,13 @@ public class ListeDeCdes {
 		}
 	}
 	
-	
+
 	public void annule(){
 		if (indiceCrt >= 0){
+			Commande cde = liste.get(indiceCrt);
 			liste.remove(indiceCrt);
 			indiceCrt--;
+			cde.undoCde();
 		}
 	}
 
@@ -50,7 +57,7 @@ public class ListeDeCdes {
 		}
 	}
 	
-	//ce fait à chaque ouverture du plan
+	
 	   public void reset(){
 	        indiceCrt = -1;
 	        liste.clear();  
