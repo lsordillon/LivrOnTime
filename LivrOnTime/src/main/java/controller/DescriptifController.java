@@ -35,7 +35,12 @@ public class DescriptifController {
 
 	public Plan plan;
 	 ObservableList<Livraison> data = FXCollections.observableArrayList();
-	   final ListView<Livraison> listView = new ListView<Livraison>(data);
+	 final ListView<Livraison> listView;
+	   
+	   
+	   public DescriptifController() {
+		   listView = new ListView<Livraison>(data);
+	   }
 	
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){

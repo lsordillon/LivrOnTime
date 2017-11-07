@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.javafx.runtime.VersionInfo;
 
 import javafx.event.ActionEvent;
 
@@ -53,7 +54,8 @@ public class AccueilController{
 	public Button CalculTournee;
 	public Button AccueilBouton;
 	public Button GenererFeuille; 
-	
+	public Button undoButton;
+	public Button redoButton;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
@@ -63,8 +65,12 @@ public class AccueilController{
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
-  
-    private static DescriptifController dController = new DescriptifController();
+    private static DescriptifController dController;
+    
+    public AccueilController() {
+    	listeDeCdes=new ListeDeCdes();
+    	dController = new DescriptifController();
+    }
     
     
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
@@ -116,7 +122,7 @@ public class AccueilController{
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
 	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
 	    	if(parserLivraison.validationXSD(xml, xsd)){
-	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
+	    		parserLivraison.lecteur(selectedFile.getAbsolutePath());
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 				LivraisonController.setDL(dl);
 				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
@@ -212,7 +218,7 @@ public class AccueilController{
 		XmlParserPlan parser = new XmlParserPlan();
 		Plan plan = new Plan();
 		
-		parser.Reader(chemin);
+		parser.lecteur(chemin);
 		plan.CreerIntersections(XmlParserPlan.noeuds);
 		plan.CreerTroncons(XmlParserPlan.troncons);
 		plan.TronconsVoisins();
@@ -299,6 +305,7 @@ public class AccueilController{
 
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
+		
 		Group group = dessinerPlan.Dessiner(plan);
 		Group group2 = dessinerPlan.Dessiner(dl);
 		VuePlan.getChildren().clear();
@@ -359,7 +366,22 @@ public class AccueilController{
 	public void setDl(DemandeLivraison dl) {
 		this.dl = dl;
 	}
+	public static ListeDeCdes getListeDeCdes() {
+		return listeDeCdes;
+	}
+	public static void setListeDeCdes(ListeDeCdes listeDeCdes) {
+		AccueilController.listeDeCdes = listeDeCdes;
+	}
 	
+	public void Undo(){
+		listeDeCdes.undo();
+		System.out.println("Undo");
+		update(tournee);
+	}
+	public void Redo(){
+		listeDeCdes.redo();
+		update(tournee);
+	}
 	
 }  
 

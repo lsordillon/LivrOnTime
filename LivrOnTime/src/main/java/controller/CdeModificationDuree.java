@@ -11,6 +11,16 @@ public class CdeModificationDuree implements Commande{
 	private Tournee tournee;
 	private Livraison livraison;
     private int dureeA=livraison.getDuree();
+    
+    
+	public CdeModificationDuree(Plan plan, Tournee tournee, Livraison livraison, int duree) {
+		super();
+		this.plan = plan;
+		this.duree = duree;
+		this.tournee = tournee;
+		this.livraison = livraison;
+	}
+
 	@Override
 	public void redoCde() {
 		tournee.ModifierLivraison(plan, livraison, duree);

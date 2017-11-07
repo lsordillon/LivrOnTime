@@ -16,12 +16,12 @@ public class CdeSuppression implements Commande {
 	
 	
 
-	public CdeSuppression(Plan plan, Intersection intersection, Tournee tournee,Livraison livraison, int index) {
+	public CdeSuppression(Plan plan, Intersection intersection, Tournee tournee,Livraison livraison,int index) {
 		super();
 		this.plan = plan;
 		this.intersection = intersection;
-		this.index = index;
 		this.tournee = tournee;
+		this.index=index;
 		this.livraison=livraison;
 	}
 
