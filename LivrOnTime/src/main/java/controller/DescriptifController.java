@@ -38,6 +38,7 @@ public class DescriptifController {
 	 private Plan plan;
 	 private Tournee tournee;
 	 private DessinerPlan dessinerPlan;
+	 private Chemin cheminSelectionne;
 	 
 	 ObservableList<Livraison> data = FXCollections.observableArrayList();
 	 final ListView<Livraison> listView;
@@ -273,13 +274,17 @@ public class DescriptifController {
 					if (oldValue != null){
 						((Circle) dessinerPlan.dessine.get(oldValue.getDestination().getId())).setFill(Color.BLUE);
 						((Circle) dessinerPlan.dessine.get(oldValue.getDestination().getId())).setStroke(Color.BLUE);
+						
+						for(Troncon t: cheminSelectionne.getTroncons()){
+			    			dessinerPlan.surlignerTroncon(t,Color.GREEN);
+			    		}
 					}
 					long id = newValue.getDestination().getId();
 					for ( Chemin c : tournee.getItineraire()) {
 						if (c.getDestination().getId()==id){
-							
+							cheminSelectionne = c;
 							for(Troncon t: c.getTroncons()){
-				    			dessinerPlan.surlignerTroncon(t);
+				    			dessinerPlan.surlignerTroncon(t,Color.YELLOW);
 				    		}
 						}
 					}

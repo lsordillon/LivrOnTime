@@ -436,15 +436,15 @@ public class DessinerPlan {
     	return group;
     }
     
-    public void surlignerTroncon (Troncon t) {
+    public void surlignerTroncon (Troncon t, Paint Couleur) {
     	
     	Circle circle1=DessinerPlan.dessine.get(t.getOrigine().getId());
 		Circle circle2=DessinerPlan.dessine.get(t.getDestination().getId());
 		
 		Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
 	        
-		line.setStroke(Color.YELLOW);
-		line.setFill(Color.YELLOW);
+		line.setStroke(Couleur);
+		line.setFill(Couleur);
 	    line.setStrokeWidth(widthStroke*4);
 	      
         canvas.getChildren().add(line);
