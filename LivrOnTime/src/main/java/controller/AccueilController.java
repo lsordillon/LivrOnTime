@@ -59,14 +59,18 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCdes=new ListeDeCdes();
+    private static ListeDeCdes listeDeCdes;
 	private static Plan plan;
 	private static Tournee tournee;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
-  
-    private static DescriptifController dController = new DescriptifController();
+    private static DescriptifController dController;
+    
+    public AccueilController() {
+    	listeDeCdes=new ListeDeCdes();
+    	dController = new DescriptifController();
+    }
     
     
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {

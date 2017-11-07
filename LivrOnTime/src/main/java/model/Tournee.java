@@ -129,7 +129,7 @@ public class Tournee {
 		Intersection origine=null, destination=null;
 		if(getListeLivraison().contains(l)){
 			
-			ArrayList<Chemin> nouvelItineraire=getItineraire();
+			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
 			for(int i=0;i<getItineraire().size();i++){
 				Chemin chemin=getItineraire().get(i);
 					if(chemin.getDestination().getId()==inter.getId()){
@@ -142,7 +142,7 @@ public class Tournee {
 						nouvelItineraire.remove(chemin);
 					}
 			}
-			System.out.println(origine +" Origine   dist"+destination);
+			System.out.println("La liste contient l");
 			if(origine!=null && destination !=null){
 				
 				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
