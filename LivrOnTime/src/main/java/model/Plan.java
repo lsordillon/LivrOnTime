@@ -18,12 +18,19 @@ import util.tsp.TSP3;
  */
 public class Plan {
 	
-	private ArrayList <Chemin> chemins=new ArrayList<Chemin>();
+	private ArrayList <Chemin> chemins;
 	private GrapheComplet graphe_complet;
-	private HashMap<Long,Intersection> Intersections = new HashMap<Long, Intersection>();
-	private ArrayList<Long> id_intersections=new ArrayList<Long>();
+	private HashMap<Long,Intersection> Intersections ;
+	private ArrayList<Long> id_intersections;
 	
-	private ArrayList<Troncon> Troncons = new ArrayList<Troncon>();
+	private ArrayList<Troncon> Troncons ;
+	
+	public Plan() {
+		chemins =new ArrayList<Chemin>();
+		Intersections = new HashMap<Long, Intersection>();
+		id_intersections =new ArrayList<Long>();
+		Troncons = new ArrayList<Troncon>();
+	}
 
 	public ArrayList<Long> getId_intersections() {
 		return id_intersections;
