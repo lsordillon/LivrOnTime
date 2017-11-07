@@ -294,6 +294,7 @@ public class DessinerPlan {
     }
 
     public Group Dessiner(Plan plan) {
+    	dessine = new HashMap<Long,Circle>();
     	canvas = new PannableCanvas();
     	Group group = new Group();
         	

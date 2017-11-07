@@ -132,12 +132,12 @@ public class Tournee {
 			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
 			for(int i=0;i<getItineraire().size();i++){
 				Chemin chemin=getItineraire().get(i);
-					if(chemin.getDestination()==inter){
+					if(chemin.getDestination().getId()==inter.getId()){
 						origine=chemin.getOrigine();
 						nouvelItineraire.remove(chemin);
 						//indice=i;
 			     	}
-					if(chemin.getOrigine()==inter){
+					if(chemin.getOrigine().getId()==inter.getId()){
 						destination=chemin.getDestination();
 						nouvelItineraire.remove(chemin);
 					}
@@ -147,7 +147,7 @@ public class Tournee {
 				
 				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
 				nouvelItineraire.add( nouveau_chemin);
-				this.itineraire = nouvelItineraire;
+				setItineraire(nouvelItineraire);
 			}
 
 			getListeLivraison().remove(l);
