@@ -27,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 class PannableCanvas extends Pane {
 
@@ -351,9 +352,10 @@ public class DessinerPlan {
         
         Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
         canvas.getChildren().remove(circle);
-    	circle.setStroke(Color.RED);
-    	circle.setFill(Color.RED);
-    	circle.setRadius(widthStroke*6);
+        
+    	circle.setStroke(Color.PURPLE);
+    	circle.setFill(Color.PURPLE);
+    	circle.setRadius(widthStroke*10);
     	 canvas.getChildren().add(circle);
         
         for (Livraison livraison : livraisons){
@@ -361,7 +363,7 @@ public class DessinerPlan {
         	canvas.getChildren().remove(circle);
         	circle.setStroke(Color.BLUE);
         	circle.setFill(Color.BLUE);
-        	circle.setRadius(widthStroke*4);
+        	circle.setRadius(widthStroke*6);
             canvas.getChildren().add(circle);
         }
      
@@ -384,11 +386,11 @@ public class DessinerPlan {
 		Group group = new Group();
 		
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
-    	canvas.getChildren().remove(circle1);
+    	/*canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
     	circle1.setFill(Color.GREEN);
     	circle1.setRadius(widthStroke*4);
-    	canvas.getChildren().add(circle1);
+    	canvas.getChildren().add(circle1);*/
     	circle1.toFront();
     	Circle circle2;
     	for (Chemin c : tournee.getItineraire()){
