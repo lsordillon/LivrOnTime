@@ -62,14 +62,15 @@ public class AccueilController{
     private static ListeDeCdes listeDeCdes;
 	private static Plan plan;
 	private static Tournee tournee;
-	static DessinerPlan dessinerPlan;
+	private DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
     private static DescriptifController dController;
     
     public AccueilController() {
     	listeDeCdes=new ListeDeCdes();
-    	dController = new DescriptifController();
+    	dessinerPlan = new DessinerPlan();
+    	dController = new DescriptifController(dessinerPlan);
     }
     
     
@@ -81,9 +82,6 @@ public class AccueilController{
 		File selectedFile = fileChooser.showOpenDialog(null);
 		XmlParserPlan parserPlan = new XmlParserPlan();
 		if (selectedFile != null) {
-		  
-		    
-		    dessinerPlan = new DessinerPlan();
 		
 		    InputStream xsd = new FileInputStream("src/main/resources/ValidationPlan.xsd");
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
@@ -250,58 +248,6 @@ public class AccueilController{
 		  return "";
 	}
 	
-	
-	
-	/** Recupere une intersection du plan a partir des coordonnees
-	 * d un clic su le plan
-	 * @param x, l abscisse du point
-	 * @param y, l ordonnee du point
-	 * @return selectionne, l intersection la plus proche des coordonnees
-	 */
-	public void getIntersectionParCoordonnees (int x, int y) {
-		
-		Intersection selectionnee = null;
-		
-		ArrayList<Long> id_intersections= plan.getId_intersections();
-		HashMap<Long,Intersection> intersections = plan.getIntersections();
-		
-		Iterator<Long> it = id_intersections.iterator();
-		Long idCourant;
-		Intersection courant;
-		double distanceMin = Double.MAX_VALUE;
-		double distance;
-		
-		while(it.hasNext()) {
-			idCourant = it.next();
-			courant = intersections.get(idCourant);
-			
-			
-			distance = distancePoints(x, y, courant.getX(), courant.getY());
-			if (distance < distanceMin && distance <200) { //de 20 a 200
-				distanceMin = distance;
-				selectionnee = courant;
-			}
-			
-		}
-		
-		intersectionSelectionne = selectionnee;
-		
-	}
-	
-	/** Calcule la distance entre 2 points a partir de leurs
-	 * coordonnees
-	 * @param x1, l abscisse du point 1
-	 * @param y1, l ordonnee du point 1
-	 * @param x2, l abscisse du point 2
-	 * @param y2, l abscisse du point 2
-	 * @return distance, la distance entre les points
-	 */
-	public double distancePoints(int x1, int y1, int x2, int y2) {
-		
-		double distance = Math.sqrt(((x2-x1)*(x2-x1)) + ((y2-y1)*(y2-y1)));
-		
-		return distance;
-	}
 
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
@@ -336,6 +282,7 @@ public class AccueilController{
 		VueDescriptif.getChildren().add(vBox2); 
 		dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	}
+	
 	public Intersection getIntersectionSelectionne() {
 		return intersectionSelectionne;
 	}

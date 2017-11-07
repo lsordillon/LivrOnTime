@@ -21,6 +21,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import model.Intersection;
@@ -28,23 +29,29 @@ import model.Livraison;
 import model.Plan;
 import model.Tournee;
 import model.Troncon;
+import model.Chemin;
 import vue.DessinerPlan;
 
 public class DescriptifController {
 	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
 
-	public Plan plan;
+	 private Plan plan;
+	 private Tournee tournee;
+	 private DessinerPlan dessinerPlan;
+	 
 	 ObservableList<Livraison> data = FXCollections.observableArrayList();
 	 final ListView<Livraison> listView;
 	   
 	   
-	   public DescriptifController() {
+	   public DescriptifController(DessinerPlan dessinerPlan) {
+		   this.dessinerPlan = dessinerPlan;
 		   listView = new ListView<Livraison>(data);
 	   }
 	
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
 		this.plan = plan;
+		this.tournee = tournee;
 		
 		data.clear();
 
@@ -258,14 +265,21 @@ public class DescriptifController {
 	
 	public void interaction(final ListView<Livraison> listView) {
 		listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
-			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,
-					Livraison newValue) {
+			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {
 				if (listView.getSelectionModel().getSelectedItem() != null) {
 					if (oldValue != null){
-						((Circle) DessinerPlan.dessine.get(oldValue.getDestination().getId())).setFill(Color.BLUE);
-						((Circle) DessinerPlan.dessine.get(oldValue.getDestination().getId())).setStroke(Color.BLUE);
+						((Circle) dessinerPlan.dessine.get(oldValue.getDestination().getId())).setFill(Color.BLUE);
+						((Circle) dessinerPlan.dessine.get(oldValue.getDestination().getId())).setStroke(Color.BLUE);
 					}
 					long id = newValue.getDestination().getId();
+					for ( Chemin c : tournee.getItineraire()) {
+						if (c.getDestination().getId()==id){
+							
+							for(Troncon t: c.getTroncons()){
+				    			dessinerPlan.surlignerTroncon(t);
+				    		}
+						}
+					}
 					((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
 					((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
 

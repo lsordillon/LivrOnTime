@@ -435,6 +435,21 @@ public class DessinerPlan {
     	
     	return group;
     }
+    
+    public void surlignerTroncon (Troncon t) {
+    	
+    	Circle circle1=DessinerPlan.dessine.get(t.getOrigine().getId());
+		Circle circle2=DessinerPlan.dessine.get(t.getDestination().getId());
+		
+		Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+	        
+		line.setStroke(Color.YELLOW);
+		line.setFill(Color.YELLOW);
+	    line.setStrokeWidth(widthStroke*4);
+	      
+        canvas.getChildren().add(line);
+        circle1.toFront();
+    }
 
 	public int getDivX() {
 		return divX;
