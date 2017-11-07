@@ -57,7 +57,7 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCdes;
+    private static ListeDeCdes listeDeCdes=new ListeDeCdes();
 	private static Plan plan;
 	private static Tournee tournee;
 	static DessinerPlan dessinerPlan;
@@ -354,6 +354,12 @@ public class AccueilController{
 	}
 	public void setDl(DemandeLivraison dl) {
 		this.dl = dl;
+	}
+	public static ListeDeCdes getListeDeCdes() {
+		return listeDeCdes;
+	}
+	public static void setListeDeCdes(ListeDeCdes listeDeCdes) {
+		AccueilController.listeDeCdes = listeDeCdes;
 	}
 	
 	
