@@ -270,16 +270,16 @@ public class DescriptifController {
 	
 	
 	public void interaction(final ListView<Livraison> listView) {
-		listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
-			
-			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {
-				if (listView.getSelectionModel().getSelectedItem() != null) {
-					if (oldValue != null){
-						dessinerPlan.actualiserCouleurPoints(tournee);
-						
-						for(Troncon t: cheminSelectionne.getTroncons()){
-			    			dessinerPlan.surlignerTroncon(t,Color.GREEN);
-			    		}
+
+		if (tournee!=null) {
+			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
+				public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {
+					if (listView.getSelectionModel().getSelectedItem() != null) {
+						if (oldValue != null){
+							dessinerPlan.actualiserCouleurPoints(tournee);					
+							for(Troncon t: cheminSelectionne.getTroncons()){
+								dessinerPlan.surlignerTroncon(t,Color.GREEN);
+							}
 					}
 					long id = newValue.getDestination().getId();
 					for ( Chemin c : tournee.getItineraire()) {
@@ -292,15 +292,12 @@ public class DescriptifController {
 					}
 					((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
 					((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
-
 				}
 				
 				dessinerPlan.passerChiffresDevant();
 			}
-
-
-
-		});
+			});
+		}
 	}
 	public void setDraggable(ListView<String> list){
 		
