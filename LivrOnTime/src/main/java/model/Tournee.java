@@ -401,7 +401,8 @@ public class Tournee {
 		if (liv.getDebutPlageHoraire() != null && liv.getFinPlageHoraire() != null ) {
 			Date debutPH = liv.getDebutPlageHoraire();
 			Date finPH = liv.getFinPlageHoraire(); 
-			long tempsRestantAvantFinPH = finPH.getTime() - 3600000 - horaireArr.getTime();
+			Date tempsRestantAvantFinPHdate = new Date(finPH.getTime() - horaireArr.getTime());
+			long tempsRestantAvantFinPH = tempsRestantAvantFinPHdate.getTime();
 
 			//arrive apres DPH et avant FPH donc n'attend pas 
 			if (horaireArr.getTime() >= debutPH.getTime() && horaireArr.getTime() < finPH.getTime()) {
