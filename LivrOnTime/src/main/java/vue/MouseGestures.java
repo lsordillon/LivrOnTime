@@ -83,7 +83,7 @@ import javafx.scene.control.Button;
 	                		}
 	                	}
 	                	Intersection intersectionClicked = plan.getIntersections().get(key);
-	                	System.out.println("Intersecrion ID "+intersectionClicked.getId());
+	                	System.out.println("Intersection ID "+intersectionClicked.getId());
 	                	LivraisonController.setIntersection(intersectionClicked);
 	                	if(LivraisonController.getDemandeL()!=null){
 	                	Parent root;

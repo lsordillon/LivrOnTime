@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 
 import util.tsp.Dijkstra;
 import util.tsp.TSP;
+import util.tsp.TSP2;
 import util.tsp.TSP3;
 
 /**
@@ -189,9 +190,11 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 		time[i+1][0]=(dl.getLivraisons().get(i).getDebutPlageHoraire()==null? -1:dl.getLivraisons().get(i).getDebutPlageHoraire().getTime()-dl.getHeureDepart().getTime());
 		time[i+1][1]=(dl.getLivraisons().get(i).getFinPlageHoraire()==null? Long.MAX_VALUE:dl.getLivraisons().get(i).getFinPlageHoraire().getTime()-dl.getHeureDepart().getTime());
 	}
-	
+	long temps=System.currentTimeMillis();
 	etape2.chercheSolution(tpLimite,nbSommet, graphe_complet.getCout(),graphe_complet.getDuree(), time);
+	temps=temps-System.currentTimeMillis();
 	
+	System.out.println("temps : "+temps);
 	ArrayList <Chemin> itineraire = new ArrayList<Chemin> ();
 	for(int i=0; i<nbSommet-1;i++) {
 		//on déroule le tableau MeilleureSolution du TSP pour creer l'itineraire
@@ -211,7 +214,7 @@ public Tournee calculerLaTournee(DemandeLivraison dl) {
 	System.out.println("LA TOURNEE");
 	Tournee tournee = new Tournee(itineraire,dl);
 	for(Chemin che:tournee.getItineraire()) {
-		System.out.println(che);
+		//System.out.println(che);
 	}
 
 	

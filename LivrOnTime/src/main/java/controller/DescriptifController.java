@@ -117,7 +117,7 @@ public class DescriptifController {
 							    	}
 						    	}
 						    	
-						    	//2e vBox qui affiche la durée et l'heure d'arrivée
+						    	//2e vBox qui affiche la durï¿½e et l'heure d'arrivï¿½e
 						    	Text txtDureeTrajet;
 						    	Text spaceTxt = new Text("|");
 						    	Text spaceTxt2 = new Text("|");

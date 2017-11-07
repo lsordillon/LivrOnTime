@@ -119,7 +119,7 @@ public class AccueilController{
 	    		parserLivraison.Reader(selectedFile.getAbsolutePath());
 				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 				LivraisonController.setDL(dl);
-				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl));
+				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl,plan));
 			    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
 			    //ListerLivraisons(dl.getLivraisons());
 			     
@@ -294,7 +294,7 @@ public class AccueilController{
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
 		Group group = dessinerPlan.Dessiner(plan);
-		Group group2 = dessinerPlan.Dessiner(dl);
+		Group group2 = dessinerPlan.Dessiner(dl,plan);
 		VuePlan.getChildren().clear();
 	    VuePlan.getChildren().add(group);
 	    VuePlan.getChildren().add(group2);
