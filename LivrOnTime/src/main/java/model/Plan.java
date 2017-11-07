@@ -195,7 +195,7 @@ public class Plan {
 		
 		graphe_complet=new GrapheComplet(dl.getLivraisons(),dl.getIntersections() ,chemins);
 		
-		int tpLimite = 10;
+		int tpLimite = 1000;
 		TSP etape2 = new TSP3();
 		int nbSommet=dl.getLivraisons().size()+1;
 		
