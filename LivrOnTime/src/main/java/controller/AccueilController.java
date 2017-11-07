@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.w3c.dom.Element;
+
 import com.sun.javafx.runtime.VersionInfo;
 
 import javafx.event.ActionEvent;
@@ -115,33 +117,53 @@ public class AccueilController{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML Files", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(null);
-
+		boolean invalide=false;
+		String fautive="";
 		if (selectedFile != null) {
 			InputStream xsd = new FileInputStream("src/main/resources/ValidationDL.xsd");
 	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
 	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
-	    	if(parserLivraison.validationXSD(xml, xsd)){
+	    	if(parserLivraison.validationXSD(xml, xsd))
+	    	{
 	    		parserLivraison.lecteur(selectedFile.getAbsolutePath());
-				dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
-				LivraisonController.setDL(dl);
-				VuePlan.getChildren().add(dessinerPlan.Dessiner(dl,plan));
-			    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
-			    //ListerLivraisons(dl.getLivraisons());
-			     
-	
-			    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-			    					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
-			    					  new Label ("Heure de Retour :      "));
-		   		vBox3.setSpacing(10);
-		   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl.getLivraisons(), plan, null));
-		   		
-		   		vBox2.setSpacing(40);
-		   		vBox2.setLayoutX(30);
-		        vBox2.setLayoutY(50);
-			    VueDescriptif.getChildren().add(vBox2);
-			    CalculTournee.setDisable(false);
-			    
-			   listeDeCdes.reset();
+				if(!plan.getIntersections().containsKey((Long.parseLong((String)((Element)XmlParserLivraison.entrepot.item(0)).getAttribute("adresse")))))
+				{
+					System.out.println("entrepot merde "+plan.getIntersections().size()+" "+Long.parseLong(((Element)XmlParserLivraison.entrepot.item(0)).getAttribute("adresse")));
+					fautive=((Element)XmlParserLivraison.entrepot.item(0)).getAttribute("adresse");
+					invalide=true;
+				}
+				for(int i = 0; i<XmlParserLivraison.livraisons.getLength(); i++) {
+					if(!plan.getIntersections().containsKey(Long.parseLong((String)((Element)XmlParserLivraison.livraisons.item(i)).getAttribute("adresse")))){
+						System.out.println("merde");
+						fautive=((Element)XmlParserLivraison.livraisons.item(i)).getAttribute("adresse");
+						invalide=true;
+					}
+				}
+				if(!invalide){
+	    		
+					dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
+					LivraisonController.setDL(dl);
+					VuePlan.getChildren().add(dessinerPlan.Dessiner(dl,plan));
+				    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
+				    //ListerLivraisons(dl.getLivraisons());
+				     
+		
+				    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
+				    					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+				    					  new Label ("Heure de Retour :      "));
+			   		vBox3.setSpacing(10);
+			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl.getLivraisons(), plan, null));
+			   		
+			   		vBox2.setSpacing(40);
+			   		vBox2.setLayoutX(30);
+			        vBox2.setLayoutY(50);
+				    VueDescriptif.getChildren().add(vBox2);
+				    CalculTournee.setDisable(false);
+				    listeDeCdes.reset();
+				} else{
+                    Alert alert = new Alert(AlertType.ERROR, "Demande de livraison corrompue : L'adresse '"+fautive+"' n'existe pas "+ "\n");
+                    alert.showAndWait();
+				}
 	    	}else{
 	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
 	    		alert.showAndWait();
