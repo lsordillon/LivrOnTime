@@ -23,15 +23,16 @@ public class XmlParserPlan {
 	public static NodeList troncons;
 	private String messageErreur;
 	
-	    public Document Reader(String file_name) throws FileNotFoundException{
+	public Document lecteur(String nomFichier) throws FileNotFoundException{
+	    	
 	    	Document document= null;
 	    	
 	        try {
 	        	 
-	        	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	        			factory.setNamespaceAware(true);
-	        			DocumentBuilder builder = factory.newDocumentBuilder();
-	        			document= builder.parse(file_name);
+	        	DocumentBuilderFactory usine = DocumentBuilderFactory.newInstance();
+	        			usine.setNamespaceAware(true);
+	        			DocumentBuilder constructeur = usine.newDocumentBuilder();
+	        			document= constructeur.parse(nomFichier);
 	            
 	        }catch (final ParserConfigurationException e) {
 	        			    e.printStackTrace();
@@ -44,25 +45,21 @@ public class XmlParserPlan {
 	        			}
 	            
 	        final Element racine = document.getDocumentElement();
-	        noeuds = racine.getElementsByTagName("noeud");
-	      
-	        troncons = racine.getElementsByTagName("troncon");
-	    	
-	        
-	       
-	    	
+	        noeuds = racine.getElementsByTagName("noeud");	      
+	        troncons = racine.getElementsByTagName("troncon");  	
 	
 	    	 return doc;
 	}
-	   public boolean validationXSD(InputStream xml, InputStream xsd)
+	    
+	public boolean validationXSD(InputStream xml, InputStream xsd)
 	    {
 	        try
 	        {
-	            SchemaFactory factory = 
+	            SchemaFactory usine = 
 	                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	            Schema schema = factory.newSchema(new StreamSource(xsd));
-	            Validator validator = schema.newValidator();
-	            validator.validate(new StreamSource(xml));
+	            Schema schema = usine.newSchema(new StreamSource(xsd));
+	            Validator validateur = schema.newValidator();
+	            validateur.validate(new StreamSource(xml));
 	            return true;
 	        }
 	        catch(SAXParseException ex)
@@ -75,6 +72,7 @@ public class XmlParserPlan {
 	            return false;
 	        }
 	    }
+	
 	public String getMessageErreur() {
 		return messageErreur;
 	}
