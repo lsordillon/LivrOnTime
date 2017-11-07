@@ -219,8 +219,8 @@ public class DessinerPlan {
     	   
     	
     	Circle circle1 = new Circle(1);
-    	 circle1.setStroke(Color.BLACK);
-         circle1.setFill(Color.BLACK);
+    	 circle1.setStroke(Color.GREY);
+         circle1.setFill(Color.GREY);
          
          //Mise a l'echelle
          x= (int)((D.getX() - minusX)*sizeCanvas / divX);
@@ -235,8 +235,8 @@ public class DessinerPlan {
         y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
     	Circle circle2 = new Circle(1);
     	circle2.setRadius(widthStroke/2);
-        circle2.setStroke(Color.BLACK);
-        circle2.setFill(Color.BLACK);
+        circle2.setStroke(Color.GREY);
+        circle2.setFill(Color.GREY);
         //Centrage
         circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
         //Rendre les circles clickable
@@ -249,8 +249,8 @@ public class DessinerPlan {
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         
         line.setStrokeWidth(widthStroke);
-        line.setFill(Color.BLACK);
-        line.setStroke(Color.BLACK);
+        line.setFill(Color.GREY);
+        line.setStroke(Color.GREY);
         String adress = "";
         for(Troncon troncon : AccueilController.getPlan().getTroncons()){
         	if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
