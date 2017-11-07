@@ -52,6 +52,7 @@ public class LivraisonController implements Initializable {
 			comboDeHeur.getItems().add(i);
 			comboAHeur.getItems().add(i);
 		}
+		
 		for(int i=0;i<60;i++){
 			comboDeMinute.getItems().add(i);
 			comboAMinute.getItems().add(i);
@@ -108,7 +109,10 @@ public class LivraisonController implements Initializable {
 			}else{
 				AccueilController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
 				AccueilController.getTournee().ModifierLivraison(plan, livraison, Integer.parseInt(dureeField.getText()) * 60);
+				listeDeCdes.ajoute(new CdeModificationDuree(plan,AccueilController.getTournee(),livraison,Integer.parseInt(dureeField.getText()) * 60));
+				listeDeCdes.ajoute(new CdeModificationPH(plan,AccueilController.getTournee(),livraison,debut,fin));
 				aController.update(AccueilController.getTournee());
+				AccueilController.setListeDeCdes(listeDeCdes);
 			}
 			Stage stage = (Stage) modifBtn.getScene().getWindow();
 		    stage.close();
@@ -118,13 +122,13 @@ public class LivraisonController implements Initializable {
 		AccueilController aController = Main.aController;
 		plan = aController.getPlan();
 		listeDeCdes=AccueilController.getListeDeCdes();
-		
 		aController.getDl().getLivraisons().remove(livraison);
 		if (aController.getTournee()==null){
 			aController.update(null);
 		}else{
-		int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex();
-		aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		
+		int idx=aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		System.out.println("index suppresion"+ idx);
 		listeDeCdes.ajoute(new CdeSuppression(plan,intersection,AccueilController.getTournee(),livraison,idx));
 		aController.setListeDeCdes(listeDeCdes);
 		aController.update(AccueilController.getTournee());

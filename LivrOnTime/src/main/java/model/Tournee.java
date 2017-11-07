@@ -130,20 +130,20 @@ public class Tournee {
 		Intersection origine=null, destination=null;
 		if(getListeLivraison().contains(l)){
 			
-			ArrayList<Chemin> nouvelItineraire=getItineraire();
+			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
 			for(int i=0;i<getItineraire().size();i++){
 				Chemin chemin=getItineraire().get(i);
-					if(chemin.getDestination()==inter){
+					if(chemin.getDestination().getId()==inter.getId()){
 						origine=chemin.getOrigine();
 						nouvelItineraire.remove(chemin);
 						//indice=i;
 			     	}
-					if(chemin.getOrigine()==inter){
+					if(chemin.getOrigine().getId()==inter.getId()){
 						destination=chemin.getDestination();
 						nouvelItineraire.remove(chemin);
 					}
 			}
-			System.out.println(origine +" Origine   dist"+destination);
+			System.out.println("La liste contient l");
 			if(origine!=null && destination !=null){
 				
 				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
@@ -172,7 +172,7 @@ public class Tournee {
 		Dijkstra d = new Dijkstra();
 		
 
-		if(!getListeLivraison().contains(inter)){
+		if(!getListeLivraison().contains(l)){
 			ArrayList<Chemin> nouvelItineraire=getItineraire();
 			Chemin dernierChemin=nouvelItineraire.get(nouvelItineraire.size()-1);
 			nouvelItineraire.remove(nouvelItineraire.size()-1);

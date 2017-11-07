@@ -15,6 +15,19 @@ public class CdeModificationPH implements Commande{
 	private Livraison livraison;
     private Date DPH_A=livraison.getDebutPlageHoraire();
     private Date FPH_A=livraison.getFinPlageHoraire();
+    
+    
+    
+    
+	public CdeModificationPH(Plan plan, Tournee tournee, Livraison livraison, Date dPH, Date fPH) {
+		super();
+		this.plan = plan;
+		DPH = dPH;
+		FPH = fPH;
+		this.tournee = tournee;
+		this.livraison = livraison;
+	}
+
 	@Override
 	public void redoCde() {
 		tournee.ModifierLivraison(plan, livraison, DPH,FPH);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.sun.javafx.runtime.VersionInfo;
 
 import javafx.event.ActionEvent;
 
@@ -53,18 +54,23 @@ public class AccueilController{
 	public Button CalculTournee;
 	public Button AccueilBouton;
 	public Button GenererFeuille; 
-	
+	public Button undoButton;
+	public Button redoButton;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCdes=new ListeDeCdes();
+    private static ListeDeCdes listeDeCdes;
 	private static Plan plan;
 	private static Tournee tournee;
 	static DessinerPlan dessinerPlan;
 	private DemandeLivraison dl;
 	private Intersection intersectionSelectionne;
-  
-    private static DescriptifController dController = new DescriptifController();
+    private static DescriptifController dController;
+    
+    public AccueilController() {
+    	listeDeCdes=new ListeDeCdes();
+    	dController = new DescriptifController();
+    }
     
     
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
@@ -299,6 +305,7 @@ public class AccueilController{
 
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
+		
 		Group group = dessinerPlan.Dessiner(plan);
 		Group group2 = dessinerPlan.Dessiner(dl);
 		VuePlan.getChildren().clear();
@@ -366,6 +373,15 @@ public class AccueilController{
 		AccueilController.listeDeCdes = listeDeCdes;
 	}
 	
+	public void Undo(){
+		listeDeCdes.undo();
+		System.out.println("Undo");
+		update(tournee);
+	}
+	public void Redo(){
+		listeDeCdes.redo();
+		update(tournee);
+	}
 	
 }  
 

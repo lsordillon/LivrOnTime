@@ -20,9 +20,8 @@ public class Plan {
 	
 	private ArrayList <Chemin> chemins;
 	private GrapheComplet graphe_complet;
-	private HashMap<Long,Intersection> Intersections ;
+	private HashMap<Long,Intersection> Intersections;
 	private ArrayList<Long> id_intersections;
-	
 	private ArrayList<Troncon> Troncons ;
 	
 	public Plan() {
