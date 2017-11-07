@@ -319,7 +319,7 @@ public class Tournee {
 	
 	
 	
-	
+	// modifier seulement la duree de livraison d'un pdl
 	public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
 		
 		if(this.getListeLivraison().contains(liv)){
@@ -335,7 +335,8 @@ public class Tournee {
 	}
 	
 	
-	
+	// modifier seulement la plage horaire de la livraison
+	// TODO : Permettre de la supprimer 
 	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
 		
 		if(this.getListeLivraison().contains(liv)){

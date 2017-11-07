@@ -27,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 class PannableCanvas extends Pane {
 
@@ -218,8 +219,8 @@ public class DessinerPlan {
     	   
     	
     	Circle circle1 = new Circle(1);
-    	 circle1.setStroke(Color.BLACK);
-         circle1.setFill(Color.BLACK);
+    	 circle1.setStroke(Color.GREY);
+         circle1.setFill(Color.GREY);
          
          //Mise a l'echelle
          x= (int)((D.getX() - minusX)*sizeCanvas / divX);
@@ -234,8 +235,8 @@ public class DessinerPlan {
         y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
     	Circle circle2 = new Circle(1);
     	circle2.setRadius(widthStroke/2);
-        circle2.setStroke(Color.BLACK);
-        circle2.setFill(Color.BLACK);
+        circle2.setStroke(Color.GREY);
+        circle2.setFill(Color.GREY);
         //Centrage
         circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
         //Rendre les circles clickable
@@ -248,8 +249,8 @@ public class DessinerPlan {
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         
         line.setStrokeWidth(widthStroke);
-        line.setFill(Color.BLACK);
-        line.setStroke(Color.BLACK);
+        line.setFill(Color.GREY);
+        line.setStroke(Color.GREY);
         String adress = "";
         for(Troncon troncon : AccueilController.getPlan().getTroncons()){
         	if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
@@ -351,9 +352,10 @@ public class DessinerPlan {
         
         Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
         canvas.getChildren().remove(circle);
-    	circle.setStroke(Color.RED);
-    	circle.setFill(Color.RED);
-    	circle.setRadius(widthStroke*6);
+        
+    	circle.setStroke(Color.PURPLE);
+    	circle.setFill(Color.PURPLE);
+    	circle.setRadius(widthStroke*10);
     	 canvas.getChildren().add(circle);
         
         for (Livraison livraison : livraisons){
@@ -361,7 +363,7 @@ public class DessinerPlan {
         	canvas.getChildren().remove(circle);
         	circle.setStroke(Color.BLUE);
         	circle.setFill(Color.BLUE);
-        	circle.setRadius(widthStroke*4);
+        	circle.setRadius(widthStroke*6);
             canvas.getChildren().add(circle);
         }
      
@@ -384,11 +386,11 @@ public class DessinerPlan {
 		Group group = new Group();
 		
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
-    	canvas.getChildren().remove(circle1);
+    	/*canvas.getChildren().remove(circle1);
     	circle1.setStroke(Color.GREEN);
     	circle1.setFill(Color.GREEN);
     	circle1.setRadius(widthStroke*4);
-    	canvas.getChildren().add(circle1);
+    	canvas.getChildren().add(circle1);*/
     	circle1.toFront();
     	Circle circle2;
     	for (Chemin c : tournee.getItineraire()){

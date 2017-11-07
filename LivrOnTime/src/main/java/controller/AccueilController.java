@@ -234,7 +234,11 @@ public class AccueilController{
 	public static String getAdresse(Intersection item){
 		  for(Troncon troncon : plan.getTroncons()){
           	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
-          		return troncon.getNomRue();
+          		if(troncon.getNomRue().equals("")){
+          			return "Rue sans nom";
+          		}else{
+          			return troncon.getNomRue();
+          		}
                   }
           }  
 		  return "";
