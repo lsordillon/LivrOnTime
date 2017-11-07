@@ -272,8 +272,7 @@ public class DescriptifController {
 			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {
 				if (listView.getSelectionModel().getSelectedItem() != null) {
 					if (oldValue != null){
-						((Circle) dessinerPlan.dessine.get(oldValue.getDestination().getId())).setFill(Color.BLUE);
-						((Circle) dessinerPlan.dessine.get(oldValue.getDestination().getId())).setStroke(Color.BLUE);
+						dessinerPlan.actualiserCouleurPoints(tournee);
 						
 						for(Troncon t: cheminSelectionne.getTroncons()){
 			    			dessinerPlan.surlignerTroncon(t,Color.GREEN);

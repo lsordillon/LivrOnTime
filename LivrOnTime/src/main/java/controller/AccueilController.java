@@ -26,7 +26,8 @@ import javafx.scene.control.Label;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -261,6 +262,8 @@ public class AccueilController{
 	    VBox vBox3;
 		if(tournee != null){
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+		dessinerPlan.actualiserCouleurPoints(tournee);
+		
 	    livraisons = tournee.getListeLivraison();
 		vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
 				  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
@@ -329,7 +332,7 @@ public class AccueilController{
 		listeDeCdes.redo();
 		update(tournee);
 	}
-	
+
 }  
 
 
