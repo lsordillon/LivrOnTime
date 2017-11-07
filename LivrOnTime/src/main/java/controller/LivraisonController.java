@@ -43,6 +43,7 @@ public class LivraisonController implements Initializable {
 	private static DemandeLivraison demandeL;
 	private Livraison livraison;
 	private Plan plan;
+	private ListeDeCdes listeDeCdes;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dureeField.setText("10");
@@ -83,6 +84,7 @@ public class LivraisonController implements Initializable {
 	public void ModifierLivraison(){
 		AccueilController aController = Main.aController;
 		plan = AccueilController.getPlan();
+		listeDeCdes=AccueilController.getListeDeCdes();
 		Date debut = new Date();
 		Date fin = new Date();
 		
@@ -115,11 +117,16 @@ public class LivraisonController implements Initializable {
 	public void SupprimerLivraison(){
 		AccueilController aController = Main.aController;
 		plan = aController.getPlan();
+		listeDeCdes=AccueilController.getListeDeCdes();
+		
 		aController.getDl().getLivraisons().remove(livraison);
 		if (aController.getTournee()==null){
 			aController.update(null);
 		}else{
+		int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex();
 		aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		listeDeCdes.ajoute(new CdeSuppression(plan,intersection,AccueilController.getTournee(),livraison,idx));
+		aController.setListeDeCdes(listeDeCdes);
 		aController.update(AccueilController.getTournee());
 		}
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
@@ -141,12 +148,15 @@ public class LivraisonController implements Initializable {
 		
 		AccueilController aController = Main.aController;
 		plan = AccueilController.getPlan();
+		listeDeCdes=AccueilController.getListeDeCdes();
 		aController.getDl().getLivraisons().add(livraison);
 		if (AccueilController.getTournee()==null){
 			aController.update(null);
 		}else{
 			    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex();
 					AccueilController.getTournee().AjouterLivraison(plan,intersection,livraison, idx);
+					listeDeCdes.ajoute(new CdeAjout(plan,intersection,AccueilController.getTournee(),livraison,idx));
+					aController.setListeDeCdes(listeDeCdes);
 					aController.update(AccueilController.getTournee());
 		}
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
