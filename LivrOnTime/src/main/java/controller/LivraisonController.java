@@ -20,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.SplitPane.Divider;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import model.Chemin;
 import model.DemandeLivraison;
 import model.Intersection;
@@ -127,7 +128,10 @@ public class LivraisonController implements Initializable {
 			aController.update(null);
 		}else{
 		
-		int idx=aController.getTournee().SupprimerLivraison(plan,intersection,  livraison);
+		Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
+		int idx = paire.getKey();
+		Tournee nouvelleTournee = paire.getValue();
+		aController.setTournee(nouvelleTournee);
 		System.out.println("index suppresion"+ idx);
 		listeDeCdes.ajoute(new CdeSuppression(plan,intersection,AccueilController.getTournee(),livraison,idx));
 		aController.setListeDeCdes(listeDeCdes);
@@ -136,6 +140,8 @@ public class LivraisonController implements Initializable {
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
 	}
+	
+	
 	public void AjouterLivraison(){
 		
 		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){

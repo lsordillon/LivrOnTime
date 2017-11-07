@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import util.tsp.Dijkstra;
 
 public class Tournee {
@@ -126,9 +127,11 @@ public class Tournee {
 		return listeLivraisons;
 	}
 	
-	public int SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
 		int index=-1;
-		Intersection origine=null, destination=null;
+		int indiceListeLivraison = 0;
+		Intersection origine=null;
+		Intersection destination=null;
 		if(getListeLivraison().contains(l)){
 			
 			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
@@ -137,6 +140,7 @@ public class Tournee {
 					if(chemin.getDestination().getId()==inter.getId()){
 						origine=chemin.getOrigine();
 						nouvelItineraire.remove(chemin);
+						indiceListeLivraison = i;
 						//indice=i;
 			     	}
 					if(chemin.getOrigine().getId()==inter.getId()){
@@ -148,13 +152,12 @@ public class Tournee {
 			if(origine!=null && destination !=null){
 				
 				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
-				nouvelItineraire.add( nouveau_chemin);
+				//nouvelItineraire.add( nouveau_chemin);
+				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
 				setItineraire(nouvelItineraire);
 			}
-			index=getListeLivraison().indexOf(l);
-			getListeLivraison().remove(l);
-
 			
+			index=listeLivraisons.indexOf(l);
 			listeLivraisons.remove(l);
 			this.initTempsPassage();
 			
@@ -165,7 +168,8 @@ public class Tournee {
 		}
 		this.initTempsPassage();
 		System.out.println("resultat fin"+ getItineraire());
-		return index;
+		Pair <Integer, Tournee> paire = new Pair (index,this);
+		return paire;
 	}
 	
 	

@@ -37,7 +37,7 @@ public class CdeAjout implements Commande {
 	@Override
 	public void undoCde() {
 		Main.aController.getDl().getLivraisons().remove(livraison);
-		index = tournee.SupprimerLivraison(plan,intersection,livraison);
+		index = (tournee.SupprimerLivraison(plan,intersection,livraison)).getKey();
 	}
 
 }

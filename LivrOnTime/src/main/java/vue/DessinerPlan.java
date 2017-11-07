@@ -467,6 +467,14 @@ public class DessinerPlan {
     }
     
     public void numeroterSommets(Tournee tournee) {
+    	
+    	if (!chiffres.isEmpty()) {
+    		for(Text t : chiffres) {
+    			canvas.getChildren().remove(t);
+    		}
+    		chiffres.clear();
+    	}
+    	
     	int indice = 1;
     	for (Chemin c : tournee.getItineraire()){
     		
@@ -481,7 +489,7 @@ public class DessinerPlan {
 	    	
 	    	indice++;
 	    	chiffres.add(chiffreOrigine);
-	    	
+	    	System.out.println(c.getDestination());
     	}
     }
     

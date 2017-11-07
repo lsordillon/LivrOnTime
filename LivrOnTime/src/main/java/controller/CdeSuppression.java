@@ -35,7 +35,7 @@ public class CdeSuppression implements Commande {
 	@Override
 	public void redoCde() {
 		Main.aController.getDl().getLivraisons().remove(livraison);
-		index =tournee.SupprimerLivraison(plan,intersection,livraison);
+		index =(tournee.SupprimerLivraison(plan,intersection,livraison)).getKey();
 	}
 
 }
