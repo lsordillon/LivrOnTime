@@ -271,6 +271,7 @@ public class DescriptifController {
 	
 	public void interaction(final ListView<Livraison> listView) {
 		listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
+			
 			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {
 				if (listView.getSelectionModel().getSelectedItem() != null) {
 					if (oldValue != null){
@@ -293,6 +294,8 @@ public class DescriptifController {
 					((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
 
 				}
+				
+				dessinerPlan.passerChiffresDevant();
 			}
 
 

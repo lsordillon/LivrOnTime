@@ -208,6 +208,11 @@ public class DessinerPlan {
 	public static HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
 	
 	MouseGestures mg;
+	private ArrayList<Text> chiffres;
+	
+	public DessinerPlan () {
+		chiffres = new ArrayList<Text>();
+	}
 
     public static HashMap<Long, Circle> getDessine() {
 		return dessine;
@@ -434,8 +439,6 @@ public class DessinerPlan {
 		actualiserCouleurPoints(tournee);
 		
     	Circle circle2;
-    	int indice = 1;
-    	ArrayList<Text> textes = new ArrayList<Text>();
     	
     	for (Chemin c : tournee.getItineraire()){
     		
@@ -455,27 +458,37 @@ public class DessinerPlan {
 		        circle1.toFront();
 		        
     		}
-	    	
-	    	Text texteCercle1 = new Text(""+indice);
-	        texteCercle1.setFill(Color.BLACK);
-	        texteCercle1.setStroke(Color.BLACK);
-	        texteCercle1.setBoundsType(TextBoundsType.VISUAL); 
-	    	
-	        texteCercle1.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + widthStroke * 7);
-	        texteCercle1.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - widthStroke * 8);
-	    	canvas.getChildren().add(texteCercle1);
-	    	
-	    	indice++;
-	    	textes.add(texteCercle1);
     		    
     	}
    	 
-    	for ( int i =0; i <textes.size(); i++) {
-    		textes.get(i).toFront();
-    	}
-		
-    	
+    	numeroterSommets(tournee);
+    	passerChiffresDevant();
     	return group;
+    }
+    
+    public void numeroterSommets(Tournee tournee) {
+    	int indice = 1;
+    	for (Chemin c : tournee.getItineraire()){
+    		
+    		Text chiffreOrigine = new Text(""+indice);
+    		chiffreOrigine.setFill(Color.BLACK);
+    		chiffreOrigine.setStroke(Color.BLACK);
+	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
+	    	
+	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + widthStroke * 7);
+	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - widthStroke * 8);
+	    	canvas.getChildren().add(chiffreOrigine);
+	    	
+	    	indice++;
+	    	chiffres.add(chiffreOrigine);
+	    	
+    	}
+    }
+    
+    public void passerChiffresDevant() {
+    	for ( int i =0; i <chiffres.size(); i++) {
+    		chiffres.get(i).toFront();
+    	}
     }
     
     public void surlignerTroncon (Troncon t, Paint Couleur) {
