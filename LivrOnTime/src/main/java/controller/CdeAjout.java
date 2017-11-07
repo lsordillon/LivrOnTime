@@ -1,5 +1,6 @@
 package controller;
 
+import LivrOnTime.Main;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
@@ -29,11 +30,13 @@ public class CdeAjout implements Commande {
 
 	@Override
 	public void redoCde() {
+		Main.aController.getDl().getLivraisons().add(livraison);
 		tournee.AjouterLivraison(plan,intersection,livraison,index);
 	}
 
 	@Override
 	public void undoCde() {
+		Main.aController.getDl().getLivraisons().remove(livraison);
 		index = tournee.SupprimerLivraison(plan,intersection,livraison);
 	}
 

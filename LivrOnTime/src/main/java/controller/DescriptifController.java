@@ -104,30 +104,33 @@ public class DescriptifController {
 
 						    	Text txtHeureArrivee;
 						    	
-						    	//COULEUR
+						    	int valeurPH = tournee.VerifierPlagesHorairesUneLiv(item);
+						    	
 						    	if (item.getFinPlageHoraire()==null) {
 						    		txtHeureArrivee = new Text(heureArrivee);
 						    		txtHeureArrivee.setFill(Color.BLACK);
 						    	}
-						    	else {
+						    	else {			
 						    		txtHeureArrivee = new Text(heureArrivee+ attente);
-							    	if (tmp[1] == null) { //s'il n'y a pas d'attente
+						    		txtHeureArrivee.setFill(Color.GREEN);
+						    		
+							    	if (valeurPH == 0) { // pas dattente et pas tendu 
 							    		txtHeureArrivee.setFill(Color.GREEN);
 							    	}
-							    	else { //sinon on teste si c'est une plage horaire tendue 
-							    		
-							    		long plageTendueMin = item.getFinPlageHoraire().getTime() - 3600000 - tmp[0].getTime();
-							    		if (plageTendueMin <= 15*60000){
-							    			txtHeureArrivee.setFill(Color.RED);//Plage tendue !!
-							    		}
-							    		else if (plageTendueMin <= 45*60000) {
-							    			txtHeureArrivee.setFill(Color.ORANGE);//Plage un peu tendue mais pas trop
-							    		}
-							    		else {
-							    			txtHeureArrivee.setFill(Color.GREEN);//DÃ©tendue mais attente quand meme..
-							    		}
-							    	}
+									if (valeurPH == 1) { //pas d'attente et tendu
+										txtHeureArrivee.setFill(Color.ORANGE);		    		
+									}
+									if (valeurPH == 2) { //attente
+										txtHeureArrivee.setFill(Color.PURPLE);
+									}
+									if (valeurPH == 3) { //plage horaire violee
+										txtHeureArrivee.setFill(Color.RED);
+									}
+									if (valeurPH == 4) { //erreur
+										txtHeureArrivee.setFill(Color.BLUEVIOLET);
+									}
 						    	}
+						    	
 						    	
 						    	//2e vBox qui affiche la durée et l'heure d'arrivée
 						    	Text txtDureeTrajet;
