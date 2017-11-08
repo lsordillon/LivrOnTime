@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-public class Livraison implements Serializable {
+public class Livraison {
 	 
 	
 	private int duree; // en secondes 
@@ -12,17 +12,11 @@ public class Livraison implements Serializable {
 	private Date finPlageHoraire;
 	private Intersection destination;
 	
-	public int getDuree() {
-		return duree;
-	}
-
 	
-	public Date getDebutPlageHoraire() {
-		return this.debutPlageHoraire;
-	}
 	public Livraison(){
 		
 	}
+	
 	public Livraison (int duree, Intersection destination ) {
 		this.duree = duree;	
 		this.debutPlageHoraire = null;
@@ -68,6 +62,12 @@ public class Livraison implements Serializable {
 		if(debutPlageHoraire!=null)
 		this.debutPlageHoraire = debutPlageHoraire;
 	}
-
 	
+	public int getDuree() {
+		return duree;
+	}
+
+	public Date getDebutPlageHoraire() {
+		return this.debutPlageHoraire;
+	}
 }

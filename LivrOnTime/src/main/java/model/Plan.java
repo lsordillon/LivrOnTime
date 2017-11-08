@@ -25,19 +25,12 @@ public class Plan {
 	private ArrayList<Long> id_intersections;
 	private ArrayList<Troncon> Troncons ;
 	
+	
 	public Plan() {
 		chemins =new ArrayList<Chemin>();
 		Intersections = new HashMap<Long, Intersection>();
 		id_intersections =new ArrayList<Long>();
 		Troncons = new ArrayList<Troncon>();
-	}
-
-	public ArrayList<Long> getId_intersections() {
-		return id_intersections;
-	}
-	
-	public void setId_intersections(ArrayList<Long> id_intersections) {
-		this.id_intersections = id_intersections;
 	}
 	
 	public void CreerIntersections(NodeList noeuds) {
@@ -66,9 +59,7 @@ public class Plan {
 	      
 	      Troncons.add(new Troncon(intersectionD, Double.parseDouble(troncon.getAttribute("longueur")),
 	    		  	   troncon.getAttribute("nomRue") , intersectionO));
-	  
 	  }
-
 	}
 
 	public void TronconsVoisins() {
@@ -77,36 +68,17 @@ public class Plan {
 			Troncons.get(i).getOrigine().setTronconsVersVoisins(Troncons.get(i));
 		}
 	}
-
-	// ------------- Calcul Itineraire
-	// L'intersection est liee a� son numero de placement dans la liste
-
-	public HashMap<Long, Intersection> getIntersections() {
-		return Intersections;
-	}
 	
-	public void setIntersections(HashMap<Long, Intersection> intersections) {
-		Intersections = intersections;
-	}
-	public ArrayList<Troncon> getTroncons() {
-		return Troncons;
-	}
-	public void setTroncons(ArrayList<Troncon> troncons) {
-		Troncons = troncons;
-	}
-
-	
-/**
- * Lance le dijkstra pour chaque point de Livraison + entrepot 
- * Trie et stocke les résultats
- * @param dl
- */
+	/**
+	 * Lance le dijkstra pour chaque point de Livraison + entrepot 
+	 * Trie et stocke les resultats
+	 * @param dl
+	 */
 	public void deroulerLesDijkstra (DemandeLivraison dl) {		
 		Dijkstra d = new Dijkstra();
 		
 		//charge la liste des points de livraison + entrepot
 		ArrayList <Intersection> origines=new ArrayList<Intersection>(dl.getIntersections());
-	
 	
 		// Pour chaque point de livraison
 		for (int j=0; j<origines.size();j++) {
@@ -118,33 +90,32 @@ public class Plan {
 			ArrayList <Intersection> destinations=new ArrayList<Intersection>(dl.getIntersections());
 			destinations.remove(ptDepart);
 			
-			
 			for (int i=0; i<destinations.size();i++) {
-				// Pour chaque trajet reliant deux points de livraison, je cree un chemin
-				Chemin chemin = new Chemin();
-				chemin.setOrigine(ptDepart);
-				chemin.setDestination(destinations.get(i));
-				
-				// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
-				Intersection courante = destinations.get(i);
-				ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-				
-				while (courante!=ptDepart) {
-					Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
-					
-					if(troncon!=null) {
-						troncons.add(0, troncon);
-					}
-					
-					courante=courante.getPredecesseur();
-				}
-				
-				chemin.setTroncons(troncons);
+				Chemin chemin = creerChemin(ptDepart,destinations.get(i));
 				chemins.add(chemin);
 			}
 		} 	
 	}
 
+	public Chemin creerChemin (Intersection depart, Intersection courante) {
+		// Pour chaque trajet reliant deux points de livraison, je cree un chemin
+		Chemin chemin = new Chemin();
+		chemin.setOrigine(depart);
+		chemin.setDestination(courante);
+		
+		// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
+		ArrayList<Troncon> troncons=new ArrayList<Troncon>();
+		
+		while (courante!=depart) {
+			Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
+			if(troncon!=null) {
+				troncons.add(0, troncon);
+			}
+			courante=courante.getPredecesseur();
+		}
+		chemin.setTroncons(troncons);
+		return chemin;
+	}
 	
 	/**
 	 * Permet de renvoyer le troncon liant deux intersections
@@ -166,7 +137,6 @@ public class Plan {
 	}
 
 	
-
 	/**
 	 * Permet de renvoyer le chemin liant deux points
 	 * @param origine
@@ -186,7 +156,7 @@ public class Plan {
 	}
 	
 	/**
-	 * Calcul l'ensemble de la tournee a partir de la demande de livraison
+	 * Calcule l'ensemble de la tournee a partir de la demande de livraison
 	 * realise tout d'abord des Dijkstra pour trouver les plus courts chemins entre chaque point
 	 * construit un graphe complet oriente
 	 * realise le TSP pour calculer l'itineraire le plus court
@@ -217,11 +187,6 @@ public class Plan {
 		ArrayList <Chemin> itineraire = new ArrayList<Chemin> ();
 		
 		for(int i=0; i<nbSommet-1;i++) {
-			//on deroule le tableau MeilleureSolution du TSP pour creer l'itineraire.
-			//Pour chaque element du tableau, on cherche l'intersection correspondante.
-			//il s'agira a tour de role d'une origine et d'une destination
-			//on cherche le chemin joignant ces deux intersections
-			System.out.println(etape2.getCoutMeilleureSolution());
 			Intersection origine = dl.getIntersections().get(etape2.getMeilleureSolution(i));
 			Intersection destination = dl.getIntersections().get(etape2.getMeilleureSolution(i+1));
 			itineraire.add(trouverChemin(origine,destination));
@@ -233,18 +198,34 @@ public class Plan {
 
 		itineraire.add(trouverChemin(origine,destination));
 
-	
-		System.out.println("LA TOURNEE");
-		Tournee tournee = new Tournee(itineraire,dl);
-		for(Chemin chem:tournee.getItineraire()) {
-			System.out.println(chem);
-		}
-	
+		Tournee tournee = new Tournee(itineraire,dl);	
 		
 		return tournee;
 	}
 
-
+	public ArrayList<Long> getId_intersections() {
+		return id_intersections;
+	}
+	
+	public void setId_intersections(ArrayList<Long> id_intersections) {
+		this.id_intersections = id_intersections;
+	}
+	
+	public HashMap<Long, Intersection> getIntersections() {
+		return Intersections;
+	}
+	
+	public void setIntersections(HashMap<Long, Intersection> intersections) {
+		Intersections = intersections;
+	}
+	
+	public ArrayList<Troncon> getTroncons() {
+		return Troncons;
+	}
+	
+	public void setTroncons(ArrayList<Troncon> troncons) {
+		Troncons = troncons;
+	}
 
 
 }

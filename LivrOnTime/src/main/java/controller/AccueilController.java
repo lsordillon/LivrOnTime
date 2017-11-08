@@ -239,8 +239,8 @@ public class AccueilController{
 	    plan=null;
 	    tournee=null;
 	    demandeLiv=null;
-	    dessinerPlan=null;
 	    intersectionSelectionnee=null;
+	    listeDeCommandes = null;
 	}
 	
 	
