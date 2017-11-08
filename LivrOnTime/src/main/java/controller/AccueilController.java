@@ -62,16 +62,16 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCdes;
+    private static ListeDeCdes listeDeCommandes;
 	private static Plan plan;
 	private static Tournee tournee;
 	private DessinerPlan dessinerPlan;
-	private DemandeLivraison dl;
-	private Intersection intersectionSelectionne;
+	private DemandeLivraison demandeLiv;
+	private Intersection intersectionSelectionnee;
     private static DescriptifController dController;
     
     public AccueilController() {
-    	listeDeCdes=new ListeDeCdes();
+    	listeDeCommandes=new ListeDeCdes();
     	dessinerPlan = new DessinerPlan();
     	dController = new DescriptifController(dessinerPlan);
     }
@@ -148,32 +148,32 @@ public class AccueilController{
 				}
 				if(!invalide){
 	    		
-					dl = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
-					LivraisonController.setDL(dl);
-					VuePlan.getChildren().add(dessinerPlan.Dessiner(dl,plan));
+					demandeLiv = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
+					LivraisonController.setDL(demandeLiv);
+					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
 				    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
 				    //ListerLivraisons(dl.getLivraisons());
 				     
 		
-				    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-				    					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+				    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
+				    					  new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
 				    					  new Label ("Heure de Retour :      "));
 			   		vBox3.setSpacing(10);
-			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(dl.getLivraisons(), plan, null));
+			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(demandeLiv.getLivraisons(), plan, null));
 			   		
 			   		vBox2.setSpacing(40);
 			   		vBox2.setLayoutX(30);
 			        vBox2.setLayoutY(50);
 				    VueDescriptif.getChildren().add(vBox2);
 				    CalculTournee.setDisable(false);
-				    listeDeCdes.reset();
+				    listeDeCommandes.reset();
 				} else{
-                    Alert alert = new Alert(AlertType.ERROR, "Demande de livraison corrompue : L'adresse '"+fautive+"' n'existe pas "+ "\n");
-                    alert.showAndWait();
+                    Alert alerte = new Alert(AlertType.ERROR, "Demande de livraison corrompue : L'adresse '"+fautive+"' n'existe pas "+ "\n");
+                    alerte.showAndWait();
 				}
 	    	}else{
-	    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
-	    		alert.showAndWait();
+	    		Alert alerte = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
+	    		alerte.showAndWait();
 	    	}	
 		}
 		
@@ -181,18 +181,18 @@ public class AccueilController{
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		tournee=plan.calculerLaTournee(dl);
+		tournee=plan.calculerLaTournee(demandeLiv);
 		tournee.initTempsPassage();
 	
-
 		
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
 	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	    
 	    GenererFeuille.setDisable(false);
 	    VueDescriptif.getChildren().clear();
-		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-							  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
+	    
+		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
+							  new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
 							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
 		vBox3.setSpacing(10);
 		
@@ -202,8 +202,8 @@ public class AccueilController{
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
-
 	}
+	
 	
 	public void GenererFeuille(ActionEvent actionEvent) {
 		FileWriter fichierGenere;
@@ -214,8 +214,8 @@ public class AccueilController{
 			fichierGenere.close();	
 			//System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt ");
 			feuilleDeRouteTxt.Open();
-			Alert alert = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
-    		alert.showAndWait();
+			Alert alerte = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
+    		alerte.showAndWait();
 			
     		
         }catch (FileNotFoundException e) {
@@ -231,14 +231,16 @@ public class AccueilController{
 	public void retourAccueil(ActionEvent actionEvent) {
 		VuePlan.getChildren().clear();
 		VueDescriptif.getChildren().clear();
+		
 	    ChargerLivraison.setDisable(true);
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
+	    
 	    plan=null;
 	    tournee=null;
-	    dl=null;
+	    demandeLiv=null;
 	    dessinerPlan=null;
-	    intersectionSelectionne=null;
+	    intersectionSelectionnee=null;
 	}
 	
 	
@@ -251,7 +253,6 @@ public class AccueilController{
 		plan.CreerTroncons(XmlParserPlan.troncons);
 		plan.TronconsVoisins();
 		return plan;
-
 	}   
 
 
@@ -265,9 +266,9 @@ public class AccueilController{
 	
 	
 	//Methode pour retourner l'adresse d'une intersection
-	public static String getAdresse(Intersection item){
+	public static String getAdresse(Intersection intersec){
 		  for(Troncon troncon : plan.getTroncons()){
-          	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
+          	if(troncon.getDestination().getId() == intersec.getId() || troncon.getOrigine().getId() == intersec.getId()){
           		if(troncon.getNomRue().equals("")){
           			return "Rue sans nom";
           		}else{
@@ -282,30 +283,32 @@ public class AccueilController{
 	public void update(Tournee tournee){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
 		
-		Group group = dessinerPlan.Dessiner(plan);
-		Group group2 = dessinerPlan.Dessiner(dl,plan);
+		Group groupe = dessinerPlan.Dessiner(plan);
+		Group groupe2 = dessinerPlan.Dessiner(demandeLiv,plan);
 		VuePlan.getChildren().clear();
-	    VuePlan.getChildren().add(group);
-	    VuePlan.getChildren().add(group2);
+	    VuePlan.getChildren().add(groupe);
+	    VuePlan.getChildren().add(groupe2);
 	    VueDescriptif.getChildren().clear();
 	    VBox vBox3;
 		if(tournee != null){
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-		dessinerPlan.actualiserCouleurPoints(tournee);
-		
-	    livraisons = tournee.getListeLivraison();
-		vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-				  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
-				  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
-		vBox3.setSpacing(10);
-		}else{
-			livraisons = dl.getLivraisons();
-			vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(dl.getAdresseEntrepot())),
-					  new Label ("Heure de Depart :      "+ dureeHms.format(dl.getHeureDepart())),
-					  new Label ("Heure de Retour :      "));
+			VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+			dessinerPlan.actualiserCouleurPoints(tournee);
+			
+		    livraisons = tournee.getListeLivraison();
+		    
+			vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
+							 new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
+							 new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
+			
+			vBox3.setSpacing(10);
+		}
+		else{
+			livraisons = demandeLiv.getLivraisons();
+			vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
+					  		 new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
+					  		 new Label ("Heure de Retour :      "));
 		}
 	
-
 		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(livraisons, plan, tournee));
 
 		vBox2.setSpacing(40);
@@ -315,50 +318,76 @@ public class AccueilController{
 		dessinerPlan.PannableScene(VuePlan.getScene(), this);
 	}
 	
-	public Intersection getIntersectionSelectionne() {
-		return intersectionSelectionne;
+	
+	public Intersection getIntersectionSelectionnee() {
+		return intersectionSelectionnee;
 	}
-	public void setIntersectionSelectionne(Intersection intersectionSelectionne) {
-		this.intersectionSelectionne = intersectionSelectionne;
+	
+	
+	public void setIntersectionSelectionnee(Intersection intersectionSelectionnee) {
+		this.intersectionSelectionnee = intersectionSelectionnee;
 	}
+	
+	
 	public static Plan getPlan() {
 		return plan;
 	}
+	
+	
 	public static void setPlan(Plan plan) {
 		AccueilController.plan = plan;
 	}
+	
+	
 	public static Tournee getTournee() {
 		return tournee;
 	}
+	
+	
 	public static void setTournee(Tournee tournee) {
 		AccueilController.tournee = tournee;
 	}
+	
+	
 	public static DescriptifController getdController() {
 		return dController;
 	}
+	
+	
 	public static void setdController(DescriptifController dController) {
 		AccueilController.dController = dController;
 	}
-	public DemandeLivraison getDl() {
-		return dl;
-	}
-	public void setDl(DemandeLivraison dl) {
-		this.dl = dl;
-	}
-	public static ListeDeCdes getListeDeCdes() {
-		return listeDeCdes;
-	}
-	public static void setListeDeCdes(ListeDeCdes listeDeCdes) {
-		AccueilController.listeDeCdes = listeDeCdes;
+	
+	
+	public DemandeLivraison getDemandeLiv() {
+		return demandeLiv;
 	}
 	
+	
+	public void setDemandeLiv(DemandeLivraison demandeLiv) {
+		this.demandeLiv = demandeLiv;
+	}
+	
+	
+	public static ListeDeCdes getListeDeCdes() {
+		return listeDeCommandes;
+	}
+	
+	
+	public static void setListeDeCdes(ListeDeCdes listeDeCommandes) {
+		AccueilController.listeDeCommandes = listeDeCommandes;
+	}
+	
+	
 	public void Undo(){
-		listeDeCdes.undo();
+		listeDeCommandes.undo();
 		System.out.println("Undo");
 		update(tournee);
 	}
+	
+	
 	public void Redo(){
-		listeDeCdes.redo();
+		listeDeCommandes.redo();
 		update(tournee);
 	}
 

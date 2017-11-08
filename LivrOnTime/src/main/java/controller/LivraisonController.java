@@ -101,11 +101,11 @@ public class LivraisonController implements Initializable {
 			}
 		
 			if (AccueilController.getTournee()==null){
-				int idx = aController.getDl().getLivraisons().indexOf(livraison);
+				int idx = aController.getDemandeLiv().getLivraisons().indexOf(livraison);
 				livraison.setDebutPlageHoraire(debut);
 				livraison.setFinPlageHoraire(fin);
 				livraison.setDuree(Integer.parseInt(dureeField.getText()) * 60);
-				aController.getDl().getLivraisons().set(idx, livraison);
+				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
 				aController.update(null);
 			}else{
 				AccueilController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
@@ -123,7 +123,7 @@ public class LivraisonController implements Initializable {
 		AccueilController aController = Main.aController;
 		plan = aController.getPlan();
 		listeDeCdes=AccueilController.getListeDeCdes();
-		aController.getDl().getLivraisons().remove(livraison);
+		aController.getDemandeLiv().getLivraisons().remove(livraison);
 		if (aController.getTournee()==null){
 			aController.update(null);
 		}else{
@@ -159,7 +159,7 @@ public class LivraisonController implements Initializable {
 		AccueilController aController = Main.aController;
 		plan = AccueilController.getPlan();
 		listeDeCdes=AccueilController.getListeDeCdes();
-		aController.getDl().getLivraisons().add(livraison);
+		aController.getDemandeLiv().getLivraisons().add(livraison);
 		if (AccueilController.getTournee()==null){
 			aController.update(null);
 		}else{
