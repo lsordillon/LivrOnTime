@@ -152,7 +152,6 @@ public class Tournee {
 			if(origine!=null && destination !=null){
 				
 				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
-				//nouvelItineraire.add( nouveau_chemin);
 				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
 				setItineraire(nouvelItineraire);
 			}
@@ -167,90 +166,83 @@ public class Tournee {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
 		}
 		this.initTempsPassage();
-		System.out.println("resultat fin"+ getItineraire());
+		System.out.println("resultat fin"+ itineraire);
 		Pair <Integer, Tournee> paire = new Pair (index,this);
 		return paire;
 	}
 	
 	
-	public boolean AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
+	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
 		Dijkstra d = new Dijkstra();
 		
 
+		// On enlève le dernier chemin ---> on enlève le chemin a l'index
 		if(!getListeLivraison().contains(l)){
-			ArrayList<Chemin> nouvelItineraire=getItineraire();
-			Chemin dernierChemin=nouvelItineraire.get(nouvelItineraire.size()-1);
-			nouvelItineraire.remove(nouvelItineraire.size()-1);
+			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
+			Chemin cheminASupprimer = nouvelItineraire.get(index);
+			nouvelItineraire.remove(index);
 		    
-		    Chemin nouveauChemin=new Chemin();
-		    d.algoDijkstra(plan, dernierChemin.getOrigine());
-			nouveauChemin.setOrigine(dernierChemin.getOrigine());
-			nouveauChemin.setDestination(inter);
-            Intersection courante = inter;
-			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
+			//On cree un nouveau chemin vers l'intersection à partir de l'origine du dernier chemin  ----> du chemin supprimé
+		    Chemin nouveauChemin1=new Chemin();
+		    d.algoDijkstra(plan, cheminASupprimer.getOrigine());
+			nouveauChemin1.setOrigine(cheminASupprimer.getOrigine());
+			nouveauChemin1.setDestination(inter);
 			
-			while (courante!=dernierChemin.getOrigine()) {
+            Intersection courante = inter;
+			ArrayList<Troncon> tronconsChemin1=new ArrayList<Troncon>();
+			
+			//On  remonte a partir de l'intersection pour trouver les troncons
+			while (courante!=cheminASupprimer.getOrigine()) {
 				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
 				
 				if(troncon!=null) {
-					troncons.add(0, troncon);
+					tronconsChemin1.add(0, troncon);
 				}
 				courante=courante.getPredecesseur();
 			}
-			nouveauChemin.setTroncons(troncons);
-			nouvelItineraire.add(nouveauChemin);
+			
+			//On rempli les troncons du nouveau chemin
+			nouveauChemin1.setTroncons(tronconsChemin1);
+			
+			//On ajoute le chemin à la fin ------> On ajoute le chemin à la bonne place dans la liste
+			nouvelItineraire.add(index,nouveauChemin1);
 		    
-		    nouveauChemin=new Chemin();
+			//---------------------------------------- Fin Premier sous chemin
+			// Idem pour le deuxième chemin
+		    Chemin nouveauChemin2= new Chemin();
 		    d.algoDijkstra(plan, inter);
-			nouveauChemin.setOrigine(inter);
-			nouveauChemin.setDestination(dernierChemin.getDestination());
+			nouveauChemin2.setOrigine(inter);
+			nouveauChemin2.setDestination(cheminASupprimer.getDestination());
 		
-			courante = dernierChemin.getDestination();
-		    troncons=new ArrayList<Troncon>();
+			courante = cheminASupprimer.getDestination();
+			
+			ArrayList<Troncon> tronconsChemin2=new ArrayList<Troncon>();
 			
 		    while (courante!=inter) {
 				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
 				
 				if(troncon!=null) {
-					troncons.add(0, troncon);
+					tronconsChemin2.add(0, troncon);
 				}
 				courante=courante.getPredecesseur();
 			}
-			nouveauChemin.setTroncons(troncons);
+		    
+			nouveauChemin2.setTroncons(tronconsChemin2);
 			
-			nouvelItineraire.add(nouveauChemin);
+			nouvelItineraire.add(index+1,nouveauChemin2);
 		    setItineraire(nouvelItineraire);
-		    getListeLivraison().add(index, l);
+		    listeLivraisons.add(index, l);
 		    /*index=listeLivraisons.indexOf(l);
 			listeLivraisons.add(index, l);
 			this.initTempsPassage();*/
+		    
 		}else {
 			System.err.println("ERREUR ! La livraison fait partie de la tournee actuelle");
-			return false;
+			return null;
 		}
 		this.initTempsPassage();
 		System.out.println("resultat fin"+ getItineraire());
-	return true;
-
-		
-		/*Chemin rChemin=itineraire.get(index);
-	    itineraire.remove(index);
-	    
-
-	    d.algoDijkstra(plan, rChemin.getOrigine());
-	    Chemin begChemin=plan.creerChemin(rChemin.getOrigine(),inter);
-	    itineraire.add(index,begChemin);
-	    
-	    d.algoDijkstra(plan, inter);
-	    Chemin endChemin=plan.creerChemin(inter,rChemin.getDestination());
-	    itineraire.add(index+1,endChemin);
-	    
-	    
-	    listeLivraisons.add(index,l);
-	    
-	    return true;*/
-
-
+	return this;
 	}
 
 		

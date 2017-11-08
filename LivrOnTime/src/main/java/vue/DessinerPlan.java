@@ -489,7 +489,7 @@ public class DessinerPlan {
 	    	
 	    	indice++;
 	    	chiffres.add(chiffreOrigine);
-	    	System.out.println(c.getDestination());
+	    	//System.out.println(c.getDestination());
     	}
     }
     

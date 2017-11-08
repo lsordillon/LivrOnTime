@@ -100,19 +100,19 @@ public class LivraisonController implements Initializable {
 				fin = null;
 			}
 		
-			if (AccueilController.getTournee()==null){
+			if (aController.getTournee()==null){
 				int idx = aController.getDemandeLiv().getLivraisons().indexOf(livraison);
 				livraison.setDebutPlageHoraire(debut);
 				livraison.setFinPlageHoraire(fin);
 				livraison.setDuree(Integer.parseInt(dureeField.getText()) * 60);
 				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
-				aController.update(null);
+				aController.update();
 			}else{
-				AccueilController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
-				AccueilController.getTournee().ModifierLivraison(plan, livraison, Integer.parseInt(dureeField.getText()) * 60);
-				listeDeCdes.ajoute(new CdeModificationDuree(plan,AccueilController.getTournee(),livraison,Integer.parseInt(dureeField.getText()) * 60));
-				listeDeCdes.ajoute(new CdeModificationPH(plan,AccueilController.getTournee(),livraison,debut,fin));
-				aController.update(AccueilController.getTournee());
+				aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
+				aController.getTournee().ModifierLivraison(plan, livraison, Integer.parseInt(dureeField.getText()) * 60);
+				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,Integer.parseInt(dureeField.getText()) * 60));
+				listeDeCdes.ajoute(new CdeModificationPH(plan,aController.getTournee(),livraison,debut,fin));
+				aController.update();
 				AccueilController.setListeDeCdes(listeDeCdes);
 			}
 			Stage stage = (Stage) modifBtn.getScene().getWindow();
@@ -124,18 +124,15 @@ public class LivraisonController implements Initializable {
 		plan = aController.getPlan();
 		listeDeCdes=AccueilController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
-		if (aController.getTournee()==null){
-			aController.update(null);
-		}else{
-		
-		Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
-		int idx = paire.getKey();
-		Tournee nouvelleTournee = paire.getValue();
-		aController.setTournee(nouvelleTournee);
-		System.out.println("index suppresion"+ idx);
-		listeDeCdes.ajoute(new CdeSuppression(plan,intersection,AccueilController.getTournee(),livraison,idx));
-		aController.setListeDeCdes(listeDeCdes);
-		aController.update(AccueilController.getTournee());
+		if (aController.getTournee()!=null){
+			Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
+			int idx = paire.getKey();
+			Tournee nouvelleTournee = paire.getValue();
+			aController.setTournee(nouvelleTournee);
+			System.out.println("index suppresion"+ idx);
+			listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
+			aController.setListeDeCdes(listeDeCdes);
+			aController.update();
 		}
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
@@ -157,21 +154,21 @@ public class LivraisonController implements Initializable {
 		}
 		
 		AccueilController aController = Main.aController;
-		plan = AccueilController.getPlan();
-		listeDeCdes=AccueilController.getListeDeCdes();
+		plan = aController.getPlan();
+		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
-		if (AccueilController.getTournee()==null){
-			aController.update(null);
-		}else{
-			    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex();
-					AccueilController.getTournee().AjouterLivraison(plan,intersection,livraison, idx);
-					listeDeCdes.ajoute(new CdeAjout(plan,intersection,AccueilController.getTournee(),livraison,idx));
-					aController.setListeDeCdes(listeDeCdes);
-					aController.update(AccueilController.getTournee());
+		if (aController.getTournee()!=null){
+		    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex()+1;
+		    	System.out.println("index ajout"+ idx);
+				aController.setTournee(aController.getTournee().AjouterLivraison(plan,intersection,livraison, idx));
+				listeDeCdes.ajoute(new CdeAjout(plan,intersection,aController.getTournee(),livraison,idx));
+				aController.setListeDeCdes(listeDeCdes);
+				aController.update();
 		}
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();
 	}
+	
 	public static void setIntersection(Intersection intersect){
 		intersection = intersect;
 	}

@@ -280,7 +280,7 @@ public class AccueilController{
 	}
 	
 
-	public void update(Tournee tournee){
+	public void update(){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
 		
 		Group groupe = dessinerPlan.Dessiner(plan);
@@ -339,12 +339,12 @@ public class AccueilController{
 	}
 	
 	
-	public static Tournee getTournee() {
+	public Tournee getTournee() {
 		return tournee;
 	}
 	
 	
-	public static void setTournee(Tournee tournee) {
+	public void setTournee(Tournee tournee) {
 		AccueilController.tournee = tournee;
 	}
 	
@@ -382,13 +382,13 @@ public class AccueilController{
 	public void Undo(){
 		listeDeCommandes.undo();
 		System.out.println("Undo");
-		update(tournee);
+		update();
 	}
 	
 	
 	public void Redo(){
 		listeDeCommandes.redo();
-		update(tournee);
+		update();
 	}
 
 }  
