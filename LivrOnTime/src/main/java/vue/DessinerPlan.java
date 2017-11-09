@@ -258,19 +258,22 @@ public class DessinerPlan {
     	}
     	
     	int indice = 1;
-    	for (Chemin c : tournee.getItineraire()){
+    	for (int i =0; i<tournee.getItineraire().size(); i++){
     		
-    		Text chiffreOrigine = new Text(""+indice);
-    		chiffreOrigine.setFill(COULEURCHIFFRES);
-    		chiffreOrigine.setStroke(COULEURCHIFFRES);
-	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
-	    	
-	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
-	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
-	    	canvas.getChildren().add(chiffreOrigine);
-	    	
-	    	indice++;
-	    	chiffres.add(chiffreOrigine);
+    		Chemin c = tournee.getItineraire().get(i);
+    		if(i==0 || c.getDestination()!=tournee.getItineraire().get(i-1).getDestination()){
+    			Text chiffreOrigine = new Text(""+indice);
+        		chiffreOrigine.setFill(COULEURCHIFFRES);
+        		chiffreOrigine.setStroke(COULEURCHIFFRES);
+    	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
+    	    	
+    	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
+    	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
+    	    	canvas.getChildren().add(chiffreOrigine);
+    	    	
+    	    	indice++;
+    	    	chiffres.add(chiffreOrigine);
+    		}    		
     	}
     }
     
