@@ -10,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.ClipboardContent;
@@ -87,9 +88,14 @@ public class DescriptifController {
 							
 							super.updateItem(livr, bln);
 							 //setItem(item);
-			                    
+							
 
+							
+							
 							VBox vBox = new VBox(new Text(getAdresse(livr.getDestination())), new Text(plageHoraire));
+							
+							//vBox.setStyle("-fx-background-color: #457E31");
+							//vBox.setId(arg0);
 							
 							//Affichage des temps de passage
 							if (tournee!=null) {
@@ -229,7 +235,6 @@ public class DescriptifController {
 					                event.setDropCompleted( success );
 					                event.consume();
 					            }} );
-
 						}
 
 
@@ -313,6 +318,13 @@ public class DescriptifController {
 	public void setDraggable(ListView<String> list){
 		
 	}
+	
+// @lsordillon -- mise en place du surlignage
+	public interface IntersectionSurligneListener{
+		void intersectionSurligneChanged(Intersection ancienne,Intersection nouvelle);
+	}
+	
+
   
 }
 

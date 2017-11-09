@@ -318,7 +318,7 @@ public class AccueilController{
 		}
 	
 		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(livraisons, plan, tournee));
-
+		
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);

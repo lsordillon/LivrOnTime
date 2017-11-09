@@ -45,6 +45,7 @@ public class DessinerPlan {
 	private HashMap<Long,Circle> dessine;
 	private ArrayList<Text> chiffres;
 	
+
 	private MouseGestures mg;
 	private SceneGestures sg;
 	
@@ -64,6 +65,7 @@ public class DessinerPlan {
 	final static Paint COULEURVIOLEE = Color.RED;
 	
 	public DessinerPlan (MouseGestures mouseGestures, SceneGestures sceneGestures) {
+
 		chiffres = new ArrayList<Text>();
 		canvas = new PannableCanvas();
 		dessine = new HashMap<Long,Circle>();
@@ -191,6 +193,7 @@ public class DessinerPlan {
     		ArrayList<Livraison> livraisons = dl.getLivraisons();
     		Group groupe = new Group();
     		
+
     		Circle cercle = dessine.get(dl.getAdresseEntrepot().getId());
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(COULEURENTREPOT);
@@ -205,6 +208,7 @@ public class DessinerPlan {
     		cercle.setFill(COULEURLIVRAISON);
     		cercle.setRadius(largeurTrait*MULTIPLICATEURTRAITLIVRAISON);
             canvas.getChildren().add(cercle);
+
         }
       
         return groupe;	             
