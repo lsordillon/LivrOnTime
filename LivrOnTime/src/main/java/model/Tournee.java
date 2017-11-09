@@ -169,7 +169,6 @@ public class Tournee {
 			int i=this.getListeLivraison().indexOf(liv);
 			  if(DPH==null || FPH==null){
 				  liv = new Livraison(liv.getDuree(),liv.getDestination());
-				  System.out.println("nouveeeeeeeeeelle");
 			  }else{
 	          liv.setDebutPlageHoraire(DPH);
 			  liv.setFinPlageHoraire(FPH);
