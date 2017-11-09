@@ -58,8 +58,7 @@ public class DescriptifController {
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
 		
-		data.clear();
-		
+		data.clear();		
 		data.addAll(livr);
 
 		listView.setCellFactory(new Callback<ListView<Livraison>, ListCell<Livraison>>() {

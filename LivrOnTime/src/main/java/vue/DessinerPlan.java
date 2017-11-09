@@ -139,7 +139,8 @@ public class DessinerPlan {
     }
 
     public Group Dessiner(Plan plan) {
-    	
+    	dessine = new HashMap<Long,Circle>();
+    	canvas = new PannableCanvas();
     	Group groupe = new Group();
         	
     	int minX,minY,maxX=0,maxY=0;
@@ -236,7 +237,7 @@ public class DessinerPlan {
     			ligne.setStroke(COULEURITINERAIRE);
     			ligne.setFill(COULEURITINERAIRE);
     		    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
-    		      
+    		    mg.rendreLigneSurvolable(ligne, t.getDestination(), t.getOrigine()); 
 		        canvas.getChildren().add(ligne);
 		        cercle1.toFront();  
     		}	    
@@ -289,7 +290,6 @@ public class DessinerPlan {
 		ligne.setStroke(Couleur);
 		ligne.setFill(Couleur);
 	    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
-	      
         canvas.getChildren().add(ligne);
         cercle1.toFront();
     }
