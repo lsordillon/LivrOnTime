@@ -103,7 +103,7 @@ public class AccueilController{
 					VuePlan.getChildren().clear();
 					VuePlan.getChildren().add(group);
 					// VuePlan.setStyle("-fx-background-color: #f7f7d4");
-					sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
+					sceneGestures.rendreCanvasZoomable(this);
 					ChargerLivraison.setDisable(false);
 					
 			    }catch(Exception e){
@@ -158,7 +158,7 @@ public class AccueilController{
 					demandeLiv = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 					LivraisonController.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
-				    sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);			    
+				    sceneGestures.rendreCanvasZoomable(this);			    
 				    //ListerLivraisons(dl.getLivraisons());
 				     
 		
@@ -195,7 +195,7 @@ public class AccueilController{
 	
 		
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-		sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
+		sceneGestures.rendreCanvasZoomable(this);
 	    
 	    GenererFeuille.setDisable(false);
 	    VueDescriptif.getChildren().clear();
@@ -326,7 +326,7 @@ public class AccueilController{
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
-		sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
+		sceneGestures.rendreCanvasZoomable(this);
 	}
 	
 	
