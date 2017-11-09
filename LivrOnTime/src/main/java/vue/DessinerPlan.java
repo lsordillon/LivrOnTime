@@ -44,7 +44,8 @@ public class DessinerPlan {
 	private PannableCanvas canvas;
 	private HashMap<Long,Circle> dessine;
 	private ArrayList<Text> chiffres;
-	
+
+
 
 	private MouseGestures mg;
 	private SceneGestures sg;
@@ -196,7 +197,6 @@ public class DessinerPlan {
     		ArrayList<Livraison> livraisons = dl.getLivraisons();
     		Group groupe = new Group();
     		
-
     		Circle cercle = dessine.get(dl.getAdresseEntrepot().getId());
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(COULEURENTREPOT);

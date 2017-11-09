@@ -169,6 +169,10 @@ public class Tournee {
 		
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
+
+
+			
+			
 			  if(DPH==null || FPH==null){
 				  liv=new Livraison(liv.getDuree(),liv.getDestination());
 			  }else{
@@ -178,7 +182,8 @@ public class Tournee {
 			  liv.setFinPlageHoraire(FPH);
 			  }
 			  this.getListeLivraison().set(i, liv);
-			  System.out.println("444444"+liv.getDebutPlageHoraire());
+			 
+
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");

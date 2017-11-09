@@ -333,8 +333,13 @@ public class DescriptifController {
 		while (it.hasNext()) {
 			Livraison courante = it.next();
 			if(courante.getDestination()==inter) {
+
 				
+				
+				//listView.get
+
 				listView.getSelectionModel().select(data.indexOf(courante));
+
 				
 			}
 		}

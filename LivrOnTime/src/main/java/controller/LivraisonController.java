@@ -54,11 +54,14 @@ public class LivraisonController implements Initializable {
 			comboDeHeur.getItems().add(i);
 			comboAHeur.getItems().add(i);
 		}
-		
+		comboAHeur.getItems().add(null);
+		comboDeHeur.getItems().add(null);
 		for(int i=0;i<60;i++){
 			comboDeMinute.getItems().add(i);
 			comboAMinute.getItems().add(i);
 		}
+		comboDeMinute.getItems().add(null);
+		comboAMinute.getItems().add(null);
 		boolean exist = false;
 		if(intersection!=null){
 			adresseField.setText(AccueilController.getAdresse(intersection));
