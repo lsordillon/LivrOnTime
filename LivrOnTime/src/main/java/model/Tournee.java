@@ -134,6 +134,8 @@ public class Tournee {
 			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
 			for(int i=0;i<getItineraire().size();i++){
 				Chemin chemin=getItineraire().get(i);
+				System.out.println("Intersection" + inter.getId());
+				System.out.println("Chemin" + chemin.getDestination().getId());
 					if(chemin.getDestination().getId()==inter.getId()){
 						origine=chemin.getOrigine();
 						nouvelItineraire.remove(chemin);
