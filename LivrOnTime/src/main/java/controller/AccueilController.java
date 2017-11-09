@@ -68,7 +68,7 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCommandes;
+    private static ListeDeCdes listeDeCommandes = new ListeDeCdes();
 	private static Plan plan;
 	private static Tournee tournee;
 	private DessinerPlan dessinerPlan;
