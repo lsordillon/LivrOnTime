@@ -133,6 +133,7 @@ public class LivraisonController implements Initializable {
 	}
 	
 	public void SupprimerLivraison(){
+		try{
 		plan = aController.getPlan();
 		listeDeCdes=aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
@@ -148,12 +149,19 @@ public class LivraisonController implements Initializable {
 			}
 		}
 		aController.update();
+		}catch(Exception e){
+		     Stage stage = (Stage) ajoutBtn.getScene().getWindow();
+		     stage.close();
+			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
+             alert.showAndWait();
+		}
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
 	}
 	
 	
 	public void AjouterLivraison(){
+		try{
 		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAHeur.getSelectionModel().getSelectedItem().equals("--") && !comboAMinute.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().getSelectedItem().equals("--")  && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().getSelectedItem().equals("--")  && !comboDeMinute.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().getSelectedItem().equals("--")){			
 		Date debut = new java.util.Date();
 		Date fin = new java.util.Date();
@@ -178,6 +186,12 @@ public class LivraisonController implements Initializable {
 				aController.setListeDeCdes(listeDeCdes);	
 		}
 		aController.update();
+		}catch(Exception e){
+			 Stage stage = (Stage) ajoutBtn.getScene().getWindow();
+			 stage.close();
+			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
+             alert.showAndWait();
+		}
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();
 	}
