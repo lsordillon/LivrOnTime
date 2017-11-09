@@ -303,6 +303,7 @@ public class DescriptifController {
 					}
 				
 					dessinerPlan.passerChiffresDevant();
+					
 				}
 			});
 		}
