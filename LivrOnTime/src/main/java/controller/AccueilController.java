@@ -173,7 +173,7 @@ public class AccueilController{
 			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(demandeLiv.getLivraisons(), plan, null));
 			   		
 			   		vBox2.setSpacing(40);
-			   		vBox2.setLayoutX(30);
+			   		vBox2.setLayoutX(70);
 			        vBox2.setLayoutY(50);
 				    VueDescriptif.getChildren().add(vBox2);
 				    CalculTournee.setDisable(false);

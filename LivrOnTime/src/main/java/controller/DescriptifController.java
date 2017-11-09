@@ -171,7 +171,7 @@ public class DescriptifController {
 						    		}
 						    		txtDureeTrajet.setFill(Color.BLUE);
 						    		
-						    		//Affichage de la durée du trajet avec la flèche
+						    		//Affichage de la durï¿½e du trajet avec la flï¿½che
 						    		
 						    		Image imageFleche=null;
 						    		ImageView vueFleche=null;
@@ -306,7 +306,7 @@ public class DescriptifController {
 
 
 		});
-
+		
 		interaction(listView);
 		return listView;
 	}
