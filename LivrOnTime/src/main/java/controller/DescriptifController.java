@@ -21,34 +21,45 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
 import model.Tournee;
 import model.Troncon;
+import model.Chemin;
+
 import vue.DessinerPlan;
+
 
 public class DescriptifController {
 	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
 
-	public Plan plan;
-	 ObservableList<Livraison> data = FXCollections.observableArrayList();
-	 final ListView<Livraison> listView;
+	private Plan plan;
+	private Tournee tournee;
+	private DessinerPlan dessinerPlan;
+	private Chemin cheminSelectionne;
+	 
+	ObservableList<Livraison> data = FXCollections.observableArrayList();
+	final ListView<Livraison> listView;
 	   
 	   
-	   public DescriptifController() {
+	public DescriptifController(DessinerPlan dessinerPlan) {
+		   this.dessinerPlan = dessinerPlan;
 		   listView = new ListView<Livraison>(data);
-	   }
+	}
+	
 	
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
 		this.plan = plan;
+		this.tournee = tournee;
 		
 		data.clear();
-
-
+		
 		data.addAll(livr);
 
 		listView.setCellFactory(new Callback<ListView<Livraison>, ListCell<Livraison>>() {
@@ -57,49 +68,49 @@ public class DescriptifController {
 				return new ListCell<Livraison>() {
 
 			@Override
-					protected void updateItem(Livraison item, boolean bln) {
+					protected void updateItem(Livraison livr, boolean bln) {
 						String plageHoraire;
 						
 
-						SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm");
+						SimpleDateFormat dureeHm = new SimpleDateFormat("HH:mm");
 						
-						if (item != null) {
-							if (item.getDebutPlageHoraire()!= null && item.getFinPlageHoraire()!=null){
-								String debut = dureeHms.format(item.getDebutPlageHoraire());
-								String fin = dureeHms.format(item.getFinPlageHoraire());
+						if (livr != null) {
+							if (livr.getDebutPlageHoraire()!= null && livr.getFinPlageHoraire()!=null){
+								String debut = dureeHm.format(livr.getDebutPlageHoraire());
+								String fin = dureeHm.format(livr.getFinPlageHoraire());
 								plageHoraire=debut +" - "+fin + "        ";
 							}else {
 								plageHoraire="";
 							}
 							
-							plageHoraire+= "Duree livraison : "+item.getDuree()/60+" min";
+							plageHoraire+= "Duree livraison : "+livr.getDuree()/60+" min";
 							
 							
 							
-							super.updateItem(item, bln);
+							super.updateItem(livr, bln);
 							 //setItem(item);
 			                    
 
-							VBox vBox = new VBox(new Text(getAdresse(item.getDestination())), new Text(plageHoraire));
+							VBox vBox = new VBox(new Text(getAdresse(livr.getDestination())), new Text(plageHoraire));
 							
 							//Affichage des temps de passage
 							if (tournee!=null) {
 								for(Livraison l : tournee.getListeLivraison()){
-									if(l.toString().equals(item.toString())){
-										item = l;
+									if(l.toString().equals(livr.toString())){
+										livr = l;
 									}
 								}
 								String heureArrivee="";
 								String attente="";
-								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(item)];
-						    	heureArrivee="Arrivee a "+dureeHms.format(tmp[0]);
-						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
+								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(livr)];
+						    	heureArrivee="Arrivee a "+dureeHm.format(tmp[0]);
+						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHm.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 
 						    	Text txtHeureArrivee;
 						    	
-						    	int valeurPH = tournee.VerifierPlagesHorairesUneLiv(item);
+						    	int valeurPH = tournee.VerifierPlagesHorairesUneLiv(livr);
 						    	
-						    	if (item.getFinPlageHoraire()==null) {
+						    	if (livr.getFinPlageHoraire()==null) {
 						    		txtHeureArrivee = new Text(heureArrivee);
 						    		txtHeureArrivee.setFill(Color.BLACK);
 						    	}
@@ -116,7 +127,7 @@ public class DescriptifController {
 									if (valeurPH == 2) { //attente
 										txtHeureArrivee.setFill(Color.PURPLE);
 									}
-									if (valeurPH == 3) { //plage horaire violee
+									if (valeurPH == 3) { // plage horaire violee
 										txtHeureArrivee.setFill(Color.RED);
 									}
 									if (valeurPH == 4) { //erreur
@@ -124,19 +135,21 @@ public class DescriptifController {
 									}
 						    	}
 						    	
+
 						    	
-						    	//2e vBox qui affiche la durée et l'heure d'arrivée
+						    	//2e vBox qui affiche la durï¿½e et l'heure d'arrivï¿½e
+
 						    	Text txtDureeTrajet;
 						    	Text spaceTxt = new Text("|");
 						    	Text spaceTxt2 = new Text("|");
 						    	
-						    	int index = tournee.getListeLivraison().indexOf(item);
+						    	int index = tournee.getListeLivraison().indexOf(livr);
 						    	if (index ==0) {
-						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHms.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
+						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
 						    	}
 						    	else {
 						    		long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
-						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHms.format(new Date(dureeTrajet))+" min");
+						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
 							    	
 						    	}
 						    	txtDureeTrajet.setFill(Color.BLUE);
@@ -250,35 +263,54 @@ public class DescriptifController {
 	
 	//Methode pour retourner l'adresse d'une intersection
 	public String getAdresse(Intersection item){
-		  for(Troncon troncon : plan.getTroncons()){
-          	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
+		for(Troncon troncon : plan.getTroncons()){
+        	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
           		return troncon.getNomRue();
-                  }
-          }  
+           	}
+        }  
 		  return "";
 	}
 	
 	
 	public void interaction(final ListView<Livraison> listView) {
-		listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
-			public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,
-					Livraison newValue) {
-				if (listView.getSelectionModel().getSelectedItem() != null) {
-					if (oldValue != null){
-						((Circle) DessinerPlan.dessine.get(oldValue.getDestination().getId())).setFill(Color.BLUE);
-						((Circle) DessinerPlan.dessine.get(oldValue.getDestination().getId())).setStroke(Color.BLUE);
+		
+		if (tournee!=null) {
+			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
+				
+				public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {				
+					if (listView.getSelectionModel().getSelectedItem() != null) {
+						if (oldValue != null){
+							dessinerPlan.actualiserCouleurPoints(tournee);					
+							
+							for(Troncon t: cheminSelectionne.getTroncons()){
+								dessinerPlan.surlignerTroncon(t,Color.GREEN);
+							}
+							
+						}
+						
+						
+						long id = newValue.getDestination().getId();
+						for ( Chemin c : tournee.getItineraire()) {
+							if (c.getDestination().getId()==id){
+								cheminSelectionne = c;
+								
+								for(Troncon t: c.getTroncons()){
+					    			dessinerPlan.surlignerTroncon(t,Color.YELLOW);
+					    		}
+							}
+						}
+						
+						((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
+						((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
 					}
-					long id = newValue.getDestination().getId();
-					((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
-					((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
-
+				
+					dessinerPlan.passerChiffresDevant();
 				}
-			}
-
-
-
-		});
+			});
+		}
 	}
+	
+	
 	public void setDraggable(ListView<String> list){
 		
 	}

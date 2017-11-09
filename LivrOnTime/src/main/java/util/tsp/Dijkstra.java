@@ -47,17 +47,17 @@ public class Dijkstra {
 			
 			ArrayList <Troncon> versVoisins = ptDepart.getTronconsVersVoisins();
 			Iterator<Troncon> it = versVoisins.iterator();
-			Troncon nextTroncon;
-			Intersection nextIntersection;
+			Troncon tronconSuivant;
+			Intersection intersectionSuivante;
 			
 			//Relachement des arcs pour le premier point
 			while(it.hasNext()) {
-				nextTroncon = it.next();
-				nextIntersection = nextTroncon.getDestination();
-				sommetsGris.add(nextIntersection);
-				sommetsBlancs.remove(nextIntersection);
-				nextIntersection.setPredecesseur(ptDepart);
-				nextIntersection.setDistance(nextTroncon.getLongueur());
+				tronconSuivant = it.next();
+				intersectionSuivante = tronconSuivant.getDestination();
+				sommetsGris.add(intersectionSuivante);
+				sommetsBlancs.remove(intersectionSuivante);
+				intersectionSuivante.setPredecesseur(ptDepart);
+				intersectionSuivante.setDistance(tronconSuivant.getLongueur());
 			}
 			
 			sommetsGris.remove(ptDepart);
@@ -83,17 +83,17 @@ public class Dijkstra {
 				
 				//Relachement des arcs pour le noeud courrant
 				while(it.hasNext()) {
-					nextTroncon = it.next();
-					nextIntersection = nextTroncon.getDestination();
-					if (sommetsBlancs.contains(nextIntersection)) {
-						sommetsGris.add(nextIntersection);
-						sommetsBlancs.remove(nextIntersection);
+					tronconSuivant = it.next();
+					intersectionSuivante = tronconSuivant.getDestination();
+					if (sommetsBlancs.contains(intersectionSuivante)) {
+						sommetsGris.add(intersectionSuivante);
+						sommetsBlancs.remove(intersectionSuivante);
 					}
-					if (sommetsGris.contains(nextIntersection)) {
-						double distance = courant.getDistance() + nextTroncon.getLongueur();
-						if(distance < nextIntersection.getDistance()) {
-							nextIntersection.setPredecesseur(courant);
-							nextIntersection.setDistance(distance);
+					if (sommetsGris.contains(intersectionSuivante)) {
+						double distance = courant.getDistance() + tronconSuivant.getLongueur();
+						if(distance < intersectionSuivante.getDistance()) {
+							intersectionSuivante.setPredecesseur(courant);
+							intersectionSuivante.setDistance(distance);
 						}
 					}
 				}
@@ -137,12 +137,12 @@ public class Dijkstra {
 			Intersection suivant = it.next();
 			double coutMin = suivant.getDistance();
 			
-			Intersection next;
+			Intersection intersectionSuivante;
 			while(it.hasNext()) {
-				next = it.next();
-				if (next.getDistance()<coutMin){
-					coutMin = next.getDistance();
-					suivant = next;
+				intersectionSuivante = it.next();
+				if (intersectionSuivante.getDistance()<coutMin){
+					coutMin = intersectionSuivante.getDistance();
+					suivant = intersectionSuivante;
 				}
 			}
 			

@@ -9,34 +9,33 @@ import model.Tournee;
 public class CdeModificationPH implements Commande{
 	
 	private Plan plan;
-	private Date DPH;
-	private Date FPH;
+	private Date debutPH; //debut plage horaire
+	private Date finPH; //fin plage horaire
 	private Tournee tournee;
 	private Livraison livraison;
-    private Date DPH_A=livraison.getDebutPlageHoraire();
-    private Date FPH_A=livraison.getFinPlageHoraire();
-    
+    private Date debutPH_A=livraison.getDebutPlageHoraire();
+    private Date finPH_A=livraison.getFinPlageHoraire();
     
     
     
 	public CdeModificationPH(Plan plan, Tournee tournee, Livraison livraison, Date dPH, Date fPH) {
 		super();
 		this.plan = plan;
-		DPH = dPH;
-		FPH = fPH;
+		debutPH = dPH;
+		finPH = fPH;
 		this.tournee = tournee;
 		this.livraison = livraison;
 	}
 
 	@Override
 	public void redoCde() {
-		tournee.ModifierLivraison(plan, livraison, DPH,FPH);
+		tournee.ModifierLivraison(plan, livraison, debutPH,finPH);
 		
 	}
 
 	@Override
 	public void undoCde() {
-		tournee.ModifierLivraison(plan,livraison, DPH_A,FPH_A);
+		tournee.ModifierLivraison(plan,livraison, debutPH_A,finPH_A);
 	}
 
 }

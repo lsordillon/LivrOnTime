@@ -13,7 +13,7 @@ public abstract class TemplateTSP implements TSP {
 		return tempsLimiteAtteint;
 	}
 	
-	public void chercheSolution(long tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] time){
+	public void chercheSolution(long tpsLimite, int nbSommets, long[][] cout, long[] duree,long[][] temps){
 		
 		
 		tempsLimiteAtteint = false;
@@ -23,7 +23,7 @@ public abstract class TemplateTSP implements TSP {
 		for (int i=1; i<nbSommets; i++) nonVus.add(i);
 		ArrayList<Integer> vus = new ArrayList<Integer>(nbSommets);
 		vus.add(0); // le premier sommet visite est 0
-		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite,time);
+		branchAndBound(0, nonVus, vus, 0, cout, duree, System.currentTimeMillis(), tpsLimite,temps);
 	}
 	
 	public Integer getMeilleureSolution(int i){
@@ -59,7 +59,7 @@ public abstract class TemplateTSP implements TSP {
 	
 	/**
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP
-	 * @param sommetCrt le dernier sommet visite
+	 * @param sommetCourant le dernier sommet visite
 	 * @param nonVus la liste des sommets qui n'ont pas encore ete visites
 	 * @param vus la liste des sommets visites (y compris sommetCrt)
 	 * @param coutVus la somme des couts des arcs du chemin passant par tous les sommets de vus + la somme des duree des sommets de vus
@@ -68,33 +68,33 @@ public abstract class TemplateTSP implements TSP {
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */	
-	 void branchAndBound(int sommetCrt, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, long tpsLimite, long[][] time){
+	 void branchAndBound(int sommetCourant, ArrayList<Integer> nonVus, ArrayList<Integer> vus, long coutVus, long[][] cout, long[] duree, long tpsDebut, long tpsLimite, long[][] temps){
 		 if (System.currentTimeMillis() - tpsDebut > tpsLimite){
 			 tempsLimiteAtteint = true;
 			 System.err.println("Temps limite atteint !");
 			 return;
 		 }
 	    if (nonVus.size() == 0){ // tous les sommets ont ete visites
-	    	coutVus += cout[sommetCrt][0];
+	    	coutVus += cout[sommetCourant][0];
 	    	if (coutVus < coutMeilleureSolution){ // on a trouve une solution meilleure que meilleureSolution
 	    		vus.toArray(meilleureSolution);
 	    		coutMeilleureSolution = coutVus;
 	    	}
-	    } else if (coutVus + bound(sommetCrt, nonVus, cout, duree) < coutMeilleureSolution){
-	        Iterator<Integer> it = iterator(sommetCrt, nonVus, cout, duree);
+	    } else if (coutVus + bound(sommetCourant, nonVus, cout, duree) < coutMeilleureSolution){
+	        Iterator<Integer> it = iterator(sommetCourant, nonVus, cout, duree);
 	        while (it.hasNext()){
 	        	Integer prochainSommet = it.next();
 	        	vus.add(prochainSommet);
 	        	nonVus.remove(prochainSommet);
 
 	        	//Code simple permettant de savoir si la plage horaire est respect�e
-	        	if ((time[prochainSommet][1])>coutVus+cout[sommetCrt][prochainSommet]) {
-		        	if ((time[prochainSommet][0])>coutVus+cout[sommetCrt][prochainSommet]) {
+	        	if ((temps[prochainSommet][1])>coutVus+cout[sommetCourant][prochainSommet]) {
+		        	if ((temps[prochainSommet][0])>coutVus+cout[sommetCourant][prochainSommet]) {
 
-	    				branchAndBound(prochainSommet, nonVus, vus,time[prochainSommet][0], cout, duree, tpsDebut, tpsLimite,time);
+	    				branchAndBound(prochainSommet, nonVus, vus,temps[prochainSommet][0], cout, duree, tpsDebut, tpsLimite,temps);
 	    			}
 	    			else {
-	    				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,time);
+	    				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCourant][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,temps);
 	    			}
 	        	}
 

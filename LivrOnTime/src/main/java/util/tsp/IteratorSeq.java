@@ -11,9 +11,9 @@ public class IteratorSeq implements Iterator<Integer> {
 	/**
 	 * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
 	 * @param nonVus
-	 * @param sommetCrt
+	 * @param sommetCourant
 	 */
-	public IteratorSeq(Collection<Integer> nonVus, int sommetCrt){
+	public IteratorSeq(Collection<Integer> nonVus, int sommetCourant){
 		this.candidats = new Integer[nonVus.size()];
 		nbCandidats = 0;
 		for (Integer s : nonVus){

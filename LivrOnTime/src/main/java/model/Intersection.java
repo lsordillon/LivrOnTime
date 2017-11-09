@@ -12,40 +12,32 @@ public class Intersection implements Serializable{
 	private double distance;
 	
 
-	public Intersection(long id, int x, int y) {
-		this.id = id;
-		this.x = x;
-		this.y = y;
-		tronconsVersVoisins = new ArrayList<Troncon>();
-	}
 	public Intersection(){
 		
 	}
 	
+	public Intersection(long id, int x, int y) {
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.tronconsVersVoisins = new ArrayList<Troncon>();
+	}	
 	
 	public Intersection getPredecesseur() {
 		return predecesseur;
 	}
-
-
-
+	
 	public void setPredecesseur(Intersection predecesseur) {
 		this.predecesseur = predecesseur;
 	}
-
-
 
 	public double getDistance() {
 		return distance;
 	}
 
-
-
 	public void setDistance(double distance) {
 		this.distance = distance;
 	}
-
-
 
 	public ArrayList<Troncon> getTronconsVersVoisins() {
 		return this.tronconsVersVoisins;
@@ -57,7 +49,6 @@ public class Intersection implements Serializable{
 	}
 
 	public String toString() {
-		
 		String affichage = "[ID ="+id+", NbTroncons"+tronconsVersVoisins.size()+"]";
 		return affichage;
 	}
@@ -90,6 +81,4 @@ public class Intersection implements Serializable{
 	public void setY(int y) {
 		this.y = y;
 	}
-	
-	
 }

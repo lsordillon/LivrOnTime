@@ -21,17 +21,18 @@ public class CdeModificationDuree implements Commande{
 		this.livraison = livraison;
 	}
 
+	
 	@Override
 	public void redoCde() {
 		tournee.ModifierLivraison(plan, livraison, duree);
 		
 	}
 
+	
 	@Override
 	public void undoCde() {
 		tournee.ModifierLivraison(plan,livraison, dureeA);
 		
 	}
 	
-
 }

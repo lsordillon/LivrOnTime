@@ -8,7 +8,7 @@ public class IteratorMinFirst implements Iterator<Integer> {
 	private Integer[] candidats;
 	private int nbCandidats;
 
-	public IteratorMinFirst(Collection<Integer> nonVus, int sommetCrt, long cout[][]) {
+	public IteratorMinFirst(Collection<Integer> nonVus, int sommetCourant, long cout[][]) {
 		// tri des sommets par couts croissant
 		Iterator<Integer> nonVisite = nonVus.iterator();
 		Integer temp;
@@ -17,19 +17,19 @@ public class IteratorMinFirst implements Iterator<Integer> {
 		candidats[0] = nonVisite.next().intValue();
 
 		while (nonVisite.hasNext()) {
-			int crt = nonVisite.next().intValue();
+			int courant = nonVisite.next().intValue();
 			for (int i = 0; i < nbCandidats + 1; i++) {
 
-				if (cout[sommetCrt][crt] > cout[sommetCrt][candidats[i]]) {
+				if (cout[sommetCourant][courant] > cout[sommetCourant][candidats[i]]) {
 
-					temp = crt;
-					crt = candidats[i];
+					temp = courant;
+					courant = candidats[i];
 					candidats[i] = temp;
 
 				}
 
 			}
-			candidats[++nbCandidats] = crt;
+			candidats[++nbCandidats] = courant;
 		}
 		nbCandidats++;
 	}
