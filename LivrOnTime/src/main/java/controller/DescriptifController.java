@@ -6,12 +6,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.ClipboardContent;
@@ -94,7 +97,6 @@ public class DescriptifController {
 							
 							VBox vBox = new VBox(new Text(getAdresse(livr.getDestination())), new Text(plageHoraire));
 							
-							//vBox.setStyle("-fx-background-color: #457E31");
 							
 							
 							//Affichage des temps de passage
@@ -160,8 +162,8 @@ public class DescriptifController {
 						    		spaceTxt.setFill(Color.BLUE);
 						    		spaceTxt2.setFill(Color.BLUE);
 						    		VBox vBox2 = new VBox(new VBox(spaceTxt,txtDureeTrajet,spaceTxt2),vBox,new VBox(txtHeureArrivee));
-						    		vBox2.setId(""+livr.getDestination().getId());
-						    		//	vBox2.setStyle("-fx-background-color: #457E31");
+						    		
+						    		
 						    		//vBox2.setSpacing(10); (????)
 						    		setGraphic(vBox2);
 							}
@@ -323,17 +325,12 @@ public class DescriptifController {
 		
 	}
 	
-	public void setSurlignage (Intersection inter) {
-		Node v=listView.lookup(""+inter.getId()); // renvoie null ?
-		//getSelectionModel
-		System.out.println(v);
-		//Node v2=v.lookup(""+inter.getId());
-		//v2.setStyle("-fx-background-color: #457E31");
+	public void setSelection (Intersection inter) {
+		
 		Iterator<Livraison> it=data.iterator();
 		while (it.hasNext()) {
 			Livraison courante = it.next();
 			if(courante.getDestination()==inter) {
-				
 				listView.getSelectionModel().select(data.indexOf(courante));
 				
 			}

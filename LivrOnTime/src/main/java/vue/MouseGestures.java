@@ -63,7 +63,7 @@ public class MouseGestures {
 	        }
 	        Tooltip tronconSurvole = new Tooltip(adresse);
 	       
-	        noeud.setOnMouseEntered(new EventHandler<MouseEvent>() {
+	        noeud.setOnMouseClicked(new EventHandler<MouseEvent>() {
 	             @Override
 	             public void handle(MouseEvent t) {
 	                  Node  node =(Node)t.getSource();
@@ -85,7 +85,6 @@ public class MouseGestures {
 	EventHandler<MouseEvent> circleOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent t) {
-       		System.out.println("enter");
        		double orgSceneX = t.getSceneX();
             double orgSceneY = t.getSceneY();
             if (t.getSource() instanceof Circle) {
@@ -100,8 +99,7 @@ public class MouseGestures {
             		}
                 }
                 Intersection intersectionClicked = plan.getIntersections().get(key);
-                System.out.println("Intersection ID "+intersectionClicked.getId());
-                accueilController.getdController().setSurlignage(intersectionClicked);
+                accueilController.getdController().setSelection(intersectionClicked);
             }
           }
       };
@@ -111,6 +109,7 @@ public class MouseGestures {
           public void handle(MouseEvent t) {             
                //tp.hide();
        	   		System.out.println("exit");
+       	   		//accueilController.update(null);
              }
          };
 
