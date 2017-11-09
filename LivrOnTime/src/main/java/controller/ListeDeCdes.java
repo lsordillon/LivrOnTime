@@ -34,8 +34,11 @@ public class ListeDeCdes {
 		if (indiceCourant >= 0){
 			Commande commande = liste.get(indiceCourant);
 			indiceCourant--;
+			
+			//return 
 			commande.undoCde();
 		}
+		
 	}
 	
 
