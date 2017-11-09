@@ -13,18 +13,22 @@ public class CdeModificationPH implements Commande{
 	private Date finPH; //fin plage horaire
 	private Tournee tournee;
 	private Livraison livraison;
-    private Date debutPH_A=livraison.getDebutPlageHoraire();
-    private Date finPH_A=livraison.getFinPlageHoraire();
+
+    private Date DPH_A,FPH_A;
+    
+
     
     
     
-	public CdeModificationPH(Plan plan, Tournee tournee, Livraison livraison, Date dPH, Date fPH) {
+	public CdeModificationPH(Plan plan, Tournee tournee, Livraison livraison,Date DPH_A,Date FPH_A) {
 		super();
 		this.plan = plan;
-		debutPH = dPH;
-		finPH = fPH;
+		this.debutPH = livraison.getDebutPlageHoraire();
+		this.finPH = livraison.getFinPlageHoraire();
 		this.tournee = tournee;
 		this.livraison = livraison;
+		this.DPH_A=DPH_A;
+		this.FPH_A=FPH_A;
 	}
 
 	@Override
@@ -35,7 +39,7 @@ public class CdeModificationPH implements Commande{
 
 	@Override
 	public void undoCde() {
-		tournee.ModifierLivraison(plan,livraison, debutPH_A,finPH_A);
+		tournee.ModifierLivraison(plan,livraison, DPH_A,FPH_A);
 	}
 
 }

@@ -35,6 +35,7 @@ public class Tournee {
 		tempsPassage = new Date[itineraire.size()][2];
 		
 		for(int i=0;i<itineraire.size();i++){
+			System.out.println("itineraire  "+itineraire.get(i));
 			for(int j=0;j<itineraire.get(i).getTroncons().size();j++){
 				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 			}
@@ -136,7 +137,6 @@ public class Tournee {
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
 			liv.setDuree(duree);
-			this.getListeLivraison().set(i, liv);
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
@@ -225,6 +225,7 @@ public class Tournee {
 		else {
 			valeurPH = 0;
 		}
+		
 		
 		return valeurPH;
 
