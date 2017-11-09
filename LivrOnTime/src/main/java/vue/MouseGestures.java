@@ -67,6 +67,7 @@ public class MouseGestures {
 	             @Override
 	             public void handle(MouseEvent t) {
 	                  Node  node =(Node)t.getSource();
+	                  
 	                  tronconSurvole.show(node, noeud.getLayoutX()+t.getSceneX(), noeud.getLayoutY()+t.getSceneY());
 	                }
 	            });

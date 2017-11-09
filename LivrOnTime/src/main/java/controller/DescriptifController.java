@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +12,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.ClipboardContent;
@@ -25,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import model.Intersection;
@@ -239,6 +244,30 @@ public class DescriptifController {
 					                event.setDropCompleted( success );
 					                event.consume();
 					            }} );
+					            setOnMouseClicked(new EventHandler<MouseEvent>(){
+			                        @Override
+			                        public void handle(MouseEvent event) {
+			                        	if (event.getClickCount() == 2) {
+			                        	Livraison livraison = listView.getSelectionModel().getSelectedItem();
+			                        	LivraisonController.setIntersection(livraison.getDestination());
+			                           	if(livraison != null){
+			        		            	Parent root;
+			        				        try {
+			        				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
+			        				            Stage stage = new Stage();
+			        				            stage.setTitle("Modifier Livraison");
+			        				            stage.setAlwaysOnTop(true);
+			        				            stage.setScene(new Scene(root));
+			        				            
+			        				            stage.show();
+			        				            
+			        				        }
+			        				        catch (IOException e) {
+			        				            e.printStackTrace();
+			        				        }
+			        	                	
+			        	            	} 
+			                        }}});
 						}
 
 
@@ -333,12 +362,9 @@ public class DescriptifController {
 		while (it.hasNext()) {
 			Livraison courante = it.next();
 			if(courante.getDestination()==inter) {
-
-				
-				
 				//listView.get
-
-				listView.getSelectionModel().select(data.indexOf(courante));
+				
+				
 
 				
 			}
