@@ -93,7 +93,7 @@ public class LivraisonController implements Initializable {
 		Date debut = new Date();
 		Date fin = new Date();
 		
-		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){			
+		if(!comboAHeur.getSelectionModel().isEmpty() && comboAHeur.getSelectionModel().getSelectedItem()!=null && !comboAMinute.getSelectionModel().isEmpty() && comboAMinute.getSelectionModel().getSelectedItem()!=null  && !comboDeHeur.getSelectionModel().isEmpty() && comboDeHeur.getSelectionModel().getSelectedItem()!=null  && !comboDeMinute.getSelectionModel().isEmpty() && comboDeMinute.getSelectionModel().getSelectedItem()!=null){			
 			debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
 			debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());			
 			fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
@@ -148,7 +148,7 @@ public class LivraisonController implements Initializable {
 	
 	public void AjouterLivraison(){
 		
-		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){
+		if(!comboAHeur.getSelectionModel().isEmpty() && comboAHeur.getSelectionModel().getSelectedItem()!=null && !comboAMinute.getSelectionModel().isEmpty() && comboAMinute.getSelectionModel().getSelectedItem()!=null  && !comboDeHeur.getSelectionModel().isEmpty() && comboDeHeur.getSelectionModel().getSelectedItem()!=null  && !comboDeMinute.getSelectionModel().isEmpty() && comboDeMinute.getSelectionModel().getSelectedItem()!=null){	
 		Date debut = new java.util.Date();
 		debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
 		debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());
