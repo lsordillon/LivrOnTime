@@ -1,6 +1,7 @@
 package controller;
 
 
+import java.awt.Paint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,9 +24,11 @@ import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-
 import javafx.scene.control.Label;
-
+import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -61,6 +64,7 @@ public class AccueilController{
 	public Button GenererFeuille; 
 	public Button undoButton;
 	public Button redoButton;
+	public HBox legendeText;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
@@ -103,7 +107,7 @@ public class AccueilController{
 					VuePlan.getChildren().clear();
 					VuePlan.getChildren().add(group);
 					// VuePlan.setStyle("-fx-background-color: #f7f7d4");
-					sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
+					sceneGestures.rendreCanvasZoomable(this);
 					ChargerLivraison.setDisable(false);
 					
 			    }catch(Exception e){
@@ -158,7 +162,7 @@ public class AccueilController{
 					demandeLiv = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 					LivraisonController.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
-				    sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);			    
+				    sceneGestures.rendreCanvasZoomable(this);			    
 				    //ListerLivraisons(dl.getLivraisons());
 				     
 		
@@ -192,10 +196,10 @@ public class AccueilController{
 	public void CalculTournee(ActionEvent actionEvent) {
 		tournee=plan.calculerLaTournee(demandeLiv);
 		tournee.initTempsPassage();
-	
-		
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-		sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
+		VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
+		VuePlan.getChildren().add(vBoxPlan);
+
+		sceneGestures.rendreCanvasZoomable(this);
 	    
 	    GenererFeuille.setDisable(false);
 	    VueDescriptif.getChildren().clear();
@@ -212,6 +216,9 @@ public class AccueilController{
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
 		CalculTournee.setDisable(true);
+		legendeText.setVisible(true);
+		//legendeText.setBackground(new Background(new BackgroundFill(Paint.OPAQUE, CornerRadii.EMPTY, Ins)));
+		
 	}
 	
 	
@@ -246,6 +253,7 @@ public class AccueilController{
 	    ChargerLivraison.setDisable(true);
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
+	    legendeText.setVisible(false);
 	    
 	    plan=null;
 	    tournee=null;
@@ -326,7 +334,7 @@ public class AccueilController{
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
-		sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
+		sceneGestures.rendreCanvasZoomable(this);
 	}
 	
 	
