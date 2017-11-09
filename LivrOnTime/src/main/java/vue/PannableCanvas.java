@@ -6,24 +6,23 @@ import javafx.scene.layout.Pane;
 
 public class PannableCanvas extends Pane {
 
-    DoubleProperty myScale = new SimpleDoubleProperty(1.0);
+    DoubleProperty echelle = new SimpleDoubleProperty(1.0);
 
     public PannableCanvas() {
         setPrefSize(600, 600);
      
         // add scale transform
-        scaleXProperty().bind(myScale);
-        scaleYProperty().bind(myScale);
+        scaleXProperty().bind(echelle);
+        scaleYProperty().bind(echelle);
         
     }
 
-
     public double getScale() {
-        return myScale.get();
+        return echelle.get();
     }
 
     public void setScale( double scale) {
-        myScale.set(scale);
+    	echelle.set(scale);
     }
 
     public void setPivot( double x, double y) {
