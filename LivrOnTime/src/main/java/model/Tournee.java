@@ -179,10 +179,9 @@ public class Tournee {
 		// valeur 0 : pas d'attente et pas tendu --> bleu
 		// valeur 1 : pas d'attente et tendu --> orange
 		// valeur 2 : attente --> PURPLE
-		// valeur 3 : plage horaire violee --> rouge 
-		// valeur 4 : test d'erreur
+		// valeur 3 : plage horaire violee --> rouge
 
-		int valeurPH = 4; 
+		int valeurPH = 0; 
 
 		for(Livraison l : getListeLivraison()){
 			if(l.toString().equals(liv.toString())){

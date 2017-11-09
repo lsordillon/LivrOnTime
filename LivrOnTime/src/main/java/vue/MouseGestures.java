@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import model.Intersection;
 import model.Plan;
-
+import model.Troncon;
 import controller.AccueilController;
 import controller.LivraisonController;
 import javafx.event.EventHandler;
@@ -16,10 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 
@@ -31,8 +33,11 @@ public class MouseGestures {
     private long cle;
     private Paint couleurSelectionne;
 	private Circle cercleSelectionne;
+	private Tooltip tronconSurvole;
 	private PannableCanvas canvas;
 	private AccueilController accueilController;
+	
+	final static Paint COULEURPOINTSELECTIONNE = Color.CYAN;
 
     public MouseGestures (AccueilController accueilController) {
     	this.accueilController = accueilController;
@@ -47,6 +52,38 @@ public class MouseGestures {
 		node.setOnMouseExited(circleOnMouseExitedEventHandler);
 	}
 	
+	public void rendreLigneSurvolable(Node noeud, Intersection D, Intersection O) {
+		if (noeud instanceof Line) {
+			String adresse = "";
+	        for(Troncon troncon : accueilController.getPlan().getTroncons()){
+	        		if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
+	        			adresse = troncon.getNomRue();
+	        		} 		
+	        }
+	        Tooltip tronconSurvole = new Tooltip(adresse);
+	        
+	        noeud.setOnMouseEntered(lineOnMouseEnteredEventHandler);
+			noeud.setOnMouseExited(lineOnMouseExitedEventHandler);
+		}	
+	}
+	
+	//Event handler du survolement de la ligne
+	EventHandler<MouseEvent> lineOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent t) {
+        	 Node noeud = (Node) t.getSource();
+             tronconSurvole.show(noeud, noeud.getLayoutX()+t.getSceneX(), noeud.getLayoutY()+t.getSceneY());
+             }
+     };
+        
+     EventHandler<MouseEvent> lineOnMouseExitedEventHandler = new EventHandler<MouseEvent>() {
+    	 @Override
+         public void handle(MouseEvent t) {
+         	 Node noeud = (Node) t.getSource();
+              tronconSurvole.hide();
+              }
+      };
+      
 	//Event handler du survolement du cercle
 	EventHandler<MouseEvent> circleOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
 		@Override
@@ -59,10 +96,10 @@ public class MouseGestures {
                 double orgTranslateX = p.getCenterX();
                 double orgTranslateY = p.getCenterY();
                 long key=0;
-                for(Circle circle : DessinerPlan.dessine.values()){
+                for(Circle circle : accueilController.getDessinerPlan().getDessine().values()){
                 		
             		if(circle.equals(p)){
-            			key = getKeyByValue(DessinerPlan.dessine, circle);
+            			key = getKeyByValue(accueilController.getDessinerPlan().getDessine(), circle);
             		}
                 }
                 Intersection intersectionClicked = plan.getIntersections().get(key);
@@ -104,10 +141,10 @@ public class MouseGestures {
 	                cercleSelectionne = p;
 	                couleurSelectionne = p.getFill();
 	                
-	                p.setFill(Color.CYAN);
-	                p.setStroke(Color.CYAN);
+	                p.setFill(COULEURPOINTSELECTIONNE);
+	                p.setStroke(COULEURPOINTSELECTIONNE);
 	                
-	                cle = getKeyByValue(DessinerPlan.dessine, p );
+	                cle = getKeyByValue(accueilController.getDessinerPlan().getDessine(), p );
 	                
 	            	Intersection intersectionClicked = plan.getIntersections().get(cle);
 	            	System.out.println("Intersection ID "+intersectionClicked.getId());

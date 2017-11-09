@@ -398,6 +398,16 @@ public class AccueilController{
 		update();
 	}
 
+
+	public DessinerPlan getDessinerPlan() {
+		return dessinerPlan;
+	}
+
+
+	public void setDessinerPlan(DessinerPlan dessinerPlan) {
+		this.dessinerPlan = dessinerPlan;
+	}
+
 }  
 
 

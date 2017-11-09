@@ -298,8 +298,8 @@ public class DescriptifController {
 							}
 						}
 						
-						((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
-						((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
+						((Circle) accueilController.getDessinerPlan().getDessine().get(id)).setFill(Color.YELLOW);
+						((Circle) accueilController.getDessinerPlan().getDessine().get(id)).setStroke(Color.YELLOW);
 					}
 				
 					dessinerPlan.passerChiffresDevant();
