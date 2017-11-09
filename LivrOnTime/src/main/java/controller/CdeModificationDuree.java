@@ -34,13 +34,17 @@ public class CdeModificationDuree implements Commande{
 	public void redoCde() {
 		tournee.ModifierLivraison(plan, livraison, duree);
 		tournee.ModifierLivraison(plan, livraison, debutPH,finPH);
+		
 	}
 
 	
 	@Override
 	public void undoCde() {
+		System.out.println("22222"+DPH_A);
 		tournee.ModifierLivraison(plan,livraison, DPH_A,FPH_A);
+		System.out.println(livraison.getDebutPlageHoraire());
 		tournee.ModifierLivraison(plan,livraison, dureeA);
+		
 		
 	}
 	

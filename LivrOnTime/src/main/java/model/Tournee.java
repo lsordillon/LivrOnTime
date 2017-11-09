@@ -32,14 +32,12 @@ public class Tournee {
 		
 	public void initTempsPassage() {
 		long dureeTotale=heureDepart.getTime();
-		tempsPassage = new Date[itineraire.size()][2];
+		tempsPassage = new Date[getItineraire().size()][2];
 		
 		for(int i=0;i<getItineraire().size();i++){
-			System.out.println("alors je suis mtn"+getItineraire().size());
 			for(int j=0;j<getItineraire().get(i).getTroncons().size();j++){
-				System.out.println(getItineraire().get(i).getTroncons().size());
-				
-				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
+				dureeTotale+= getItineraire().get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
+
 			}
 			if (i<listeLivraisons.size()) {
 				if (listeLivraisons.get(i).getDebutPlageHoraire()!=null && listeLivraisons.get(i).getDebutPlageHoraire().getTime()>dureeTotale) {
@@ -62,6 +60,7 @@ public class Tournee {
 		
 	
 	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+		
 		int index=-1;
 		int indiceListeLivraison = 0;
 		Intersection origine=null;
@@ -72,6 +71,8 @@ public class Tournee {
 			for(int i=0;i<getItineraire().size();i++){
 				System.out.println("au debut je suis"+ getItineraire().size());
 				Chemin chemin=getItineraire().get(i);
+				System.out.println("Intersection" + inter.getId());
+				System.out.println("Chemin" + chemin.getDestination().getId());
 					if(chemin.getDestination().getId()==inter.getId()){
 						origine=chemin.getOrigine();
 						nouvelItineraire.remove(chemin);
@@ -86,23 +87,29 @@ public class Tournee {
 			if(origine!=null && destination !=null){
 				//Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
 				d.algoDijkstra(plan, origine);
+
 				Chemin nouveau_chemin=plan.creerChemin(origine,destination);
+
 				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
-				setItineraire(nouvelItineraire);
 			}
-			System.out.println("je devien"+getItineraire().size());
+
+		
+
+			this.setItineraire(nouvelItineraire);
+
 			index=listeLivraisons.indexOf(l);
 			System.out.println("je suis l'index"+index);
 			listeLivraisons.remove(l);
-			this.initTempsPassage();
+
+			initTempsPassage();
 		}
 		
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
 		}
 		
-		this.initTempsPassage();
-		Pair <Integer, Tournee> paire = new Pair (index,this);
+		
+		Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
 		return paire;
 	}
 	
@@ -119,10 +126,10 @@ public class Tournee {
 		    d.algoDijkstra(plan, cheminASupprimer.getOrigine());
 		    Chemin nouveauChemin1 = plan.creerChemin(cheminASupprimer.getOrigine(), inter);
 			
-			//On ajoute le chemin à la fin ------> On ajoute le chemin à la bonne place dans la liste
+			//On ajoute le chemin ï¿½ la fin ------> On ajoute le chemin ï¿½ la bonne place dans la liste
 			nouvelItineraire.add(index,nouveauChemin1);
 
-			// Idem pour le deuxième chemin
+			// Idem pour le deuxiï¿½me chemin
 		    d.algoDijkstra(plan, inter);
 		    Chemin nouveauChemin2 = plan.creerChemin(inter, cheminASupprimer.getDestination());
 			nouvelItineraire.add(index+1,nouveauChemin2);
@@ -133,7 +140,7 @@ public class Tournee {
 			System.err.println("ERREUR ! La livraison fait partie de la tournee actuelle");
 			return null;
 		}
-		this.initTempsPassage();
+		initTempsPassage();
 		return this;
 	}	
 	
@@ -160,16 +167,16 @@ public class Tournee {
 		
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
-			
-			if(DPH!= null) {
-				liv.setDebutPlageHoraire(DPH);
-			}
-			
-			if(FPH!=null) {
-				liv.setFinPlageHoraire(FPH);
-			}
-			
-			this.getListeLivraison().set(i, liv);
+			  if(DPH==null || FPH==null){
+				  liv=new Livraison(liv.getDuree(),liv.getDestination());
+			  }else{
+				  
+			  
+	          liv.setDebutPlageHoraire(DPH);
+			  liv.setFinPlageHoraire(FPH);
+			  }
+			  this.getListeLivraison().set(i, liv);
+			  System.out.println("444444"+liv.getDebutPlageHoraire());
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
@@ -186,10 +193,9 @@ public class Tournee {
 		// valeur 0 : pas d'attente et pas tendu --> bleu
 		// valeur 1 : pas d'attente et tendu --> orange
 		// valeur 2 : attente --> PURPLE
-		// valeur 3 : plage horaire violee --> rouge 
-		// valeur 4 : test d'erreur
+		// valeur 3 : plage horaire violee --> rouge
 
-		int valeurPH = 4; 
+		int valeurPH = 0; 
 
 		for(Livraison l : getListeLivraison()){
 			if(l.toString().equals(liv.toString())){
