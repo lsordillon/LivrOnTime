@@ -103,6 +103,8 @@ public class DessinerPlan {
          //Rendre les circles clicable
          mg.makeClickable(cercle1);
          mg.makeClickable(cercle2);
+         mg.rendreCercleSurvolable(cercle1);
+         mg.rendreCercleSurvolable(cercle2);
         
     	
          Line ligne = new Line(cercle1.getLayoutX(), cercle1.getLayoutY(), cercle2.getLayoutX(), cercle2.getLayoutY());
