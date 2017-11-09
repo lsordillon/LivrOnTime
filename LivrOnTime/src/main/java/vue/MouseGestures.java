@@ -35,7 +35,6 @@ public class MouseGestures {
     private long cle;
     private Paint couleurSelectionne;
 	private Circle cercleSelectionne;
-	private Tooltip tronconSurvole;
 	private PannableCanvas canvas;
 	private AccueilController accueilController;
 	
@@ -62,29 +61,25 @@ public class MouseGestures {
 	        			adresse = troncon.getNomRue();
 	        		} 		
 	        }
-	        tronconSurvole = new Tooltip(adresse);
-	        
-	        noeud.setOnMouseEntered(lineOnMouseEnteredEventHandler);
-			noeud.setOnMouseExited(lineOnMouseExitedEventHandler);
+	        Tooltip tronconSurvole = new Tooltip(adresse);
+	       
+	        noeud.setOnMouseEntered(new EventHandler<MouseEvent>() {
+	             @Override
+	             public void handle(MouseEvent t) {
+	                  Node  node =(Node)t.getSource();
+	                  tronconSurvole.show(node, noeud.getLayoutX()+t.getSceneX(), noeud.getLayoutY()+t.getSceneY());
+	                }
+	            });
+	        noeud.setOnMouseExited(new EventHandler<MouseEvent>() {
+	            @Override
+	            public void handle(MouseEvent t) {             
+	                 tronconSurvole.hide();
+	               }
+	           });
+
 		}	
 	}
 	
-	//Event handler du survolement de la ligne
-	EventHandler<MouseEvent> lineOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent t) {
-        	 Node noeud = (Node) t.getSource();
-             tronconSurvole.show(noeud, noeud.getLayoutX()+t.getSceneX(), noeud.getLayoutY()+t.getSceneY());
-             }
-     };
-        
-     EventHandler<MouseEvent> lineOnMouseExitedEventHandler = new EventHandler<MouseEvent>() {
-    	 @Override
-         public void handle(MouseEvent t) {
-         	 Node noeud = (Node) t.getSource();
-              tronconSurvole.hide();
-              }
-      };
       
 	//Event handler du survolement du cercle
 	EventHandler<MouseEvent> circleOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
