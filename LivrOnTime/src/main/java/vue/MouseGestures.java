@@ -4,13 +4,15 @@ package vue;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import controller.AccueilController;
+import controller.LivraisonController;
+
 import java.util.Objects;
 
 import model.Intersection;
 import model.Plan;
 import model.Troncon;
-import controller.AccueilController;
-import controller.LivraisonController;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
