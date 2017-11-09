@@ -2,6 +2,8 @@ package controller;
 
 import java.util.LinkedList;
 
+import model.Tournee;
+
 
 public class ListeDeCdes {
 	
@@ -32,8 +34,11 @@ public class ListeDeCdes {
 		if (indiceCourant >= 0){
 			Commande commande = liste.get(indiceCourant);
 			indiceCourant--;
+			
+			//return 
 			commande.undoCde();
 		}
+		
 	}
 	
 
