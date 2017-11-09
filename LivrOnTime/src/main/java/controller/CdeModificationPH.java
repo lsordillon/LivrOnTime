@@ -13,8 +13,7 @@ public class CdeModificationPH implements Commande{
 	private Date FPH;
 	private Tournee tournee;
 	private Livraison livraison;
-    private Date DPH_A=livraison.getDebutPlageHoraire();
-    private Date FPH_A=livraison.getFinPlageHoraire();
+    private Date DPH_A,FPH_A;
     
     
     
@@ -26,6 +25,8 @@ public class CdeModificationPH implements Commande{
 		FPH = fPH;
 		this.tournee = tournee;
 		this.livraison = livraison;
+		this.DPH_A=livraison.getDebutPlageHoraire();
+		 this.FPH_A=livraison.getFinPlageHoraire();
 	}
 
 	@Override
