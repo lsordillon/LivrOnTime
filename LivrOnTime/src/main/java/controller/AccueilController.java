@@ -105,6 +105,7 @@ public class AccueilController{
 					// VuePlan.setStyle("-fx-background-color: #f7f7d4");
 					sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
 					ChargerLivraison.setDisable(false);
+					
 			    }catch(Exception e){
 			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a �t� provoqu� car certaines rues ne possedent pas d'intersection"+ "\n");
 	                   alert.showAndWait();
@@ -173,6 +174,8 @@ public class AccueilController{
 			        vBox2.setLayoutY(50);
 				    VueDescriptif.getChildren().add(vBox2);
 				    CalculTournee.setDisable(false);
+				    ChargerButoon.setDisable(true);
+				    ChargerLivraison.setDisable(true);
 				    listeDeCommandes.reset();
 				} else{
                     Alert alerte = new Alert(AlertType.ERROR, "Demande de livraison corrompue : L'adresse '"+fautive+"' n'existe pas "+ "\n");
@@ -240,6 +243,7 @@ public class AccueilController{
 		VuePlan.getChildren().clear();
 		VueDescriptif.getChildren().clear();
 		
+		ChargerButoon.setDisable(false);
 	    ChargerLivraison.setDisable(true);
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
