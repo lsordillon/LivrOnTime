@@ -127,7 +127,6 @@ public class AccueilController{
 
 	}
 	public void ChargerLivraison(ActionEvent actionEvent) throws FileNotFoundException {
-		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML Files", "*.xml"));
 		File selectedFile = fileChooser.showOpenDialog(null);

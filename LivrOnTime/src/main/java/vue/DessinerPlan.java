@@ -44,7 +44,8 @@ public class DessinerPlan {
 	private PannableCanvas canvas;
 	private HashMap<Long,Circle> dessine;
 	private ArrayList<Text> chiffres;
-	
+
+
 
 	private MouseGestures mg;
 	private SceneGestures sg;

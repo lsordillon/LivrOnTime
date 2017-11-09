@@ -159,13 +159,11 @@ public class Tournee {
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
 			
-			if(DPH!= null) {
+			if(DPH!= null && FPH!=null) {
 				liv.setDebutPlageHoraire(DPH);
-			}
-			
-			if(FPH!=null) {
 				liv.setFinPlageHoraire(FPH);
 			}
+
 			
 			this.getListeLivraison().set(i, liv);
 		}
