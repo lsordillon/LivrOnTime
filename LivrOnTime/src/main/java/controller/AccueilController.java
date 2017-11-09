@@ -254,12 +254,14 @@ public class AccueilController{
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
 	    legendeText.setVisible(false);
+	    undoButton.setDisable(true);
+	    redoButton.setDisable(true);
 	    
 	    plan=null;
 	    tournee=null;
 	    demandeLiv=null;
 	    intersectionSelectionnee=null;
-	    listeDeCommandes = null;
+	    listeDeCommandes = new ListeDeCdes();
 	}
 	
 	

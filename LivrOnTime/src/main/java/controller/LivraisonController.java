@@ -144,9 +144,10 @@ public class LivraisonController implements Initializable {
 				aController.setTournee(nouvelleTournee);
 				listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
 				aController.setListeDeCdes(listeDeCdes);
-				aController.update();
+				
 			}
 		}
+		aController.update();
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
 	}

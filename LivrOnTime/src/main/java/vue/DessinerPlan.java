@@ -50,9 +50,9 @@ public class DessinerPlan {
 	private MouseGestures mg;
 	private SceneGestures sg;
 	
-	final static double MULTIPLICATEURTRAITCERCLE = 2;
-	final static double MULTIPLICATEURTRAITENTREPOT = 10;
-	final static double MULTIPLICATEURTRAITLIVRAISON = 4;
+	final static double MULTIPLICATEURTRAITCERCLE = 1;
+	final static double MULTIPLICATEURTRAITENTREPOT = 4;
+	final static double MULTIPLICATEURTRAITLIVRAISON = 2;
 	final static double MULTIPLICATEURTRAITITINERAIRE = 4;
 	final static double MODIFICATEURPOSITIONCHIFFREX = 7;
 	final static double MODIFICATEURPOSITIONCHIFFREY = 8;
@@ -85,7 +85,7 @@ public class DessinerPlan {
          //Mise a l'echelle
          x= (int)((D.getX() - minusX)*tailleCanvas / divX);
          y=(int)((D.getY() - minusY) *tailleCanvas/ divY);
-         cercle1.setRadius(largeurTrait * MULTIPLICATEURTRAITCERCLE);
+         cercle1.setRadius(MULTIPLICATEURTRAITCERCLE);
          
          //Centrage
          cercle1.relocate(y + tailleCanvas/2, -x+tailleCanvas);
@@ -95,7 +95,7 @@ public class DessinerPlan {
          y=(int)((O.getY() - minusY)*tailleCanvas/ divY );
 
          Circle cercle2 = new Circle(1);
-    	 cercle2.setRadius(largeurTrait*MULTIPLICATEURTRAITCERCLE);
+    	 cercle2.setRadius(MULTIPLICATEURTRAITCERCLE);
          cercle2.setStroke(COULEURPLAN);
          cercle2.setFill(COULEURPLAN);
 
@@ -201,7 +201,7 @@ public class DessinerPlan {
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(COULEURENTREPOT);
     		cercle.setFill(COULEURENTREPOT);
-    		cercle.setRadius(largeurTrait*MULTIPLICATEURTRAITENTREPOT);
+    		cercle.setRadius(MULTIPLICATEURTRAITENTREPOT);
     		canvas.getChildren().add(cercle);
   
         for (Livraison livraison : livraisons){
@@ -209,7 +209,7 @@ public class DessinerPlan {
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(COULEURLIVRAISON);
     		cercle.setFill(COULEURLIVRAISON);
-    		cercle.setRadius(largeurTrait*MULTIPLICATEURTRAITLIVRAISON);
+    		cercle.setRadius(MULTIPLICATEURTRAITLIVRAISON);
             canvas.getChildren().add(cercle);
 
         }
@@ -268,7 +268,7 @@ public class DessinerPlan {
     	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
     	    	
     	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
-    	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREY);
+    	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
     	    	canvas.getChildren().add(chiffreOrigine);
     	    	
     	    	indice++;
