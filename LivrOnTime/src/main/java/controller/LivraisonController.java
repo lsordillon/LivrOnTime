@@ -131,13 +131,15 @@ public class LivraisonController implements Initializable {
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
 		if (aController.getTournee()!=null){
 			Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
-			int idx = paire.getKey();
-			Tournee nouvelleTournee = paire.getValue();
-			aController.setTournee(nouvelleTournee);
-			listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
-			aController.setListeDeCdes(listeDeCdes);
+			if (paire != null) {
+				int idx = paire.getKey();
+				Tournee nouvelleTournee = paire.getValue();
+				aController.setTournee(nouvelleTournee);
+				listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
+				aController.setListeDeCdes(listeDeCdes);
+				aController.update();
+			}
 		}
-		aController.update();
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
 	}
