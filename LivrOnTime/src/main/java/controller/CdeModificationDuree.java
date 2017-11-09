@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Date;
 
+import LivrOnTime.Main;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
@@ -32,18 +33,21 @@ public class CdeModificationDuree implements Commande{
 	
 	@Override
 	public void redoCde() {
+		int i=Main.aController.getDemandeLiv().getLivraisons().indexOf(livraison);
 		tournee.ModifierLivraison(plan, livraison, duree);
 		tournee.ModifierLivraison(plan, livraison, debutPH,finPH);
+		Main.aController.getDemandeLiv().getLivraisons().set(i,livraison);
+		
 		
 	}
 
 	
 	@Override
 	public void undoCde() {
-		System.out.println("22222"+DPH_A);
+		int i=Main.aController.getDemandeLiv().getLivraisons().indexOf(livraison);
 		tournee.ModifierLivraison(plan,livraison, DPH_A,FPH_A);
-		System.out.println(livraison.getDebutPlageHoraire());
 		tournee.ModifierLivraison(plan,livraison, dureeA);
+		Main.aController.getDemandeLiv().getLivraisons().set(i,livraison);
 		
 		
 	}
