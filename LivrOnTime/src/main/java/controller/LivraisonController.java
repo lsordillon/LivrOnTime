@@ -108,11 +108,14 @@ public class LivraisonController implements Initializable {
 				aController.update(null);
 			}else{
 				AccueilController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
-				AccueilController.getTournee().ModifierLivraison(plan, livraison, Integer.parseInt(dureeField.getText()) * 60);
-				listeDeCdes.ajoute(new CdeModificationDuree(plan,AccueilController.getTournee(),livraison,Integer.parseInt(dureeField.getText()) * 60));
-				listeDeCdes.ajoute(new CdeModificationPH(plan,AccueilController.getTournee(),livraison,debut,fin));
-				aController.update(AccueilController.getTournee());
+				int duree=Integer.parseInt(dureeField.getText()) * 60;
+				AccueilController.getTournee().ModifierLivraison(plan, livraison,duree );
+				System.out.println("je suis la"+livraison.getDuree());
+				listeDeCdes.ajoute(new CdeModificationDuree(plan,AccueilController.getTournee(),livraison,duree));
+				//listeDeCdes.ajoute(new CdeModificationPH(plan,AccueilController.getTournee(),livraison,debut,fin));
 				AccueilController.setListeDeCdes(listeDeCdes);
+				aController.update(AccueilController.getTournee());
+				
 			}
 			Stage stage = (Stage) modifBtn.getScene().getWindow();
 		    stage.close();
