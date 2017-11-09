@@ -388,7 +388,9 @@ public class AccueilController{
 	}
 	
 	
-	public static ListeDeCdes getListeDeCdes() {
+	public ListeDeCdes getListeDeCdes() {
+		undoButton.setDisable(false);
+		redoButton.setDisable(false);
 		return listeDeCommandes;
 	}
 	

@@ -94,7 +94,7 @@ public class LivraisonController implements Initializable {
 	
 	public void ModifierLivraison(){
 		plan = aController.getPlan();
-		listeDeCdes=AccueilController.getListeDeCdes();
+		listeDeCdes=aController.getListeDeCdes();
 		Date debut = new Date();
 		Date fin = new Date();
 		

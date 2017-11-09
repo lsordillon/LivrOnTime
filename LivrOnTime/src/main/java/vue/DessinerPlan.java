@@ -38,7 +38,7 @@ public class DessinerPlan {
 	
 	//Taille supposee du canvas, a ne pas laisser en dur
 	private double tailleCanvas=400.0;
-	private double largeurTrait=0.5;
+	private double largeurTrait=1;
 	
 	private Pane overlay = new Pane();
 	private PannableCanvas canvas;
@@ -50,9 +50,9 @@ public class DessinerPlan {
 	private MouseGestures mg;
 	private SceneGestures sg;
 	
-	final static double MULTIPLICATEURTRAITCERCLE = 0.5;
+	final static double MULTIPLICATEURTRAITCERCLE = 2;
 	final static double MULTIPLICATEURTRAITENTREPOT = 10;
-	final static double MULTIPLICATEURTRAITLIVRAISON = 6;
+	final static double MULTIPLICATEURTRAITLIVRAISON = 4;
 	final static double MULTIPLICATEURTRAITITINERAIRE = 4;
 	final static double MODIFICATEURPOSITIONCHIFFREX = 7;
 	final static double MODIFICATEURPOSITIONCHIFFREY = 8;
