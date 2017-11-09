@@ -44,6 +44,7 @@ import util.parserXML.XmlParserLivraison;
 import util.parserXML.XmlParserPlan;
 import vue.DessinerPlan;
 import vue.MouseGestures;
+import vue.SceneGestures;
 
 
 
@@ -71,13 +72,14 @@ public class AccueilController{
 	private Intersection intersectionSelectionnee;
     private static DescriptifController dController;
     private MouseGestures mouseGestures;
+    private SceneGestures sceneGestures;
     
     public AccueilController() {
     	listeDeCommandes=new ListeDeCdes();
     	mouseGestures = new MouseGestures(this);
-    	dessinerPlan = new DessinerPlan(mouseGestures);
+    	sceneGestures = new SceneGestures(this);	
+    	dessinerPlan = new DessinerPlan(mouseGestures, sceneGestures);
     	dController = new DescriptifController(dessinerPlan,this);
-    	
     	
     }
     
@@ -101,7 +103,7 @@ public class AccueilController{
 					VuePlan.getChildren().clear();
 					VuePlan.getChildren().add(group);
 					// VuePlan.setStyle("-fx-background-color: #f7f7d4");
-					dessinerPlan.PannableScene(VuePlan.getScene(), this);
+					sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
 					ChargerLivraison.setDisable(false);
 			    }catch(Exception e){
 			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a été provoqué car certaines rues ne possedent pas d'intersection"+ "\n");
@@ -156,7 +158,7 @@ public class AccueilController{
 					demandeLiv = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
 					LivraisonController.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
-				    dessinerPlan.PannableScene(VuePlan.getScene(), this);			    
+				    sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);			    
 				    //ListerLivraisons(dl.getLivraisons());
 				     
 		
@@ -191,7 +193,7 @@ public class AccueilController{
 	
 		
 		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
-	    dessinerPlan.PannableScene(VuePlan.getScene(), this);
+		sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
 	    
 	    GenererFeuille.setDisable(false);
 	    VueDescriptif.getChildren().clear();
@@ -320,7 +322,7 @@ public class AccueilController{
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
-		dessinerPlan.PannableScene(VuePlan.getScene(), this);
+		sceneGestures.rendreCanvasZoomable(VuePlan.getScene(), this);
 	}
 	
 	

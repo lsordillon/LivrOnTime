@@ -44,10 +44,30 @@ import javafx.scene.control.Button;
 	        node.setOnMousePressed(circleOnMousePressedEventHandler);
 	    }
 		
-		public void rendreSurvolable(Node node) {
+		public void rendreCercleSurvolable(Node node) {
 			node.setOnMouseEntered(circleOnMouseEnteredEventHandler);
 			node.setOnMouseExited(circleOnMouseExitedEventHandler);
 		}
+		
+		/*public void rendreCanvasZoomable(Scene scene) {
+			scene.setOnMousePressed(sceneOnMousePressedEventHandler);
+			scene.setOnMouseDragged(sceneOnMouseDraggedEventHandler);
+			scene.setOnScroll(sceneOnScrollEventHandler);
+		}
+		
+		EventHandler<MouseEvent> sceneOnMousePressedEventHandler = new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent t) {
+				if( event.isSecondaryButtonDown()) {
+
+		            sceneDragContext.mouseAnchorX = event.getSceneX();
+		            sceneDragContext.mouseAnchorY = event.getSceneY();
+		
+		            sceneDragContext.translateAnchorX = canvas.getTranslateX();
+		            sceneDragContext.translateAnchorY = canvas.getTranslateY();
+	            }
+			}
+		};*/
 		
 		//Event handler du survolement du cercle
 		EventHandler<MouseEvent> circleOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {

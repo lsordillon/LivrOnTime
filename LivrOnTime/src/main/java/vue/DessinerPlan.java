@@ -54,11 +54,13 @@ public class DessinerPlan {
 	public static HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
 	
 	MouseGestures mg;
+	SceneGestures sg;
 	private ArrayList<Text> chiffres;
 	
-	public DessinerPlan (MouseGestures mouseGestures) {
+	public DessinerPlan (MouseGestures mouseGestures, SceneGestures sceneGestures) {
 		chiffres = new ArrayList<Text>();
 		mg = mouseGestures;
+		sg = sceneGestures;
 	}
 
     public static HashMap<Long, Circle> getDessine() {
@@ -192,6 +194,7 @@ public class DessinerPlan {
         
         mg.setCanvas(canvas);
         mg.setPlan(plan);
+        sg.setCanvas(canvas);
        
         for (Troncon T: plan.getTroncons()){
         	
@@ -227,7 +230,7 @@ public class DessinerPlan {
             
             
             //ecoute
-        		mg.rendreSurvolable(circle);
+        		mg.rendreCercleSurvolable(circle);
             
            //fin ecoute
            
@@ -239,14 +242,7 @@ public class DessinerPlan {
 		             
 	}
     
-    public void PannableScene(Scene scene, AccueilController controleur) {
-    	
-    	   SceneGestures sceneGestures = new SceneGestures(canvas, this, controleur);
-           scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
-           scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-           scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-		
-	}
+
 
 
     public Group afficherChemin(Tournee tournee){

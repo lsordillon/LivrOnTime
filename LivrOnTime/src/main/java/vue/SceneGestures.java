@@ -2,10 +2,9 @@ package vue;
 
 import controller.AccueilController;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.paint.Paint;
-import model.Intersection;
 
 public class SceneGestures {
 
@@ -14,30 +13,20 @@ public class SceneGestures {
 
     private DragContext sceneDragContext = new DragContext();
 
-    PannableCanvas canvas;
-    DessinerPlan dessinerPlan;
-    AccueilController controleur;
-    Paint couleurSelectionne;
-	Intersection intersectionSelectionnee;
+    private PannableCanvas canvas;
+    private AccueilController controleur;
 
-    public SceneGestures( PannableCanvas canvas, DessinerPlan dessinerPlan, AccueilController controleur) {
-        this.canvas = canvas;
-        this.dessinerPlan = dessinerPlan;
+    public SceneGestures(AccueilController controleur) {
         this.controleur = controleur;
-        intersectionSelectionnee = null;
     }
-
-    public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
-        return onMousePressedEventHandler;
-    }
-
-    public EventHandler<MouseEvent> getOnMouseDraggedEventHandler() {
-        return onMouseDraggedEventHandler;
-    }
-
-    public EventHandler<ScrollEvent> getOnScrollEventHandler() {
-        return onScrollEventHandler;
-    }
+    
+    public void rendreCanvasZoomable(Scene scene, AccueilController controleur) {
+    	
+        scene.addEventFilter( MouseEvent.MOUSE_PRESSED, onMousePressedEventHandler);
+        scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, onMouseDraggedEventHandler);
+        scene.addEventFilter( ScrollEvent.ANY, onScrollEventHandler);
+		
+	}
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
@@ -52,25 +41,19 @@ public class SceneGestures {
 	            sceneDragContext.translateAnchorX = canvas.getTranslateX();
 	            sceneDragContext.translateAnchorY = canvas.getTranslateY();
             }
-            
-           if(event.isPrimaryButtonDown()) {
-            		
-            }
         }
-
     };
 
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
         public void handle(MouseEvent event) {
 
             // right mouse button => panning
-            if( !event.isSecondaryButtonDown())
-                return;
-
-            canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
-            canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
-
-            event.consume();
+            if( event.isSecondaryButtonDown()) {
+	            canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
+	            canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
+	
+	            event.consume();
+            }
         }
     };
 
@@ -95,13 +78,9 @@ public class SceneGestures {
             canvas.setScale( scale);
             // note: pivot value must be untransformed, i. e. without scaling
             canvas.setPivot(f*dx, f*dy);
-            //System.out.println(scale);
 
             event.consume();
-            
-
         }
-
     };
 
 
@@ -118,4 +97,12 @@ public class SceneGestures {
 
         return value;
     }
+
+	public PannableCanvas getCanvas() {
+		return canvas;
+	}
+
+	public void setCanvas(PannableCanvas canvas) {
+		this.canvas = canvas;
+	}
 }
