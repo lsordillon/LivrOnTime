@@ -210,6 +210,13 @@ public class DessinerPlan {
 	MouseGestures mg;
 	private ArrayList<Text> chiffres;
 	
+	//test
+	Intersection intersectionSurligne = new Intersection();
+	
+	public Intersection getSurlignement() {
+		return intersectionSurligne;
+	}
+	
 	public DessinerPlan () {
 		chiffres = new ArrayList<Text>();
 	}
@@ -400,6 +407,7 @@ public class DessinerPlan {
     	                		}
         	                Intersection intersectionClicked = plan.getIntersections().get(key);
     	                		System.out.println("Intersection ID "+intersectionClicked.getId());
+    	                		intersectionSurligne = intersectionClicked;
         	            }
                    }
                });

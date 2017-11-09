@@ -99,7 +99,7 @@ public class AccueilController{
 					dessinerPlan.PannableScene(VuePlan.getScene(), this);
 					ChargerLivraison.setDisable(false);
 			    }catch(Exception e){
-			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a été provoqué car certaines rues ne possedent pas d'intersection"+ "\n");
+			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a ï¿½tï¿½ provoquï¿½ car certaines rues ne possedent pas d'intersection"+ "\n");
 	                   alert.showAndWait();
 		    	 }
 		    	 
@@ -310,7 +310,7 @@ public class AccueilController{
 		}
 	
 		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(livraisons, plan, tournee));
-
+		
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
