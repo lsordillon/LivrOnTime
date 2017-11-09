@@ -46,6 +46,7 @@ import javafx.scene.control.Button;
 		
 		public void rendreSurvolable(Node node) {
 			node.setOnMouseEntered(circleOnMouseEnteredEventHandler);
+			node.setOnMouseExited(circleOnMouseExitedEventHandler);
 		}
 		
 		//Event handler du survolement du cercle
@@ -71,6 +72,14 @@ import javafx.scene.control.Button;
    	            }
               }
           };
+          
+          EventHandler<MouseEvent> circleOnMouseExitedEventHandler = new EventHandler <MouseEvent>(){
+              @Override
+              public void handle(MouseEvent t) {             
+                   //tp.hide();
+           	   		System.out.println("exit");
+                 }
+             };
 	
 	    //Event handler du clique sur un cercle
 	    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<MouseEvent>() {

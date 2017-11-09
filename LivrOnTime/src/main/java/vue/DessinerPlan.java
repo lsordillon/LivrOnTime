@@ -381,37 +381,8 @@ public class DessinerPlan {
             
             
             //ecoute
-            circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent t) {
-                     //Node  node =(Node)t.getSource();
-                     //tp.show(node, line.getLayoutX()+t.getSceneX(), line.getLayoutY()+t.getSceneY());
-                		System.out.println("enter");
-                		double orgSceneX = t.getSceneX();
-        	            double orgSceneY = t.getSceneY();
-        	            if (t.getSource() instanceof Circle) {
-        	            	Circle p = ((Circle) (t.getSource()));
-        	                double orgTranslateX = p.getCenterX();
-        	                double orgTranslateY = p.getCenterY();
-        	                long key=0;
-        	                for(Circle circle : DessinerPlan.dessine.values()){
-        	                		
-        	                		if(circle.equals(p)){
-        	                			key = getKeyByValue(DessinerPlan.dessine, circle);
-        	                		}
-    	                		}
-        	                Intersection intersectionClicked = plan.getIntersections().get(key);
-    	                		System.out.println("Intersection ID "+intersectionClicked.getId());
-        	            }
-                   }
-               });
-           circle.setOnMouseExited(new EventHandler<MouseEvent>() {
-               @Override
-               public void handle(MouseEvent t) {             
-                    //tp.hide();
-            	   		System.out.println("exit");
-                  }
-              });
+        		mg.rendreSurvolable(circle);
+            
            //fin ecoute
            
            canvas.getChildren().add(circle);
