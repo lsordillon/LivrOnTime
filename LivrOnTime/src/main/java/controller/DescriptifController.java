@@ -51,7 +51,7 @@ import model.Troncon;
 import model.Chemin;
 
 import vue.DessinerPlan;
-
+import LivrOnTime.Main;
 
 public class DescriptifController {
 	
@@ -207,67 +207,99 @@ public class DescriptifController {
 							setOnDragDetected(new EventHandler<MouseEvent>(){
 		                        @Override
 		                        public void handle(MouseEvent event) {
-					            	 if (getItem() == null) {
-					                     return;
-					                 }
-					                System.out.println( "listcell setOnDragDetected" );
-					                Dragboard db = startDragAndDrop( TransferMode.MOVE );
-					                ClipboardContent content = new ClipboardContent();
-					                content.put(dataFormat, getItem());
+		                        	 int draggedIdx = listView.getItems().indexOf(getItem());
+						                if (draggedIdx!=0&&draggedIdx!=  listView.getItems().size()-1)
+						                {
+							                Dragboard db = startDragAndDrop( TransferMode.MOVE );
+							                ClipboardContent content = new ClipboardContent();
+							                content.putString(""+getItem());
+							                
+							                db.setContent( content );
+							                event.consume();
+						                }
 					                
-					                db.setContent( content );
-					                event.consume();
-					                System.out.println( "listcell setOnDragDetected" );
-					            }} );
-					            setOnDragEntered(new EventHandler<DragEvent>(){
-			                        @Override
-			                        public void handle(DragEvent event) {
-					                setStyle( "-fx-background-color: PaleGreen;" );
-					            }} );
-
-					            setOnDragExited( ( DragEvent event ) ->
-					            {
-					                setStyle( "" );
-					            } );
-
-					           setOnDragOver(new EventHandler<DragEvent>(){
-			                        @Override
-			                        public void handle(DragEvent event) {
+					            }
+		                    });
+							 
+							
+					        setOnDragEntered(new EventHandler<DragEvent>(){
+	                        	@Override
+	                        	public void handle(DragEvent event) {
+	                        		setStyle( "-fx-background-color: PaleGreen;" );
+	                        	}
+					        } );
+					        
+				            setOnDragExited( ( DragEvent event ) ->
+				            {
+				                setStyle( "" );
+				            } );
+							
+				           setOnDragOver(new EventHandler<DragEvent>(){
+		                        @Override
+		                        public void handle(DragEvent event) {
 					    
 					                Dragboard db = event.getDragboard();
-					                if ( db.hasContent(dataFormat) )
+					                int draggedIdx = listView.getItems().indexOf(getItem());
+					                if (db.hasString()&&draggedIdx!=0&&draggedIdx!=  listView.getItems().size()-1)
 					                {
+					                	
 					                    event.acceptTransferModes( TransferMode.MOVE );
 					                }
 					                event.consume();
 					            } });
+				           
 					            setOnDragDropped(new EventHandler<DragEvent>(){
 			                        @Override
 			                        public void handle(DragEvent event) {
 					            	 if (getItem() == null) {
 					                     return;
 					                 }
-					                System.out.println( "listCell.setOnDragDropped" );
+					             
 					                Dragboard db = event.getDragboard();
 					                boolean success = false;
-					                if ( db.hasContent(dataFormat))
+					                if ( db.hasString())
 					                {
-					                		System.out.println( "listCell.setOnDragDropped TRUE" );
-					                    ObservableList<Livraison> items = listView.getItems();					               
-					                    //int draggedIdx = items.indexOf(db.getContent(dataFormat));
+					                    ObservableList<Livraison> items = listView.getItems();		
 					                    int draggedIdx = getListView().getSelectionModel().getSelectedIndex();
+					                   
+					                   
 					                    int thisIdx = items.indexOf(getItem());
-					                    System.out.println(draggedIdx+"**"+thisIdx);
-					                    System.out.println(((Livraison) db.getContent(dataFormat)).toString());
-					                    items.remove(draggedIdx);
-					                    items.add(thisIdx,(Livraison) db.getContent(dataFormat) );
 					                    
-					                    //items.set(thisIdx, (Livraison) db.getContent(dataFormat));
-
+					                    Livraison aSupprimer=null;
+					                    for(Livraison etape:items)
+					                    {
+					                    	if(etape.toString().equals(db.getString()))
+					                    	{
+					                    		aSupprimer=etape;
+					                    		 
+					                    	}
+					                    }
+					                    items.remove(draggedIdx);
+					                    items.add(thisIdx, aSupprimer );
+					                    
+					                 
 					                    List<Livraison> itemscopy = new ArrayList<>(items);
 					                    listView.getItems().setAll(itemscopy);
 
 					                    success = true;
+					                    
+					                    //Changement du modele
+					                    LivraisonController lC=new LivraisonController();
+					                   
+				                    	try {
+											Main.aController.getTournee().SupprimerLivraison(plan,getItem().getDestination(),getItem());
+											Main.aController.getTournee().AjouterLivraison(plan,getItem().getDestination(),getItem(), thisIdx);
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+				                    	
+				                    	//Main.aController.getTournee().SupprimerLivraison(plan,aSupprimer.getDestination(),aSupprimer);
+				                    	//Main.aController.getTournee().AjouterLivraison(plan,aSupprimer.getDestination(),aSupprimer, draggedIdx);
+				                    	Main.aController.update();
+				                    	
+					                    
+					                   
 					                }
 					                event.setDropCompleted( success );
 					                event.consume();
