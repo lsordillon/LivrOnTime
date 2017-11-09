@@ -68,7 +68,7 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCommandes;
+    private static ListeDeCdes listeDeCommandes = new ListeDeCdes();
 	private static Plan plan;
 	private static Tournee tournee;
 	private DessinerPlan dessinerPlan;
@@ -173,7 +173,7 @@ public class AccueilController{
 			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(demandeLiv.getLivraisons(), plan, null));
 			   		
 			   		vBox2.setSpacing(40);
-			   		vBox2.setLayoutX(30);
+			   		vBox2.setLayoutX(70);
 			        vBox2.setLayoutY(50);
 				    VueDescriptif.getChildren().add(vBox2);
 				    CalculTournee.setDisable(false);
@@ -254,12 +254,14 @@ public class AccueilController{
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
 	    legendeText.setVisible(false);
+	    undoButton.setDisable(true);
+	    redoButton.setDisable(true);
 	    
 	    plan=null;
 	    tournee=null;
 	    demandeLiv=null;
 	    intersectionSelectionnee=null;
-	    listeDeCommandes = null;
+	    listeDeCommandes = new ListeDeCdes();
 	}
 	
 	
@@ -388,7 +390,9 @@ public class AccueilController{
 	}
 	
 	
-	public static ListeDeCdes getListeDeCdes() {
+	public ListeDeCdes getListeDeCdes() {
+		undoButton.setDisable(false);
+		redoButton.setDisable(false);
 		return listeDeCommandes;
 	}
 	

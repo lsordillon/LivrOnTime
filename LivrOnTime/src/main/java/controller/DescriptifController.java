@@ -1,33 +1,46 @@
 package controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
 import javafx.scene.control.Label;
+
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import model.Intersection;
@@ -146,22 +159,38 @@ public class DescriptifController {
 						    		//2e vBox qui affiche la dur�e et l'heure d'arriv�e
 						    		
 						    		Text txtDureeTrajet;
-						    		Text spaceTxt = new Text("|");
-						    		Text spaceTxt2 = new Text("|");
 						    	
 						    		int index = tournee.getListeLivraison().indexOf(livr);
 						    		if (index ==0) {
-						    			txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
+						    			txtDureeTrajet = new Text("Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000))+" min");
 						    		}
 						    		else {
 						    			long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
-						    			txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
+						    			txtDureeTrajet = new Text("Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
 							    	
 						    		}
 						    		txtDureeTrajet.setFill(Color.BLUE);
-						    		spaceTxt.setFill(Color.BLUE);
-						    		spaceTxt2.setFill(Color.BLUE);
-						    		VBox vBox2 = new VBox(new VBox(spaceTxt,txtDureeTrajet,spaceTxt2),vBox,new VBox(txtHeureArrivee));
+						    		
+						    		//Affichage de la dur�e du trajet avec la fl�che
+						    		
+						    		Image imageFleche=null;
+						    		ImageView vueFleche=null;
+						    		
+									try {
+										imageFleche = new Image(new FileInputStream("src/main/resources/img/down_arrow.png"));
+									} catch (FileNotFoundException e) {
+										e.printStackTrace();
+									}
+									
+									if (imageFleche!=null) {
+										vueFleche = new ImageView(imageFleche);
+										vueFleche.setFitWidth(25);
+										vueFleche.setPreserveRatio(true);
+									}
+						    		
+						    		HBox hBoxTrajet = new HBox(vueFleche,txtDureeTrajet);
+						    		hBoxTrajet.setAlignment(Pos.CENTER_LEFT);
+						    		VBox vBox2 = new VBox(hBoxTrajet,vBox,new VBox(txtHeureArrivee));
 						    		
 						    		
 						    		//vBox2.setSpacing(10); (????)
@@ -241,6 +270,30 @@ public class DescriptifController {
 					                event.setDropCompleted( success );
 					                event.consume();
 					            }} );
+					            setOnMouseClicked(new EventHandler<MouseEvent>(){
+			                        @Override
+			                        public void handle(MouseEvent event) {
+			                        	if (event.getClickCount() == 2) {
+			                        	Livraison livraison = listView.getSelectionModel().getSelectedItem();
+			                        	LivraisonController.setIntersection(livraison.getDestination());
+			                           	if(livraison != null){
+			        		            	Parent root;
+			        				        try {
+			        				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
+			        				            Stage stage = new Stage();
+			        				            stage.setTitle("Modifier Livraison");
+			        				            stage.setAlwaysOnTop(true);
+			        				            stage.setScene(new Scene(root));
+			        				            
+			        				            stage.show();
+			        				            
+			        				        }
+			        				        catch (IOException e) {
+			        				            e.printStackTrace();
+			        				        }
+			        	                	
+			        	            	} 
+			                        }}});
 						}
 
 
@@ -253,7 +306,7 @@ public class DescriptifController {
 
 
 		});
-
+		
 		interaction(listView);
 		return listView;
 	}
@@ -331,8 +384,11 @@ public class DescriptifController {
 		while (it.hasNext()) {
 			Livraison courante = it.next();
 			if(courante.getDestination()==inter) {
+	
+
 
 				listView.getSelectionModel().select(data.indexOf(courante));
+
 
 				
 			}

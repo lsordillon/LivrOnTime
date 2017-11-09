@@ -62,11 +62,13 @@ public class MouseGestures {
 	        }
 	        Tooltip tronconSurvole = new Tooltip(adresse);
 	       
-	        noeud.setOnMouseClicked(new EventHandler<MouseEvent>() {
+	        noeud.setOnMouseEntered(new EventHandler<MouseEvent>() {
 	             @Override
 	             public void handle(MouseEvent t) {
 	                  Node  node =(Node)t.getSource();
+
 	                  tronconSurvole.show(node, noeud.getLayoutX()+400, 300+noeud.getLayoutY());
+
 	                }
 	            });
 	        noeud.setOnMouseExited(new EventHandler<MouseEvent>() {
