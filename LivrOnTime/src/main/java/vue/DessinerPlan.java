@@ -237,7 +237,7 @@ public class DessinerPlan {
     			ligne.setStroke(COULEURITINERAIRE);
     			ligne.setFill(COULEURITINERAIRE);
     		    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
-    		      
+    		    mg.rendreLigneSurvolable(ligne, t.getDestination(), t.getOrigine()); 
 		        canvas.getChildren().add(ligne);
 		        cercle1.toFront();  
     		}	    
@@ -290,7 +290,6 @@ public class DessinerPlan {
 		ligne.setStroke(Couleur);
 		ligne.setFill(Couleur);
 	    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
-	      
         canvas.getChildren().add(ligne);
         cercle1.toFront();
     }
