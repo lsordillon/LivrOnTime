@@ -99,7 +99,7 @@ public class AccueilController{
 					dessinerPlan.PannableScene(VuePlan.getScene(), this);
 					ChargerLivraison.setDisable(false);
 			    }catch(Exception e){
-			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a été provoqué car certaines rues ne possedent pas d'intersection"+ "\n");
+			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a ï¿½tï¿½ provoquï¿½ car certaines rues ne possedent pas d'intersection"+ "\n");
 	                   alert.showAndWait();
 		    	 }
 		    	 

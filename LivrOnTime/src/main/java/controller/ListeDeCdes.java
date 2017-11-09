@@ -2,6 +2,8 @@ package controller;
 
 import java.util.LinkedList;
 
+import model.Tournee;
+
 
 public class ListeDeCdes {
 	
