@@ -1,6 +1,7 @@
 package controller;
 
 import LivrOnTime.Main;
+import javafx.util.Pair;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
@@ -38,6 +39,8 @@ public class CdeAjout implements Commande {
 	public void undoCde() {
 		Main.aController.getDemandeLiv().getLivraisons().remove(livraison);
 		index = (tournee.SupprimerLivraison(plan,intersection,livraison)).getKey();
+		
+		//return tournee;
 	}
 
 }
