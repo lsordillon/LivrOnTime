@@ -14,13 +14,10 @@ import model.Livraison;
 import model.Plan;
 import model.Tournee;
 import model.Troncon;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.ObservableList;
+
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -31,168 +28,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
-import javafx.scene.layout.StackPane;
-
-class PannableCanvas extends Pane {
-
-    DoubleProperty myScale = new SimpleDoubleProperty(1.0);
-
-    public PannableCanvas() {
-        setPrefSize(600, 600);
-     
-        // add scale transform
-        scaleXProperty().bind(myScale);
-        scaleYProperty().bind(myScale);
-        
-    }
 
 
-    public double getScale() {
-        return myScale.get();
-    }
-
-    public void setScale( double scale) {
-        myScale.set(scale);
-    }
-
-    public void setPivot( double x, double y) {
-        setTranslateX(getTranslateX()-x);
-        setTranslateY(getTranslateY()-y);
-    }
-}
-
-
-class DragContext {
-
-    double mouseAnchorX;
-    double mouseAnchorY;
-
-    double translateAnchorX;
-    double translateAnchorY;
-
-}
-
-// Plan is draggable using the right mouse button 
-
-class SceneGestures {
-
-    private static final double MAX_SCALE = 10.0d;
-    private static final double MIN_SCALE = .1d;
-
-    private DragContext sceneDragContext = new DragContext();
-
-    PannableCanvas canvas;
-    DessinerPlan dessinerPlan;
-    AccueilController controleur;
-    Paint couleurSelectionne;
-	Intersection intersectionSelectionnee;
-
-    public SceneGestures( PannableCanvas canvas, DessinerPlan dessinerPlan, AccueilController controleur) {
-        this.canvas = canvas;
-        this.dessinerPlan = dessinerPlan;
-        this.controleur = controleur;
-        intersectionSelectionnee = null;
-    }
-
-    public EventHandler<MouseEvent> getOnMousePressedEventHandler() {
-        return onMousePressedEventHandler;
-    }
-
-    public EventHandler<MouseEvent> getOnMouseDraggedEventHandler() {
-        return onMouseDraggedEventHandler;
-    }
-
-    public EventHandler<ScrollEvent> getOnScrollEventHandler() {
-        return onScrollEventHandler;
-    }
-
-    private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
-
-        public void handle(MouseEvent event) {
-
-            // right mouse button => panning
-            if( event.isSecondaryButtonDown()) {
-
-	            sceneDragContext.mouseAnchorX = event.getSceneX();
-	            sceneDragContext.mouseAnchorY = event.getSceneY();
-	
-	            sceneDragContext.translateAnchorX = canvas.getTranslateX();
-	            sceneDragContext.translateAnchorY = canvas.getTranslateY();
-            }
-            
-           if(event.isPrimaryButtonDown()) {
-            		
-            }
-        }
-
-    };
-
-    private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
-        public void handle(MouseEvent event) {
-
-            // right mouse button => panning
-            if( !event.isSecondaryButtonDown())
-                return;
-
-            canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
-            canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
-
-            event.consume();
-        }
-    };
-
-    /**
-     * Mouse wheel handler: zoom to pivot point
-     */
-    private EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
-
-        public void handle(ScrollEvent event) {
-            
-            double scale = canvas.getScale();// currently we only use Y, same value is used for X
-            double oldScale = scale;
-            
-            scale *= Math.pow(1.01, event.getDeltaY());
-            scale = clamp( scale, MIN_SCALE, MAX_SCALE);
-
-            double f = (scale / oldScale)-1;
-
-            double dx = (event.getSceneX() - (canvas.getBoundsInParent().getWidth()/2 + canvas.getBoundsInParent().getMinX()));
-            double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight()/2 + canvas.getBoundsInParent().getMinY()));
-
-            canvas.setScale( scale);
-            // note: pivot value must be untransformed, i. e. without scaling
-            canvas.setPivot(f*dx, f*dy);
-            //System.out.println(scale);
-
-            event.consume();
-            
-
-        }
-
-    };
-
-
-    public static double clamp( double value, double min, double max) {
-
-        if( Double.compare(value, min) < 0)
-        {
-            return min;
-        }
-        if( Double.compare(value, max) > 0)
-        {
-            return max;
-        }
-
-        return value;
-    }
-}
-
-
-
-
-/**
- * An application with a zoomable and pannable canvas.
- */
 public class DessinerPlan {
 	
 	//Variables de mise a l'echelle
@@ -200,119 +37,108 @@ public class DessinerPlan {
 	private int minX,minY,maxX=0,maxY=0;
 	
 	//Taille supposee du canvas, a ne pas laisser en dur
-	double sizeCanvas=400.0;
-	double widthStroke=0.5;
+	private double tailleCanvas=400.0;
+	private double largeurTrait=0.5;
 	
-	Pane overlay = new Pane();
-	PannableCanvas canvas = new PannableCanvas();
-	public static HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
-	
-	MouseGestures mg;
+	private Pane overlay = new Pane();
+	private PannableCanvas canvas;
+	private HashMap<Long,Circle> dessine;
 	private ArrayList<Text> chiffres;
 	
-	//test
-	Intersection intersectionSurligne = new Intersection();
+
+	private MouseGestures mg;
+	private SceneGestures sg;
 	
-	public Intersection getSurlignement() {
-		return intersectionSurligne;
-	}
+	final static double MULTIPLICATEURTRAITCERCLE = 0.5;
+	final static double MULTIPLICATEURTRAITENTREPOT = 10;
+	final static double MULTIPLICATEURTRAITLIVRAISON = 6;
+	final static double MULTIPLICATEURTRAITITINERAIRE = 4;
+	final static double MODIFICATEURPOSITIONCHIFFREX = 7;
+	final static double MODIFICATEURPOSITIONCHIFFREY = 8;
+	final static Paint COULEURPLAN = Color.GREY;
+	final static Paint COULEURENTREPOT = Color.PLUM;
+	final static Paint COULEURLIVRAISON = Color.BLUE;
+	final static Paint COULEURITINERAIRE = Color.GREEN;
+	final static Paint COULEURCHIFFRES = Color.BLACK;
+	final static Paint COULEURTENDU = Color.ORANGE;
+	final static Paint COULEURATTENTE = Color.PURPLE;
+	final static Paint COULEURVIOLEE = Color.RED;
 	
-	public DessinerPlan () {
+	public DessinerPlan (MouseGestures mouseGestures, SceneGestures sceneGestures) {
+
 		chiffres = new ArrayList<Text>();
-	}
-
-    public static HashMap<Long, Circle> getDessine() {
-		return dessine;
-	}
-
-	public static void setDessine(HashMap<Long, Circle> dessine) {
-		DessinerPlan.dessine = dessine;
+		canvas = new PannableCanvas();
+		dessine = new HashMap<Long,Circle>();
+		mg = mouseGestures;
+		sg = sceneGestures;
 	}
 
 	// Methode qui dessine les troncons
     public void dessinerTroncon(Intersection D, Intersection O,Plan plan) {
-    		int x,y;
-    	   
+    		
+    	int x,y;
+    	Circle cercle1 = new Circle(1);
+    	cercle1.setStroke(COULEURPLAN);
+        cercle1.setFill(COULEURPLAN);
 
-    		Circle circle1 = new Circle(1);
-    		circle1.setStroke(Color.GREY);
-        circle1.setFill(Color.GREY);
-
-         
          //Mise a l'echelle
-         x= (int)((D.getX() - minusX)*sizeCanvas / divX);
-         y=(int)((D.getY() - minusY) *sizeCanvas/ divY);
-         circle1.setRadius(widthStroke/2);
+         x= (int)((D.getX() - minusX)*tailleCanvas / divX);
+         y=(int)((D.getY() - minusY) *tailleCanvas/ divY);
+         cercle1.setRadius(largeurTrait * MULTIPLICATEURTRAITCERCLE);
          
          //Centrage
-         circle1.relocate(y + sizeCanvas/2, -x+sizeCanvas);
+         cercle1.relocate(y + tailleCanvas/2, -x+tailleCanvas);
          
-        //Mise a l'echelle
-        x= (int)((O.getX() - minusX)*sizeCanvas/ divX);
-        y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
+         //Mise a l'echelle
+         x= (int)((O.getX() - minusX)*tailleCanvas/ divX);
+         y=(int)((O.getY() - minusY)*tailleCanvas/ divY );
 
-        Circle circle2 = new Circle(1);
-    		circle2.setRadius(widthStroke/2);
-        circle2.setStroke(Color.GREY);
-        circle2.setFill(Color.GREY);
+         Circle cercle2 = new Circle(1);
+    	 cercle2.setRadius(largeurTrait*MULTIPLICATEURTRAITCERCLE);
+         cercle2.setStroke(COULEURPLAN);
+         cercle2.setFill(COULEURPLAN);
 
-        //Centrage
-        circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
-        //Rendre les circles clickable
-        mg.makeClickable(circle1);
-        mg.makeClickable(circle2);
+         //Centrage
+         cercle2.relocate(y+ tailleCanvas/2 , -x+ tailleCanvas);
+         //Rendre les circles clicable
+         mg.makeClickable(cercle1);
+         mg.makeClickable(cercle2);
         
     	
-        Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+         Line ligne = new Line(cercle1.getLayoutX(), cercle1.getLayoutY(), cercle2.getLayoutX(), cercle2.getLayoutY());
         
-        line.setStrokeWidth(widthStroke);
-        line.setFill(Color.GREY);
-        line.setStroke(Color.GREY);
-        String adress = "";
-        for(Troncon troncon : AccueilController.getPlan().getTroncons()){
-        		if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
-        			adress = troncon.getNomRue();
-        		} 		
-        }
+        ligne.setStrokeWidth(largeurTrait);
+        ligne.setFill(COULEURPLAN);
+        ligne.setStroke(COULEURPLAN);
         
-        Tooltip tp = new Tooltip(adress);
-        line.setOnMouseEntered(new EventHandler<MouseEvent>() {
-             @Override
-             public void handle(MouseEvent t) {
-                  Node  node =(Node)t.getSource();
-                  tp.show(node, line.getLayoutX()+t.getSceneX(), line.getLayoutY()+t.getSceneY());
-                }
-            });
-        line.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {             
-                 tp.hide();
-               }
-           });
+        mg.rendreLigneSurvolable(ligne, D, O);
 
-        canvas.getChildren().add(line);
+        canvas.getChildren().add(ligne);
         
         if (!dessine.containsKey(D.getId())){
-    			canvas.getChildren().add(circle1);
-    			dessine.put(D.getId(), circle1);
-        }else{
-    			((Circle) dessine.get(D.getId())).toFront();
-    		}
+    			canvas.getChildren().add(cercle1);
+    			dessine.put(D.getId(), cercle1);
+        }
+        
+        else {
+    		((Circle) dessine.get(D.getId())).toFront();
+    	}
     	
             
         if (!dessine.containsKey(O.getId())){
-        		canvas.getChildren().add(circle2);
-        		dessine.put(O.getId(), circle2);
-        }else{
-        		((Circle) dessine.get(O.getId())).toFront();
+    		canvas.getChildren().add(cercle2);
+    		dessine.put(O.getId(), cercle2);
+        }
+        
+        else{
+    		((Circle) dessine.get(O.getId())).toFront();
         }
 
     }
 
     public Group Dessiner(Plan plan) {
-    	dessine = new HashMap<Long,Circle>();
-    	canvas = new PannableCanvas();
-    	Group group = new Group();
+    	
+    	Group groupe = new Group();
         	
     	int minX,minY,maxX=0,maxY=0;
     	//Calcul du minX et du min Y 
@@ -344,134 +170,79 @@ public class DessinerPlan {
     			minY=Math.min(T.getDestination().getY(), T.getOrigine().getY());
     		}
     	 }
-        // create sample nodes which can be dragged
+    	 
     	minusX=minX;
         divX=maxX-minusX;
         minusY=minY;
         divY=maxY-minusY;
         
-        mg = new MouseGestures(plan, canvas);
+        mg.setCanvas(canvas);
+        mg.setPlan(plan);
+        sg.setCanvas(canvas);
        
         for (Troncon T: plan.getTroncons()){
-        	
         	dessinerTroncon(T.getDestination(), T.getOrigine(),plan);
         }
         
-   
-        group.getChildren().add(canvas);
-        return group;
-               
+        groupe.getChildren().add(canvas);
+        return groupe;              
     }
     
 
     public Group Dessiner(DemandeLivraison dl, Plan plan) {
     		ArrayList<Livraison> livraisons = dl.getLivraisons();
-    		Group group = new Group();
+    		Group groupe = new Group();
     		
-    		Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
-    		canvas.getChildren().remove(circle);
-    		circle.setStroke(Color.PLUM);
-    		circle.setFill(Color.PLUM);
-    		circle.setRadius(widthStroke*10);
-    		canvas.getChildren().add(circle);
 
-        
+    		Circle cercle = dessine.get(dl.getAdresseEntrepot().getId());
+    		canvas.getChildren().remove(cercle);
+    		cercle.setStroke(COULEURENTREPOT);
+    		cercle.setFill(COULEURENTREPOT);
+    		cercle.setRadius(largeurTrait*MULTIPLICATEURTRAITENTREPOT);
+    		canvas.getChildren().add(cercle);
+  
         for (Livraison livraison : livraisons){
+    		cercle = dessine.get(livraison.getDestination().getId());
+    		canvas.getChildren().remove(cercle);
+    		cercle.setStroke(COULEURLIVRAISON);
+    		cercle.setFill(COULEURLIVRAISON);
+    		cercle.setRadius(largeurTrait*MULTIPLICATEURTRAITLIVRAISON);
+            canvas.getChildren().add(cercle);
 
-        		circle = dessine.get(livraison.getDestination().getId());
-        		canvas.getChildren().remove(circle);
-        		circle.setStroke(Color.BLUE);
-        		circle.setFill(Color.BLUE);
-        		circle.setRadius(widthStroke*6);
-            
-            
-            //ecoute
-            circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent t) {
-                     //Node  node =(Node)t.getSource();
-                     //tp.show(node, line.getLayoutX()+t.getSceneX(), line.getLayoutY()+t.getSceneY());
-                		System.out.println("enter");
-                		double orgSceneX = t.getSceneX();
-        	            double orgSceneY = t.getSceneY();
-        	            if (t.getSource() instanceof Circle) {
-        	            		Circle p = ((Circle) (t.getSource()));
-        	                double orgTranslateX = p.getCenterX();
-        	                double orgTranslateY = p.getCenterY();
-        	                long key=0;
-        	                for(Circle circle : DessinerPlan.dessine.values()){
-        	                		
-        	                		if(circle.equals(p)){
-        	                			key = getKeyByValue(DessinerPlan.dessine, circle);
-        	                		}
-    	                		}
-        	                Intersection intersectionClicked = plan.getIntersections().get(key);
-    	                		System.out.println("Intersection ID "+intersectionClicked.getId());
-    	                		intersectionSurligne = intersectionClicked;
-        	            }
-                   }
-               });
-           circle.setOnMouseExited(new EventHandler<MouseEvent>() {
-               @Override
-               public void handle(MouseEvent t) {             
-                    //tp.hide();
-            	   		System.out.println("exit");
-                  }
-              });
-           //fin ecoute
-           
-           canvas.getChildren().add(circle);
- 
         }
       
-        return group;
-		             
+        return groupe;	             
 	}
     
-    public void PannableScene(Scene scene, AccueilController controleur) {
-    	
-    	   SceneGestures sceneGestures = new SceneGestures(canvas, this, controleur);
-           scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
-           scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
-           scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
-		
-	}
-
-
     public Group afficherChemin(Tournee tournee){
-		Group group = new Group();
+		Group groupe = new Group();
 		
-		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
-		//circle1.toFront();
-		
+		Circle cercle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
 		actualiserCouleurPoints(tournee);
-		
-    	Circle circle2;
+    	Circle cercle2;
     	
     	for (Chemin c : tournee.getItineraire()){
     		
     		Text precedent = new Text();
     		
     		for(Troncon t: c.getTroncons()){
-    			circle1=dessine.get(t.getOrigine().getId());
-    			circle2=dessine.get(t.getDestination().getId());
+    			cercle1=dessine.get(t.getOrigine().getId());
+    			cercle2=dessine.get(t.getDestination().getId());
     			
-    			Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+    			Line ligne = new Line(cercle1.getLayoutX(), cercle1.getLayoutY(), cercle2.getLayoutX(), cercle2.getLayoutY());
     		        
-    			line.setStroke(Color.GREEN);
-    			line.setFill(Color.GREEN);
-    		    line.setStrokeWidth(widthStroke*4);
+    			ligne.setStroke(COULEURITINERAIRE);
+    			ligne.setFill(COULEURITINERAIRE);
+    		    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
     		      
-		        canvas.getChildren().add(line);
-		        circle1.toFront();
-		        
-    		}
-    		    
+		        canvas.getChildren().add(ligne);
+		        cercle1.toFront();  
+    		}	    
     	}
-   	 
+   
     	numeroterSommets(tournee);
     	passerChiffresDevant();
-    	return group;
+    	return groupe;
     }
     
     public void numeroterSommets(Tournee tournee) {
@@ -487,17 +258,16 @@ public class DessinerPlan {
     	for (Chemin c : tournee.getItineraire()){
     		
     		Text chiffreOrigine = new Text(""+indice);
-    		chiffreOrigine.setFill(Color.BLACK);
-    		chiffreOrigine.setStroke(Color.BLACK);
+    		chiffreOrigine.setFill(COULEURCHIFFRES);
+    		chiffreOrigine.setStroke(COULEURCHIFFRES);
 	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
 	    	
-	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + widthStroke * 7);
-	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - widthStroke * 8);
+	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
+	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
 	    	canvas.getChildren().add(chiffreOrigine);
 	    	
 	    	indice++;
 	    	chiffres.add(chiffreOrigine);
-	    	//System.out.println(c.getDestination());
     	}
     }
     
@@ -509,17 +279,57 @@ public class DessinerPlan {
     
     public void surlignerTroncon (Troncon t, Paint Couleur) {
     	
-    	Circle circle1=DessinerPlan.dessine.get(t.getOrigine().getId());
-		Circle circle2=DessinerPlan.dessine.get(t.getDestination().getId());
+    	Circle cercle1= dessine.get(t.getOrigine().getId());
+		Circle cercle2= dessine.get(t.getDestination().getId());
 		
-		Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+		Line ligne = new Line(cercle1.getLayoutX(), cercle1.getLayoutY(), cercle2.getLayoutX(), cercle2.getLayoutY());
 	        
-		line.setStroke(Couleur);
-		line.setFill(Couleur);
-	    line.setStrokeWidth(widthStroke*4);
+		ligne.setStroke(Couleur);
+		ligne.setFill(Couleur);
+	    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
 	      
-        canvas.getChildren().add(line);
-        circle1.toFront();
+        canvas.getChildren().add(ligne);
+        cercle1.toFront();
+    }
+    
+    public void actualiserCouleurPoints(Tournee tournee) {
+    	
+		for (int i = 0; i<tournee.getItineraire().size()-1; i++){
+			//retrouver lintersection correspondant a la livraison interLiv
+			Livraison liv = tournee.getListeLivraison().get(i);
+	        
+			int[] valeursPH = tournee.VerifierPlagesHorairesTournee();
+			
+			if (valeursPH[i] == 0) {
+				Circle cercleActuel = dessine.get(liv.getDestination().getId());
+				cercleActuel.setFill(COULEURLIVRAISON);
+				cercleActuel.setStroke(COULEURLIVRAISON);
+			}
+			if (valeursPH[i] == 1) {
+				Circle cercleActuel = dessine.get(liv.getDestination().getId());
+				cercleActuel.setFill(COULEURTENDU);
+				cercleActuel.setStroke(COULEURTENDU);
+			}
+			if (valeursPH[i] == 2) {
+				Circle cercleActuel = dessine.get(liv.getDestination().getId());
+				cercleActuel.setFill(COULEURATTENTE);
+				cercleActuel.setStroke(COULEURATTENTE);
+			}
+			if (valeursPH[i] == 3) {
+				Circle cercleActuel = dessine.get(liv.getDestination().getId());
+				cercleActuel.setFill(COULEURVIOLEE);
+				cercleActuel.setStroke(COULEURVIOLEE);
+			}
+		}
+	}
+    
+    public static <T, E> T getKeyByValue(HashMap<T, E> map, E value) {
+        for (Entry<T, E> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
 	public int getDivX() {
@@ -554,58 +364,20 @@ public class DessinerPlan {
 		this.minusY = minusY;
 	}
 
-	public double getSizeCanvas() {
-		return sizeCanvas;
+	public double getTailleCanvas() {
+		return tailleCanvas;
 	}
 
-	public void setSizeCanvas(double sizeCanvas) {
-		this.sizeCanvas = sizeCanvas;
+	public void setTailleCanvas(double sizeCanvas) {
+		this.tailleCanvas = sizeCanvas;
 	}
 	
-	public static <T, E> T getKeyByValue(HashMap<T, E> map, E value) {
-        for (Entry<T, E> entry : map.entrySet()) {
-            if (Objects.equals(value, entry.getValue())) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-    
-	public void actualiserCouleurPoints(Tournee tournee) {
-	
-		for (int i = 0; i<tournee.getItineraire().size()-1; i++){
-			//retrouver lintersection correspondant a la livraison interLiv
-			Livraison liv = tournee.getListeLivraison().get(i);
-	        
-			int[] valeursPH = tournee.VerifierPlagesHorairesTournee();
-			
-				if (valeursPH[i] == 0) {
-					Circle cercleActuel = dessine.get(liv.getDestination().getId());
-					cercleActuel.setFill(Color.BLUE);
-					cercleActuel.setStroke(Color.BLUE);
-				}
-				if (valeursPH[i] == 1) {
-					Circle cercleActuel = dessine.get(liv.getDestination().getId());
-					cercleActuel.setFill(Color.ORANGE);
-					cercleActuel.setStroke(Color.ORANGE);
-				}
-				if (valeursPH[i] == 2) {
-					Circle cercleActuel = dessine.get(liv.getDestination().getId());
-					cercleActuel.setFill(Color.PURPLE);
-					cercleActuel.setStroke(Color.PURPLE);
-				}
-				if (valeursPH[i] == 3) {
-					Circle cercleActuel = dessine.get(liv.getDestination().getId());
-					cercleActuel.setFill(Color.RED);
-					cercleActuel.setStroke(Color.RED);
-				}
-				if (valeursPH[i] == 4) {
-					Circle cercleActuel = dessine.get(liv.getDestination().getId());
-					cercleActuel.setFill(Color.BLUEVIOLET);
-					cercleActuel.setStroke(Color.BLUEVIOLET);
-				}
-		
-		}
+	public HashMap<Long, Circle> getDessine() {
+			return dessine;
+	}
+
+	public void setDessine(HashMap<Long, Circle> dessine) {
+		this.dessine = dessine;
 	}
    
 }

@@ -10,15 +10,15 @@ public class CdeModificationDuree implements Commande{
 	private int duree;
 	private Tournee tournee;
 	private Livraison livraison;
-    private int dureeA=livraison.getDuree();
+	int dureeA;
     
     
-	public CdeModificationDuree(Plan plan, Tournee tournee, Livraison livraison, int duree) {
-		super();
+	public CdeModificationDuree(Plan plan, Tournee tournee, Livraison livraison, int dureeA) {
 		this.plan = plan;
-		this.duree = duree;
+		this.duree = livraison.getDuree();
 		this.tournee = tournee;
 		this.livraison = livraison;
+		this.dureeA=dureeA;
 	}
 
 	
@@ -31,6 +31,8 @@ public class CdeModificationDuree implements Commande{
 	
 	@Override
 	public void undoCde() {
+		
+	   
 		tournee.ModifierLivraison(plan,livraison, dureeA);
 		
 	}

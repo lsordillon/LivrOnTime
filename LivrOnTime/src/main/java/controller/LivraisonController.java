@@ -29,6 +29,7 @@ import model.Plan;
 import model.Tournee;
 
 public class LivraisonController implements Initializable {
+	AccueilController aController = Main.aController;
 	public TextField adresseField;
 	public TextField dureeField;
 	public ComboBox<Integer> comboDeHeur;
@@ -84,8 +85,7 @@ public class LivraisonController implements Initializable {
 	}
 	
 	public void ModifierLivraison(){
-		AccueilController aController = Main.aController;
-		plan = AccueilController.getPlan();
+		plan = aController.getPlan();
 		listeDeCdes=AccueilController.getListeDeCdes();
 		Date debut = new Date();
 		Date fin = new Date();
@@ -108,21 +108,26 @@ public class LivraisonController implements Initializable {
 				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
 				aController.update();
 			}else{
-				aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
-				aController.getTournee().ModifierLivraison(plan, livraison, Integer.parseInt(dureeField.getText()) * 60);
-				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,Integer.parseInt(dureeField.getText()) * 60));
-				listeDeCdes.ajoute(new CdeModificationPH(plan,aController.getTournee(),livraison,debut,fin));
+
+				int duree=Integer.parseInt(dureeField.getText()) * 60;
+				int dureeA=livraison.getDuree();
+				Date DPH_A=livraison.getDebutPlageHoraire();
+				Date FPH_A=livraison.getFinPlageHoraire();
+                aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
+				aController.getTournee().ModifierLivraison(plan, livraison, duree);
+				
+				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,dureeA));
+				listeDeCdes.ajoute(new CdeModificationPH(plan,aController.getTournee(),livraison,DPH_A,FPH_A));
 				aController.update();
-				AccueilController.setListeDeCdes(listeDeCdes);
+				
 			}
 			Stage stage = (Stage) modifBtn.getScene().getWindow();
 		    stage.close();
 	}
 	
 	public void SupprimerLivraison(){
-		AccueilController aController = Main.aController;
 		plan = aController.getPlan();
-		listeDeCdes=AccueilController.getListeDeCdes();
+		listeDeCdes=aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
 		if (aController.getTournee()!=null){
 			Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
@@ -153,7 +158,7 @@ public class LivraisonController implements Initializable {
 			livraison = new Livraison(0,intersection);
 		}
 		
-		AccueilController aController = Main.aController;
+		
 		plan = aController.getPlan();
 		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
@@ -161,9 +166,10 @@ public class LivraisonController implements Initializable {
 		    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex()+1;
 		    	System.out.println("index ajout"+ idx);
 				aController.setTournee(aController.getTournee().AjouterLivraison(plan,intersection,livraison, idx));
+				aController.update();
 				listeDeCdes.ajoute(new CdeAjout(plan,intersection,aController.getTournee(),livraison,idx));
 				aController.setListeDeCdes(listeDeCdes);
-				aController.update();
+				
 		}
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();

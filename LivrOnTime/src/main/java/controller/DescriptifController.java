@@ -37,27 +37,25 @@ import vue.DessinerPlan;
 
 
 public class DescriptifController {
+	
 	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
-
-	private Plan plan;
-	private Tournee tournee;
 	private DessinerPlan dessinerPlan;
 	private Chemin cheminSelectionne;
+	private AccueilController accueilController;
 	 
 	ObservableList<Livraison> data = FXCollections.observableArrayList();
 	final ListView<Livraison> listView;
 	   
 	   
-	public DescriptifController(DessinerPlan dessinerPlan) {
+	public DescriptifController(DessinerPlan dessinerPlan, AccueilController accueilController) {
 		   this.dessinerPlan = dessinerPlan;
 		   listView = new ListView<Livraison>(data);
+		   this.accueilController = accueilController;
 	}
 	
 	
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
-		this.plan = plan;
-		this.tournee = tournee;
 		
 		data.clear();
 		
@@ -95,9 +93,10 @@ public class DescriptifController {
 							
 							
 							VBox vBox = new VBox(new Text(getAdresse(livr.getDestination())), new Text(plageHoraire));
-							if(dessinerPlan.getSurlignement()==livr.getDestination()) {
-							vBox.setStyle("-fx-background-color: #457E31");}
+							
+							//vBox.setStyle("-fx-background-color: #457E31");
 							//vBox.setId(arg0);
+							
 							//Affichage des temps de passage
 							if (tournee!=null) {
 								for(Livraison l : tournee.getListeLivraison()){
@@ -267,7 +266,7 @@ public class DescriptifController {
 	
 	//Methode pour retourner l'adresse d'une intersection
 	public String getAdresse(Intersection item){
-		for(Troncon troncon : plan.getTroncons()){
+		for(Troncon troncon : accueilController.getPlan().getTroncons()){
         	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
           		return troncon.getNomRue();
            	}
@@ -278,13 +277,13 @@ public class DescriptifController {
 	
 	public void interaction(final ListView<Livraison> listView) {
 		
-		if (tournee!=null) {
+		if (accueilController.getTournee()!=null) {
 			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
 				
 				public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {				
 					if (listView.getSelectionModel().getSelectedItem() != null) {
 						if (oldValue != null){
-							dessinerPlan.actualiserCouleurPoints(tournee);					
+							dessinerPlan.actualiserCouleurPoints(accueilController.getTournee());					
 							
 							for(Troncon t: cheminSelectionne.getTroncons()){
 								dessinerPlan.surlignerTroncon(t,Color.GREEN);
@@ -294,7 +293,7 @@ public class DescriptifController {
 						
 						
 						long id = newValue.getDestination().getId();
-						for ( Chemin c : tournee.getItineraire()) {
+						for ( Chemin c : accueilController.getTournee().getItineraire()) {
 							if (c.getDestination().getId()==id){
 								cheminSelectionne = c;
 								
@@ -304,8 +303,8 @@ public class DescriptifController {
 							}
 						}
 						
-						((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
-						((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
+						((Circle) accueilController.getDessinerPlan().getDessine().get(id)).setFill(Color.YELLOW);
+						((Circle) accueilController.getDessinerPlan().getDessine().get(id)).setStroke(Color.YELLOW);
 					}
 				
 					dessinerPlan.passerChiffresDevant();
@@ -324,44 +323,7 @@ public class DescriptifController {
 		void intersectionSurligneChanged(Intersection ancienne,Intersection nouvelle);
 	}
 	
-public void interactionContraire(final ListView<Livraison> listView) {
-		
-		if (tournee!=null) {
-			dessinerPlan.getSurlignement();
-			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
-				
-				public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {				
-					if (listView.getSelectionModel().getSelectedItem() != null) {
-						if (oldValue != null){
-							dessinerPlan.actualiserCouleurPoints(tournee);					
-							
-							for(Troncon t: cheminSelectionne.getTroncons()){
-								dessinerPlan.surlignerTroncon(t,Color.GREEN);
-							}
-							
-						}
-						
-						
-						long id = newValue.getDestination().getId();
-						for ( Chemin c : tournee.getItineraire()) {
-							if (c.getDestination().getId()==id){
-								cheminSelectionne = c;
-								
-								for(Troncon t: c.getTroncons()){
-					    			dessinerPlan.surlignerTroncon(t,Color.YELLOW);
-					    		}
-							}
-						}
-						
-						((Circle) DessinerPlan.dessine.get(id)).setFill(Color.YELLOW);
-						((Circle) DessinerPlan.dessine.get(id)).setStroke(Color.YELLOW);
-					}
-				
-					dessinerPlan.passerChiffresDevant();
-				}
-			});
-		}
-	}
+
   
 }
 
