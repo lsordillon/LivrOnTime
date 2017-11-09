@@ -34,9 +34,11 @@ public class Tournee {
 		long dureeTotale=heureDepart.getTime();
 		tempsPassage = new Date[itineraire.size()][2];
 		
-		for(int i=0;i<itineraire.size();i++){
-			System.out.println("itineraire  "+itineraire.get(i));
-			for(int j=0;j<itineraire.get(i).getTroncons().size();j++){
+		for(int i=0;i<getItineraire().size();i++){
+			System.out.println("alors je suis mtn"+getItineraire().size());
+			for(int j=0;j<getItineraire().get(i).getTroncons().size();j++){
+				System.out.println(getItineraire().get(i).getTroncons().size());
+				
 				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 			}
 			if (i<listeLivraisons.size()) {
@@ -65,9 +67,10 @@ public class Tournee {
 		Intersection origine=null;
 		Intersection destination=null;
 		if(getListeLivraison().contains(l)){
-			
+			Dijkstra d = new Dijkstra();
 			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
 			for(int i=0;i<getItineraire().size();i++){
+				System.out.println("au debut je suis"+ getItineraire().size());
 				Chemin chemin=getItineraire().get(i);
 					if(chemin.getDestination().getId()==inter.getId()){
 						origine=chemin.getOrigine();
@@ -81,12 +84,15 @@ public class Tournee {
 			}
 			
 			if(origine!=null && destination !=null){
-				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
+				//Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
+				d.algoDijkstra(plan, origine);
+				Chemin nouveau_chemin=plan.creerChemin(origine,destination);
 				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
 				setItineraire(nouvelItineraire);
 			}
-			
+			System.out.println("je devien"+getItineraire().size());
 			index=listeLivraisons.indexOf(l);
+			System.out.println("je suis l'index"+index);
 			listeLivraisons.remove(l);
 			this.initTempsPassage();
 		}
@@ -137,6 +143,7 @@ public class Tournee {
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
 			liv.setDuree(duree);
+			this.getListeLivraison().set(i, liv);
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
