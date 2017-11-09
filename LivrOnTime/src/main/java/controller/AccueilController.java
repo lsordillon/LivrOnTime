@@ -194,7 +194,9 @@ public class AccueilController{
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		tournee=plan.calculerLaTournee(demandeLiv);
+		try {
+			tournee=plan.calculerLaTournee(demandeLiv);
+		
 		tournee.initTempsPassage();
 		VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
 		VuePlan.getChildren().add(vBoxPlan);
@@ -221,7 +223,10 @@ public class AccueilController{
 		CalculTournee.setDisable(true);
 		legendeText.setVisible(true);
 		//legendeText.setBackground(new Background(new BackgroundFill(Paint.OPAQUE, CornerRadii.EMPTY, Ins)));
-		
+		} catch (Exception e) {
+			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
+             alert.showAndWait();
+		}
 	}
 	
 	

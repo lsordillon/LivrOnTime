@@ -59,7 +59,7 @@ public class Tournee {
 	}
 		
 	
-	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l) throws Exception{
 		
 		int index=-1;
 		int indiceListeLivraison = 0;
@@ -114,7 +114,7 @@ public class Tournee {
 	}
 	
 	
-	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
+	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index) throws Exception{
 		Dijkstra d = new Dijkstra();
 
 		if(!getListeLivraison().contains(l)){
