@@ -111,7 +111,7 @@ public class LivraisonController implements Initializable {
 				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
 				aController.update();
 			}else{
-
+				int idx = aController.getDemandeLiv().getLivraisons().indexOf(livraison);
 				int duree=Integer.parseInt(dureeField.getText()) * 60;
 				int dureeA=livraison.getDuree();
 				Date DPH_A=livraison.getDebutPlageHoraire();
@@ -119,7 +119,7 @@ public class LivraisonController implements Initializable {
 				Date FPH_A=livraison.getFinPlageHoraire();
                 aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
 				aController.getTournee().ModifierLivraison(plan, livraison, duree);
-				
+				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
 				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,dureeA,DPH_A,FPH_A));
 				aController.update();
 				

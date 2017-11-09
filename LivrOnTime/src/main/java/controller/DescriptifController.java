@@ -219,7 +219,7 @@ public class DescriptifController {
 					                boolean success = false;
 					                if ( db.hasContent(dataFormat))
 					                {
-					                	System.out.println( "listCell.setOnDragDropped TRUE" );
+					                		System.out.println( "listCell.setOnDragDropped TRUE" );
 					                    ObservableList<Livraison> items = listView.getItems();					               
 					                    //int draggedIdx = items.indexOf(db.getContent(dataFormat));
 					                    int draggedIdx = getListView().getSelectionModel().getSelectedIndex();
@@ -333,10 +333,13 @@ public class DescriptifController {
 		while (it.hasNext()) {
 			Livraison courante = it.next();
 			if(courante.getDestination()==inter) {
-				
+
 				
 				
 				//listView.get
+
+				listView.getSelectionModel().select(data.indexOf(courante));
+
 				
 			}
 		}
