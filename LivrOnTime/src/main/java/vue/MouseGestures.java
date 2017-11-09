@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import controller.AccueilController;
 import controller.LivraisonController;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -33,17 +34,44 @@ import javafx.scene.control.Button;
 	    Paint couleurSelectionne;
 		Circle cercleSelectionne;
 		PannableCanvas canvas;
-	  
-	    public MouseGestures(Plan plan, PannableCanvas canvas) {
-			this.plan=plan;
-			this.canvas = canvas;
-		}
+		private AccueilController accueilController;
 
+	    public MouseGestures (AccueilController accueilController) {
+	    	this.accueilController = accueilController;
+	    }
 
 		public void makeClickable(Node node) {
 	        node.setOnMousePressed(circleOnMousePressedEventHandler);
 	    }
 		
+		public void rendreSurvolable(Node node) {
+			node.setOnMouseEntered(circleOnMouseEnteredEventHandler);
+		}
+		
+		//Event handler du survolement du cercle
+		EventHandler<MouseEvent> circleOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent t) {
+           		System.out.println("enter");
+           		double orgSceneX = t.getSceneX();
+   	            double orgSceneY = t.getSceneY();
+   	            if (t.getSource() instanceof Circle) {
+   	            		Circle p = ((Circle) (t.getSource()));
+   	                double orgTranslateX = p.getCenterX();
+   	                double orgTranslateY = p.getCenterY();
+   	                long key=0;
+   	                for(Circle circle : DessinerPlan.dessine.values()){
+   	                		
+                		if(circle.equals(p)){
+                			key = getKeyByValue(DessinerPlan.dessine, circle);
+                		}
+	                }
+   	                Intersection intersectionClicked = plan.getIntersections().get(key);
+	                System.out.println("Intersection ID "+intersectionClicked.getId());
+   	            }
+              }
+          };
+	
 	    //Event handler du clique sur un cercle
 	    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
@@ -125,6 +153,22 @@ import javafx.scene.control.Button;
 	        }
 	        return null;
 	    }
+
+		public Plan getPlan() {
+			return plan;
+		}
+
+		public void setPlan(Plan plan) {
+			this.plan = plan;
+		}
+
+		public PannableCanvas getCanvas() {
+			return canvas;
+		}
+
+		public void setCanvas(PannableCanvas canvas) {
+			this.canvas = canvas;
+		}
 	    
 	    
 	}

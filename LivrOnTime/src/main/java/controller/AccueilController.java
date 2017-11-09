@@ -43,6 +43,7 @@ import util.genererFeuilleDeRoute.feuilleDeRouteTxt;
 import util.parserXML.XmlParserLivraison;
 import util.parserXML.XmlParserPlan;
 import vue.DessinerPlan;
+import vue.MouseGestures;
 
 
 
@@ -69,11 +70,15 @@ public class AccueilController{
 	private DemandeLivraison demandeLiv;
 	private Intersection intersectionSelectionnee;
     private static DescriptifController dController;
+    private MouseGestures mouseGestures;
     
     public AccueilController() {
     	listeDeCommandes=new ListeDeCdes();
-    	dessinerPlan = new DessinerPlan();
-    	dController = new DescriptifController(dessinerPlan);
+    	mouseGestures = new MouseGestures(this);
+    	dessinerPlan = new DessinerPlan(mouseGestures);
+    	dController = new DescriptifController(dessinerPlan,this);
+    	
+    	
     }
     
     

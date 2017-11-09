@@ -210,8 +210,9 @@ public class DessinerPlan {
 	MouseGestures mg;
 	private ArrayList<Text> chiffres;
 	
-	public DessinerPlan () {
+	public DessinerPlan (MouseGestures mouseGestures) {
 		chiffres = new ArrayList<Text>();
+		mg = mouseGestures;
 	}
 
     public static HashMap<Long, Circle> getDessine() {
@@ -343,7 +344,8 @@ public class DessinerPlan {
         minusY=minY;
         divY=maxY-minusY;
         
-        mg = new MouseGestures(plan, canvas);
+        mg.setCanvas(canvas);
+        mg.setPlan(plan);
        
         for (Troncon T: plan.getTroncons()){
         	
@@ -388,7 +390,7 @@ public class DessinerPlan {
                 		double orgSceneX = t.getSceneX();
         	            double orgSceneY = t.getSceneY();
         	            if (t.getSource() instanceof Circle) {
-        	            		Circle p = ((Circle) (t.getSource()));
+        	            	Circle p = ((Circle) (t.getSource()));
         	                double orgTranslateX = p.getCenterX();
         	                double orgTranslateY = p.getCenterY();
         	                long key=0;

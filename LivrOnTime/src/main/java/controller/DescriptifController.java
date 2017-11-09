@@ -36,27 +36,25 @@ import vue.DessinerPlan;
 
 
 public class DescriptifController {
+	
 	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
-
-	private Plan plan;
-	private Tournee tournee;
 	private DessinerPlan dessinerPlan;
 	private Chemin cheminSelectionne;
+	private AccueilController accueilController;
 	 
 	ObservableList<Livraison> data = FXCollections.observableArrayList();
 	final ListView<Livraison> listView;
 	   
 	   
-	public DescriptifController(DessinerPlan dessinerPlan) {
+	public DescriptifController(DessinerPlan dessinerPlan, AccueilController accueilController) {
 		   this.dessinerPlan = dessinerPlan;
 		   listView = new ListView<Livraison>(data);
+		   this.accueilController = accueilController;
 	}
 	
 	
 	   // ************ ListesLivraison *********************
 	public ListView<Livraison> ListerLivraisons(ArrayList<Livraison> livr, Plan plan, Tournee tournee){
-		this.plan = plan;
-		this.tournee = tournee;
 		
 		data.clear();
 		
@@ -263,7 +261,7 @@ public class DescriptifController {
 	
 	//Methode pour retourner l'adresse d'une intersection
 	public String getAdresse(Intersection item){
-		for(Troncon troncon : plan.getTroncons()){
+		for(Troncon troncon : accueilController.getPlan().getTroncons()){
         	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
           		return troncon.getNomRue();
            	}
@@ -274,13 +272,13 @@ public class DescriptifController {
 	
 	public void interaction(final ListView<Livraison> listView) {
 		
-		if (tournee!=null) {
+		if (accueilController.getTournee()!=null) {
 			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
 				
 				public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {				
 					if (listView.getSelectionModel().getSelectedItem() != null) {
 						if (oldValue != null){
-							dessinerPlan.actualiserCouleurPoints(tournee);					
+							dessinerPlan.actualiserCouleurPoints(accueilController.getTournee());					
 							
 							for(Troncon t: cheminSelectionne.getTroncons()){
 								dessinerPlan.surlignerTroncon(t,Color.GREEN);
@@ -290,7 +288,7 @@ public class DescriptifController {
 						
 						
 						long id = newValue.getDestination().getId();
-						for ( Chemin c : tournee.getItineraire()) {
+						for ( Chemin c : accueilController.getTournee().getItineraire()) {
 							if (c.getDestination().getId()==id){
 								cheminSelectionne = c;
 								
