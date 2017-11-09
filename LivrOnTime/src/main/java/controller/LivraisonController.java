@@ -116,8 +116,8 @@ public class LivraisonController implements Initializable {
                 aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
 				aController.getTournee().ModifierLivraison(plan, livraison, duree);
 				
-				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,dureeA));
-				listeDeCdes.ajoute(new CdeModificationPH(plan,aController.getTournee(),livraison,DPH_A,FPH_A));
+				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,dureeA,DPH_A,FPH_A));
+				//listeDeCdes.ajoute(new CdeModificationPH(plan,aController.getTournee(),livraison,DPH_A,FPH_A));
 				aController.update();
 				
 			}
