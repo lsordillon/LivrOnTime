@@ -44,7 +44,8 @@ public class DessinerPlan {
 	private PannableCanvas canvas;
 	private HashMap<Long,Circle> dessine;
 	private ArrayList<Text> chiffres;
-	
+
+
 
 	private MouseGestures mg;
 	private SceneGestures sg;
@@ -196,7 +197,6 @@ public class DessinerPlan {
     		ArrayList<Livraison> livraisons = dl.getLivraisons();
     		Group groupe = new Group();
     		
-
     		Circle cercle = dessine.get(dl.getAdresseEntrepot().getId());
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(COULEURENTREPOT);
@@ -258,19 +258,22 @@ public class DessinerPlan {
     	}
     	
     	int indice = 1;
-    	for (Chemin c : tournee.getItineraire()){
+    	for (int i =0; i<tournee.getItineraire().size(); i++){
     		
-    		Text chiffreOrigine = new Text(""+indice);
-    		chiffreOrigine.setFill(COULEURCHIFFRES);
-    		chiffreOrigine.setStroke(COULEURCHIFFRES);
-	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
-	    	
-	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
-	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
-	    	canvas.getChildren().add(chiffreOrigine);
-	    	
-	    	indice++;
-	    	chiffres.add(chiffreOrigine);
+    		Chemin c = tournee.getItineraire().get(i);
+    		if(i==0 || c.getDestination()!=tournee.getItineraire().get(i-1).getDestination()){
+    			Text chiffreOrigine = new Text(""+indice);
+        		chiffreOrigine.setFill(COULEURCHIFFRES);
+        		chiffreOrigine.setStroke(COULEURCHIFFRES);
+    	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
+    	    	
+    	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
+    	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREY);
+    	    	canvas.getChildren().add(chiffreOrigine);
+    	    	
+    	    	indice++;
+    	    	chiffres.add(chiffreOrigine);
+    		}    		
     	}
     }
     
@@ -292,6 +295,7 @@ public class DessinerPlan {
 	    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
         canvas.getChildren().add(ligne);
         cercle1.toFront();
+        cercle2.toFront();
     }
     
     public void actualiserCouleurPoints(Tournee tournee) {

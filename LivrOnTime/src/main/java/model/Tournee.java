@@ -61,56 +61,58 @@ public class Tournee {
 	
 	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
 		
-		int index=-1;
-		int indiceListeLivraison = 0;
-		Intersection origine=null;
-		Intersection destination=null;
-		if(getListeLivraison().contains(l)){
-			Dijkstra d = new Dijkstra();
-			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
-			for(int i=0;i<getItineraire().size();i++){
-				System.out.println("au debut je suis"+ getItineraire().size());
-				Chemin chemin=getItineraire().get(i);
-				System.out.println("Intersection" + inter.getId());
-				System.out.println("Chemin" + chemin.getDestination().getId());
-					if(chemin.getDestination().getId()==inter.getId()){
-						origine=chemin.getOrigine();
-						nouvelItineraire.remove(chemin);
-						indiceListeLivraison = i;
-			     	}
-					if(chemin.getOrigine().getId()==inter.getId()){
-						destination=chemin.getDestination();
-						nouvelItineraire.remove(chemin);
-					}
+		
+		if(listeLivraisons.size()>1) {
+			
+			int index=-1;
+			int indiceListeLivraison = 0;
+			Intersection origine=null;
+			Intersection destination=null;
+			if(listeLivraisons.contains(l)){
+				Dijkstra d = new Dijkstra();
+				ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
+				for(int i=0;i<itineraire.size();i++){
+					Chemin chemin=itineraire.get(i);
+						if(chemin.getDestination().getId()==inter.getId()){
+							origine=chemin.getOrigine();
+							nouvelItineraire.remove(chemin);
+							indiceListeLivraison = i;
+				     	}
+						if(chemin.getOrigine().getId()==inter.getId()){
+							destination=chemin.getDestination();
+							nouvelItineraire.remove(chemin);
+						}
+				}
+				
+				if(origine!=null && destination !=null){
+					d.algoDijkstra(plan, origine);
+	
+					Chemin nouveau_chemin=plan.creerChemin(origine,destination);
+	
+					nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
+				}
+	
+			
+	
+				this.setItineraire(nouvelItineraire);
+				listeLivraisons.remove(l);
+	
+				initTempsPassage();
 			}
 			
-			if(origine!=null && destination !=null){
-				//Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
-				d.algoDijkstra(plan, origine);
-
-				Chemin nouveau_chemin=plan.creerChemin(origine,destination);
-
-				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
+			else {
+				System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
 			}
-
-		
-
-			this.setItineraire(nouvelItineraire);
-
-			index=listeLivraisons.indexOf(l);
-			System.out.println("je suis l'index"+index);
-			listeLivraisons.remove(l);
-
-			initTempsPassage();
+			
+			
+			Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
+			return paire;
 		}
 		
 		else {
-			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			System.err.println("Vous ne pouvez pas supprimer la dernière livraison de la tournée");
+			return null;
 		}
-		
-		
-		Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
-		return paire;
 	}
 	
 	
@@ -167,6 +169,10 @@ public class Tournee {
 		
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
+
+
+			
+			
 			  if(DPH==null || FPH==null){
 				  liv=new Livraison(liv.getDuree(),liv.getDestination());
 			  }else{
@@ -176,7 +182,8 @@ public class Tournee {
 			  liv.setFinPlageHoraire(FPH);
 			  }
 			  this.getListeLivraison().set(i, liv);
-			  System.out.println("444444"+liv.getDebutPlageHoraire());
+			 
+
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
