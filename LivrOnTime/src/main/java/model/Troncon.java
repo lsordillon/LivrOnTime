@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Troncon implements Serializable {
+	
 	private Intersection destination;
 	private double longueur ;
 	private String nomRue;
@@ -41,7 +42,9 @@ public class Troncon implements Serializable {
 	public String getNomRue() {
 		if(nomRue.equals("")){
 			return "Rue sans nom";
-		}else{
+		}
+		
+		else{
 			return nomRue;
 		}
 	}
@@ -57,8 +60,4 @@ public class Troncon implements Serializable {
 	public void setOrigine(Intersection origine) {
 		this.origine = origine;
 	}
-
-	
-	
-
 }

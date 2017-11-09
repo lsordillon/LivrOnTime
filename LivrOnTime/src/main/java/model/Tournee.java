@@ -3,41 +3,31 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import util.tsp.Dijkstra;
 
 public class Tournee {
 
 
-        final static double VITESSE=(double)15/3.6; // 15KM/h 
-		private Date heureDepart;
-		private Date heureArrivee;
-		private ArrayList <Chemin> itineraire;
-		private ArrayList <Livraison> listeLivraisons;
+    static final double VITESSE=(double)15/3.6; // 15KM/h 
+	private Date heureDepart;
+	private Date heureArrivee;
+	private ArrayList <Chemin> itineraire;
+	private ArrayList <Livraison> listeLivraisons;
+	private Date[][] tempsPassage;
+	
+	public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
+	    this.heureDepart=dl.getHeureDepart();
+		this.itineraire=itineraire2;
 		
-		/**
-		 * Ce tableau correspond aux temps de passage estimes de la livraison 
-		 * aux differents points de livraison. Plus d'explication avec la 
-		 * fonction {@link Tournee#getTempsPassage}
-		 */
-		private Date[][] tempsPassage;
-		
-		public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
-		    this.heureDepart=dl.getHeureDepart();
-			this.itineraire=itineraire2;
-			
-			
-			listeLivraisons = new ArrayList<Livraison>();
-			for (Chemin chemin : itineraire2){
-		    	for(Livraison l : dl.getLivraisons()){
-		    		if(l.getDestination().getId() == chemin.getDestination().getId()){
-		    			listeLivraisons.add(l);
-		    		}
-		    	}
-		    }
-			
-			
-			
+		listeLivraisons = new ArrayList<Livraison>();
+		for (Chemin chemin : itineraire2){
+	    	for(Livraison l : dl.getLivraisons()){
+	    		if(l.getDestination().getId() == chemin.getDestination().getId()){
+	    			listeLivraisons.add(l);
+	    		}
+	    	}
+	    }	
 	}
 		
 	public void initTempsPassage() {
@@ -45,6 +35,7 @@ public class Tournee {
 		tempsPassage = new Date[itineraire.size()][2];
 		
 		for(int i=0;i<itineraire.size();i++){
+			System.out.println("itineraire  "+itineraire.get(i));
 			for(int j=0;j<itineraire.get(i).getTroncons().size();j++){
 				dureeTotale+= itineraire.get(i).getTroncons().get(j).getLongueur()*1000/VITESSE;//Duree des trajets en seconde
 			}
@@ -64,22 +55,194 @@ public class Tournee {
 			}
 		}
 		
-		
 		heureArrivee=new Date(dureeTotale);
-		Date duree = new Date(dureeTotale- heureDepart.getTime()-3600000);// Soustraire 1 heure en millisecondes (probleme avec la date absolue par rapport a une duree brute en ms)
-		
-		SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
-		SimpleDateFormat dateJhms = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-		
-	    System.out.println("Duree : "+dureeHms.format(duree)+"\nDepart : "+dateJhms.format(heureDepart)+"\nArrivee : "+dateJhms.format(heureArrivee));
-	    
-	    for (Date[] tmp:tempsPassage) {
-	    	System.out.print("Trajet : heure d'arrivee = "+dateJhms.format(tmp[0]));
-	    	System.out.println((tmp[1]==null?"":("     Temps d'attente = "+dureeHms.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min, livraison a "+dureeHms.format(tmp[1]))));
-	    	
-	    }
 	}
 		
+	
+	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+		int index=-1;
+		int indiceListeLivraison = 0;
+		Intersection origine=null;
+		Intersection destination=null;
+		if(getListeLivraison().contains(l)){
+			
+			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
+			for(int i=0;i<getItineraire().size();i++){
+				Chemin chemin=getItineraire().get(i);
+					if(chemin.getDestination().getId()==inter.getId()){
+						origine=chemin.getOrigine();
+						nouvelItineraire.remove(chemin);
+						indiceListeLivraison = i;
+			     	}
+					if(chemin.getOrigine().getId()==inter.getId()){
+						destination=chemin.getDestination();
+						nouvelItineraire.remove(chemin);
+					}
+			}
+			
+			if(origine!=null && destination !=null){
+				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
+				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
+				setItineraire(nouvelItineraire);
+			}
+			
+			index=listeLivraisons.indexOf(l);
+			listeLivraisons.remove(l);
+			this.initTempsPassage();
+		}
+		
+		else {
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+		}
+		
+		this.initTempsPassage();
+		Pair <Integer, Tournee> paire = new Pair (index,this);
+		return paire;
+	}
+	
+	
+	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
+		Dijkstra d = new Dijkstra();
+
+		if(!getListeLivraison().contains(l)){
+			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
+			Chemin cheminASupprimer = nouvelItineraire.get(index);
+			nouvelItineraire.remove(index);
+			
+			//On cree le premier chemin
+		    d.algoDijkstra(plan, cheminASupprimer.getOrigine());
+		    Chemin nouveauChemin1 = plan.creerChemin(cheminASupprimer.getOrigine(), inter);
+			
+			//On ajoute le chemin à la fin ------> On ajoute le chemin à la bonne place dans la liste
+			nouvelItineraire.add(index,nouveauChemin1);
+
+			// Idem pour le deuxième chemin
+		    d.algoDijkstra(plan, inter);
+		    Chemin nouveauChemin2 = plan.creerChemin(inter, cheminASupprimer.getDestination());
+			nouvelItineraire.add(index+1,nouveauChemin2);
+		    setItineraire(nouvelItineraire);
+		    listeLivraisons.add(index, l);
+		    
+		}else {
+			System.err.println("ERREUR ! La livraison fait partie de la tournee actuelle");
+			return null;
+		}
+		this.initTempsPassage();
+		return this;
+	}	
+	
+	// modifier seulement la duree de livraison d'un pdl
+	public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
+		
+		if(this.getListeLivraison().contains(liv)){
+			int i=this.getListeLivraison().indexOf(liv);
+			liv.setDuree(duree);
+		}
+		else {
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			return false;
+		}	
+		this.initTempsPassage();
+		return true;
+	}
+	
+	
+	// modifier seulement la plage horaire de la livraison
+	// TODO : Permettre de la supprimer 
+	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
+		
+		if(this.getListeLivraison().contains(liv)){
+			int i=this.getListeLivraison().indexOf(liv);
+			
+			if(DPH!= null) {
+				liv.setDebutPlageHoraire(DPH);
+			}
+			
+			if(FPH!=null) {
+				liv.setFinPlageHoraire(FPH);
+			}
+			
+			this.getListeLivraison().set(i, liv);
+		}
+		else {
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			return false;
+		}	
+		this.initTempsPassage();
+		return true;
+	}
+	
+	
+	// verifier si l'heure d'arrive a une livrasion correspond aux plages horaires 
+	public int VerifierPlagesHorairesUneLiv(Livraison liv) {
+		// juste checker si l'horaire d'arrivee fait partie de la ph
+		// valeur 0 : pas d'attente et pas tendu --> bleu
+		// valeur 1 : pas d'attente et tendu --> orange
+		// valeur 2 : attente --> PURPLE
+		// valeur 3 : plage horaire violee --> rouge 
+		// valeur 4 : test d'erreur
+
+		int valeurPH = 4; 
+
+		for(Livraison l : getListeLivraison()){
+			if(l.toString().equals(liv.toString())){
+				liv = l;
+			}
+		}
+
+		Date[] tempsPassage=getTempsPassage()[getListeLivraison().indexOf(liv)];
+
+		boolean attente = true;
+		Date horaireArr = tempsPassage[0];
+
+		if (liv.getDebutPlageHoraire() != null && liv.getFinPlageHoraire() != null ) {
+			Date debutPH = liv.getDebutPlageHoraire();
+			Date finPH = liv.getFinPlageHoraire(); 
+			Date tempsRestantAvantFinPHdate = new Date(finPH.getTime() - horaireArr.getTime());
+			long tempsRestantAvantFinPH = tempsRestantAvantFinPHdate.getTime();
+
+			//arrive apres DPH et avant FPH donc n'attend pas 
+			if (horaireArr.getTime() >= debutPH.getTime() && horaireArr.getTime() < finPH.getTime()) {
+				attente = false; 
+			}
+
+			if (attente == false && tempsRestantAvantFinPH > 30*60000 + liv.getDuree()*1000 ) { // pas d'attente et pas tendu 
+				valeurPH = 0;
+			}
+
+			if (attente == false && tempsRestantAvantFinPH <= 30*60000 + liv.getDuree()*1000) { // pas d'attente et tendu 
+				valeurPH = 1;
+			}
+
+			if (attente == true && tempsRestantAvantFinPH >= liv.getDuree()*1000) { // attente
+				valeurPH = 2;
+			}
+
+			if (tempsRestantAvantFinPH < liv.getDuree()*1000 ) {// plage violee
+				valeurPH = 3;
+			}	
+		}
+		else {
+			valeurPH = 0;
+		}
+		
+		
+		return valeurPH;
+
+	}
+	
+	public int[] VerifierPlagesHorairesTournee() {
+		int nbLivraisons = getListeLivraison().size();
+		int[] tableauPlageHoraire = new int[nbLivraisons]  ;  // initialiser taille a nombre de liv 
+		
+		for (int i = 0; i < nbLivraisons; i++) {
+			int valeurPH = VerifierPlagesHorairesUneLiv(getListeLivraison().get(i));
+			tableauPlageHoraire[i]= valeurPH;
+		}
+		
+		return tableauPlageHoraire;
+	}
+	
 	/**
 	 * <p>Getter de l'attribut tempsPassage qui recense les temps de passage estimes aux differents points de livraison.
 	 * Il s'agit d'un tableau 2D contenant :</p>
@@ -123,333 +286,6 @@ public class Tournee {
 	
 	public ArrayList <Livraison> getListeLivraison() {
 		return listeLivraisons;
-	}
-	
-	public int SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
-		int index=-1;
-		Intersection origine=null, destination=null;
-		if(getListeLivraison().contains(l)){
-			
-			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
-			for(int i=0;i<getItineraire().size();i++){
-				Chemin chemin=getItineraire().get(i);
-					if(chemin.getDestination().getId()==inter.getId()){
-						origine=chemin.getOrigine();
-						nouvelItineraire.remove(chemin);
-						//indice=i;
-			     	}
-					if(chemin.getOrigine().getId()==inter.getId()){
-						destination=chemin.getDestination();
-						nouvelItineraire.remove(chemin);
-					}
-			}
-			System.out.println("La liste contient l");
-			if(origine!=null && destination !=null){
-				
-				Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
-				nouvelItineraire.add( nouveau_chemin);
-				setItineraire(nouvelItineraire);
-			}
-
-			getListeLivraison().remove(l);
-
-			index=listeLivraisons.indexOf(l);
-			listeLivraisons.remove(l);
-			this.initTempsPassage();
-			
-			
-		}
-		else {
-			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-		}
-		this.initTempsPassage();
-		System.out.println("resultat fin"+ getItineraire());
-		return index;
-	}
-	
-	
-	public boolean AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
-		Dijkstra d = new Dijkstra();
-		
-
-		if(!getListeLivraison().contains(l)){
-			ArrayList<Chemin> nouvelItineraire=getItineraire();
-			Chemin dernierChemin=nouvelItineraire.get(nouvelItineraire.size()-1);
-			nouvelItineraire.remove(nouvelItineraire.size()-1);
-		    
-		    Chemin nouveauChemin=new Chemin();
-		    d.algoDijkstra(plan, dernierChemin.getOrigine());
-			nouveauChemin.setOrigine(dernierChemin.getOrigine());
-			nouveauChemin.setDestination(inter);
-            Intersection courante = inter;
-			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-			
-			while (courante!=dernierChemin.getOrigine()) {
-				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
-				
-				if(troncon!=null) {
-					troncons.add(0, troncon);
-				}
-				courante=courante.getPredecesseur();
-			}
-			nouveauChemin.setTroncons(troncons);
-			nouvelItineraire.add(nouveauChemin);
-		    
-		    nouveauChemin=new Chemin();
-		    d.algoDijkstra(plan, inter);
-			nouveauChemin.setOrigine(inter);
-			nouveauChemin.setDestination(dernierChemin.getDestination());
-		
-			courante = dernierChemin.getDestination();
-		    troncons=new ArrayList<Troncon>();
-			
-		    while (courante!=inter) {
-				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
-				
-				if(troncon!=null) {
-					troncons.add(0, troncon);
-				}
-				courante=courante.getPredecesseur();
-			}
-			nouveauChemin.setTroncons(troncons);
-			
-			nouvelItineraire.add(nouveauChemin);
-		    setItineraire(nouvelItineraire);
-		    getListeLivraison().add(index, l);
-		    /*index=listeLivraisons.indexOf(l);
-			listeLivraisons.add(index, l);
-			this.initTempsPassage();*/
-		}else {
-			System.err.println("ERREUR ! La livraison fait partie de la tournee actuelle");
-			return false;
-		}
-		this.initTempsPassage();
-		System.out.println("resultat fin"+ getItineraire());
-	return true;
-
-		
-		/*Chemin rChemin=itineraire.get(index);
-	    itineraire.remove(index);
-	    
-
-	    d.algoDijkstra(plan, rChemin.getOrigine());
-	    Chemin begChemin=plan.creerChemin(rChemin.getOrigine(),inter);
-	    itineraire.add(index,begChemin);
-	    
-	    d.algoDijkstra(plan, inter);
-	    Chemin endChemin=plan.creerChemin(inter,rChemin.getDestination());
-	    itineraire.add(index+1,endChemin);
-	    
-	    
-	    listeLivraisons.add(index,l);
-	    
-	    return true;*/
-
-
-	}
-
-		
-	public boolean ModifierLivraison(Plan plan,Livraison liv,Intersection inter){
-		Intersection origine=new Intersection(); 
-		Intersection distination=new Intersection();
-		
-		//si cette livraison n'appartient pas dï¿½ja a DL
-		if(!this.getListeLivraison().contains(inter)){
-			ArrayList<Chemin> nouvelItineraire=getItineraire();
-			Dijkstra d=new Dijkstra();
-			
-			int index=0;
-		
-			for(int i=0;i<nouvelItineraire.size();i++){
-				if(nouvelItineraire.get(i).getDestination()==liv.getDestination()){
-					origine=nouvelItineraire.get(i).getOrigine();
-					nouvelItineraire.remove(nouvelItineraire.get(i));;
-					index=i;
-				}
-				if(nouvelItineraire.get(i).getOrigine()==liv.getDestination()){
-					origine=nouvelItineraire.get(i).getDestination();
-					nouvelItineraire.remove(nouvelItineraire.get(i));
-				}
-				
-			}
-			
-			
-			
-			Chemin nouveauChemin=new Chemin();
-		    d.algoDijkstra(plan, origine);
-			nouveauChemin.setOrigine(origine);
-			nouveauChemin.setDestination(inter);
-		
-			Intersection courante = inter;
-			ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-			
-			while (courante!=origine) {
-				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
-				
-				if(troncon!=null) {
-					troncons.add(0, troncon);
-				}
-				else{
-					System.err.println("un point inaccessible !");
-				}
-				courante=courante.getPredecesseur();
-			}
-			
-			nouveauChemin.setTroncons(troncons);		
-		    nouvelItineraire.add(index, nouveauChemin);
-		    
-		    nouveauChemin=new Chemin();
-		    d.algoDijkstra(plan, inter);
-			nouveauChemin.setOrigine(inter);
-			nouveauChemin.setDestination(distination);
-		
-			courante =distination;
-		    troncons=new ArrayList<Troncon>();
-			
-		    while (courante!=inter) {
-				Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
-				if(troncon!=null) {
-					troncons.add(0, troncon);
-				}
-				else{
-					System.err.println("un point inaccessible !");
-				}
-				courante=courante.getPredecesseur();
-			}
-			nouveauChemin.setTroncons(troncons);
-			
-			nouvelItineraire.add(++index,nouveauChemin);
-			
-			 setItineraire(nouvelItineraire);
-			 liv.setDestination(inter);
-		}else {
-			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-			return false;
-		}
-		this.initTempsPassage();
-		System.out.println("resultat fin"+ getItineraire());
-		return true;
-	}
-	
-	
-	// modifier seulement la duree de livraison d'un pdl
-	public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
-		
-		if(this.getListeLivraison().contains(liv)){
-			int i=this.getListeLivraison().indexOf(liv);
-			liv.setDuree(duree);
-			this.getListeLivraison().set(i, liv);
-		}
-		else {
-			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-			return false;
-		}	
-		this.initTempsPassage();
-		return true;
-	}
-	
-	
-	// modifier seulement la plage horaire de la livraison
-	// TODO : Permettre de la supprimer 
-	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
-		
-		if(this.getListeLivraison().contains(liv)){
-			int i=this.getListeLivraison().indexOf(liv);
-			
-			if(DPH!= null) {
-				liv.setDebutPlageHoraire(DPH);
-			}
-			
-			if(FPH!=null) {
-				liv.setFinPlageHoraire(FPH);
-			}
-			
-			this.getListeLivraison().set(i, liv);
-		}
-		else {
-			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-			return false;
-		}	
-		this.initTempsPassage();
-		return true;
-	}
-	
-	
-	// verifier si l'heure d'arrive a une livrasion correspond aux plages horaires 
-	public int VerifierPlagesHorairesUneLiv(Tournee tournee, Livraison liv) {
-		// juste checker si l'horaire d'arrivee fait partie de la ph
-		// valeur 0 : pas d'attente et pas tendu --> bleu
-		// valeur 1 : pas d'attente et tendu --> orange
-		// valeur 2 : attente --> orangered
-		// valeur 3 : plage horaire violee --> rouge 
-		// valeur 4 : test d'erreur
-		
-		int valeurPH = 4; 
-		
-		if (tournee!=null) {
-			for(Livraison l : tournee.getListeLivraison()){
-				if(l.toString().equals(liv.toString())){
-					liv = l;
-				}
-			}
-
-			Date[] tempsPassage=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(liv)];
-	
-			boolean attente = true;
-			Date horaireArr = tempsPassage[0];
-			Date debutPH = liv.getDebutPlageHoraire();
-			Date finPH = liv.getFinPlageHoraire(); 
-			long tempsRestantAvantFinPH = finPH.getTime() - 3600000 - horaireArr.getTime();
-			
-			//arrive apres DPH et avant FPH donc n'attend pas 
-			if (horaireArr.getTime() >= debutPH.getTime() && horaireArr.getTime() < finPH.getTime()) {
-				attente = false; 
-			}
-			
-			if (attente == false && tempsRestantAvantFinPH > 30*60000 + liv.getDuree()*1000 ) { // pas d'attente et pas tendu 
-				valeurPH = 0;
-			}
-			
-			if (attente == false && tempsRestantAvantFinPH <= 30*60000 + liv.getDuree()*1000) { // pas d'attente et tendu 
-				valeurPH = 1;
-			}
-			
-			if (attente == true && tempsRestantAvantFinPH >= liv.getDuree()*1000) { // attente
-				valeurPH = 2;
-			}
-			
-			if (tempsRestantAvantFinPH < liv.getDuree()*1000 ) {// plage violee 
-				valeurPH = 3;
-			}	
-		}
-		return valeurPH;
-	}
-	
-	
-	public int[] VerifierPlagesHorairesTournee(Tournee tournee) {
-		int nbLivraisons = tournee.getListeLivraison().size();
-		int[] tableauPlageHoraire = new int[nbLivraisons]  ;  // initialiser taille a nombre de liv 
-		
-		for (int i = 0; i < nbLivraisons; i++) {
-			int valeurPH = VerifierPlagesHorairesUneLiv(tournee, tournee.getListeLivraison().get(i));
-			tableauPlageHoraire[i]= valeurPH;
-		}
-		
-		return tableauPlageHoraire;
-	}
-	
-	
-	//Unused setters (yet)
-	/*private void setHeureArrive(Date heureArrive) {
-		this.heureArrivee = heureArrive;
-	}
-	
-	private void setListeLivraison(ArrayList <Livraison> liste) {
-		this.listeLivraisons=liste;
-	}
-	private void setHeureDepart(Date heureDepart) {
-		this.heureDepart = heureDepart;
-	}*/
-	
+	}	
 		
 }

@@ -8,10 +8,10 @@ import java.util.ArrayList;
  *
  */
 public class GrapheComplet {
+	
 	private long [] duree;
 	private long [][] couts;
 
-	
 	public GrapheComplet (ArrayList<Livraison> listeLivraisons,ArrayList<Intersection> listeIntersections,ArrayList<Chemin> chemins) {
 		int taille = listeIntersections.size();
 		duree= new long [taille];
@@ -40,14 +40,8 @@ public class GrapheComplet {
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
 	}
+	
 	
 	public Chemin trouverChemin (Intersection origine, Intersection destination, ArrayList<Chemin> chemins) {
 		Chemin result=null;

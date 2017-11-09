@@ -1,5 +1,6 @@
 package controller;
 
+import LivrOnTime.Main;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
@@ -27,12 +28,14 @@ public class CdeSuppression implements Commande {
 
 	@Override
 	public void undoCde() {
+		Main.aController.getDemandeLiv().getLivraisons().add(livraison);
 		tournee.AjouterLivraison(plan,intersection,livraison,index);
 	}
 
 	@Override
 	public void redoCde() {
-		index =tournee.SupprimerLivraison(plan,intersection,livraison);
+		Main.aController.getDemandeLiv().getLivraisons().remove(livraison);
+		index =(tournee.SupprimerLivraison(plan,intersection,livraison)).getKey();
 	}
 
 }

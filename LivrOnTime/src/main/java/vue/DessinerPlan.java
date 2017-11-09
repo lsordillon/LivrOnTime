@@ -3,6 +3,8 @@ package vue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Map.Entry;
 
 import controller.AccueilController;
 import model.Chemin;
@@ -28,6 +30,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.*;
+import javafx.scene.layout.StackPane;
 
 class PannableCanvas extends Pane {
 
@@ -204,6 +208,11 @@ public class DessinerPlan {
 	public static HashMap<Long,Circle> dessine = new HashMap<Long,Circle>();
 	
 	MouseGestures mg;
+	private ArrayList<Text> chiffres;
+	
+	public DessinerPlan () {
+		chiffres = new ArrayList<Text>();
+	}
 
     public static HashMap<Long, Circle> getDessine() {
 		return dessine;
@@ -215,12 +224,13 @@ public class DessinerPlan {
 
 	// Methode qui dessine les troncons
     public void dessinerTroncon(Intersection D, Intersection O,Plan plan) {
-    	int x,y;
+    		int x,y;
     	   
-    	
-    	Circle circle1 = new Circle(1);
-    	 circle1.setStroke(Color.GREY);
-         circle1.setFill(Color.GREY);
+
+    		Circle circle1 = new Circle(1);
+    		circle1.setStroke(Color.GREY);
+        circle1.setFill(Color.GREY);
+
          
          //Mise a l'echelle
          x= (int)((D.getX() - minusX)*sizeCanvas / divX);
@@ -233,18 +243,18 @@ public class DessinerPlan {
         //Mise a l'echelle
         x= (int)((O.getX() - minusX)*sizeCanvas/ divX);
         y=(int)((O.getY() - minusY)*sizeCanvas/ divY );
-    	Circle circle2 = new Circle(1);
-    	circle2.setRadius(widthStroke/2);
+
+        Circle circle2 = new Circle(1);
+    		circle2.setRadius(widthStroke/2);
         circle2.setStroke(Color.GREY);
         circle2.setFill(Color.GREY);
+
         //Centrage
         circle2.relocate(y+ sizeCanvas/2 , -x+ sizeCanvas);
         //Rendre les circles clickable
         mg.makeClickable(circle1);
         mg.makeClickable(circle2);
         
-       
-    	
     	
         Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
         
@@ -253,11 +263,11 @@ public class DessinerPlan {
         line.setStroke(Color.GREY);
         String adress = "";
         for(Troncon troncon : AccueilController.getPlan().getTroncons()){
-        	if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
-        		adress = troncon.getNomRue();
-        	}
-        		
+        		if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
+        			adress = troncon.getNomRue();
+        		} 		
         }
+        
         Tooltip tp = new Tooltip(adress);
         line.setOnMouseEntered(new EventHandler<MouseEvent>() {
              @Override
@@ -268,8 +278,7 @@ public class DessinerPlan {
             });
         line.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent t) {
-                 
+            public void handle(MouseEvent t) {             
                  tp.hide();
                }
            });
@@ -277,18 +286,18 @@ public class DessinerPlan {
         canvas.getChildren().add(line);
         
         if (!dessine.containsKey(D.getId())){
-    		canvas.getChildren().add(circle1);
-    		dessine.put(D.getId(), circle1);
-    	}else{
-    		((Circle) dessine.get(D.getId())).toFront();
-    	}
+    			canvas.getChildren().add(circle1);
+    			dessine.put(D.getId(), circle1);
+        }else{
+    			((Circle) dessine.get(D.getId())).toFront();
+    		}
     	
             
         if (!dessine.containsKey(O.getId())){
-        	canvas.getChildren().add(circle2);
-        	dessine.put(O.getId(), circle2);
+        		canvas.getChildren().add(circle2);
+        		dessine.put(O.getId(), circle2);
         }else{
-        	((Circle) dessine.get(O.getId())).toFront();
+        		((Circle) dessine.get(O.getId())).toFront();
         }
 
     }
@@ -347,27 +356,65 @@ public class DessinerPlan {
                
     }
     
-    public Group Dessiner(DemandeLivraison dl) {
-    	ArrayList<Livraison> livraisons = dl.getLivraisons();
-    	Group group = new Group();
-        
-        Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
-        canvas.getChildren().remove(circle);
-        
-    	circle.setStroke(Color.PURPLE);
-    	circle.setFill(Color.PURPLE);
-    	circle.setRadius(widthStroke*10);
-    	 canvas.getChildren().add(circle);
+
+    public Group Dessiner(DemandeLivraison dl, Plan plan) {
+    		ArrayList<Livraison> livraisons = dl.getLivraisons();
+    		Group group = new Group();
+    		
+    		Circle circle = dessine.get(dl.getAdresseEntrepot().getId());
+    		canvas.getChildren().remove(circle);
+    		circle.setStroke(Color.PLUM);
+    		circle.setFill(Color.PLUM);
+    		circle.setRadius(widthStroke*10);
+    		canvas.getChildren().add(circle);
+
         
         for (Livraison livraison : livraisons){
-        	circle = dessine.get(livraison.getDestination().getId());
-        	canvas.getChildren().remove(circle);
-        	circle.setStroke(Color.BLUE);
-        	circle.setFill(Color.BLUE);
-        	circle.setRadius(widthStroke*6);
-            canvas.getChildren().add(circle);
+
+        		circle = dessine.get(livraison.getDestination().getId());
+        		canvas.getChildren().remove(circle);
+        		circle.setStroke(Color.BLUE);
+        		circle.setFill(Color.BLUE);
+        		circle.setRadius(widthStroke*6);
+            
+            
+            //ecoute
+            circle.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent t) {
+                     //Node  node =(Node)t.getSource();
+                     //tp.show(node, line.getLayoutX()+t.getSceneX(), line.getLayoutY()+t.getSceneY());
+                		System.out.println("enter");
+                		double orgSceneX = t.getSceneX();
+        	            double orgSceneY = t.getSceneY();
+        	            if (t.getSource() instanceof Circle) {
+        	            		Circle p = ((Circle) (t.getSource()));
+        	                double orgTranslateX = p.getCenterX();
+        	                double orgTranslateY = p.getCenterY();
+        	                long key=0;
+        	                for(Circle circle : DessinerPlan.dessine.values()){
+        	                		
+        	                		if(circle.equals(p)){
+        	                			key = getKeyByValue(DessinerPlan.dessine, circle);
+        	                		}
+    	                		}
+        	                Intersection intersectionClicked = plan.getIntersections().get(key);
+    	                		System.out.println("Intersection ID "+intersectionClicked.getId());
+        	            }
+                   }
+               });
+           circle.setOnMouseExited(new EventHandler<MouseEvent>() {
+               @Override
+               public void handle(MouseEvent t) {             
+                    //tp.hide();
+            	   		System.out.println("exit");
+                  }
+              });
+           //fin ecoute
+           
+           canvas.getChildren().add(circle);
+ 
         }
-     
       
         return group;
 		             
@@ -381,39 +428,90 @@ public class DessinerPlan {
            scene.addEventFilter( ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
 		
 	}
-   
-    
+
+
     public Group afficherChemin(Tournee tournee){
 		Group group = new Group();
 		
 		Circle circle1 = dessine.get(tournee.getItineraire().get(0).getOrigine().getId());
-    	/*canvas.getChildren().remove(circle1);
-    	circle1.setStroke(Color.GREEN);
-    	circle1.setFill(Color.GREEN);
-    	circle1.setRadius(widthStroke*4);
-    	canvas.getChildren().add(circle1);*/
-    	circle1.toFront();
+		//circle1.toFront();
+		
+		actualiserCouleurPoints(tournee);
+		
     	Circle circle2;
+    	
     	for (Chemin c : tournee.getItineraire()){
+    		
+    		Text precedent = new Text();
+    		
     		for(Troncon t: c.getTroncons()){
     			circle1=dessine.get(t.getOrigine().getId());
     			circle2=dessine.get(t.getDestination().getId());
     			
-    			 Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+    			Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
     		        
-    			 line.setStroke(Color.GREEN);
+    			line.setStroke(Color.GREEN);
     			line.setFill(Color.GREEN);
-    		        line.setStrokeWidth(widthStroke*4);
+    		    line.setStrokeWidth(widthStroke*4);
     		      
-    		        canvas.getChildren().add(line);
-    		        circle1.toFront();
-    		        circle2.toFront();
+		        canvas.getChildren().add(line);
+		        circle1.toFront();
+		        
     		}
     		    
     	}
-		
-    	
+   	 
+    	numeroterSommets(tournee);
+    	passerChiffresDevant();
     	return group;
+    }
+    
+    public void numeroterSommets(Tournee tournee) {
+    	
+    	if (!chiffres.isEmpty()) {
+    		for(Text t : chiffres) {
+    			canvas.getChildren().remove(t);
+    		}
+    		chiffres.clear();
+    	}
+    	
+    	int indice = 1;
+    	for (Chemin c : tournee.getItineraire()){
+    		
+    		Text chiffreOrigine = new Text(""+indice);
+    		chiffreOrigine.setFill(Color.BLACK);
+    		chiffreOrigine.setStroke(Color.BLACK);
+	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
+	    	
+	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + widthStroke * 7);
+	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - widthStroke * 8);
+	    	canvas.getChildren().add(chiffreOrigine);
+	    	
+	    	indice++;
+	    	chiffres.add(chiffreOrigine);
+	    	//System.out.println(c.getDestination());
+    	}
+    }
+    
+    public void passerChiffresDevant() {
+    	for ( int i =0; i <chiffres.size(); i++) {
+    		chiffres.get(i).toFront();
+    	}
+    }
+    
+    public void surlignerTroncon (Troncon t, Paint Couleur) {
+    	
+    	Circle circle1=DessinerPlan.dessine.get(t.getOrigine().getId());
+		Circle circle2=DessinerPlan.dessine.get(t.getDestination().getId());
+		
+		Line line = new Line(circle1.getLayoutX(), circle1.getLayoutY(), circle2.getLayoutX(), circle2.getLayoutY());
+	        
+		line.setStroke(Couleur);
+		line.setFill(Couleur);
+	    line.setStrokeWidth(widthStroke*4);
+	      
+        canvas.getChildren().add(line);
+        circle1.toFront();
     }
 
 	public int getDivX() {
@@ -455,6 +553,51 @@ public class DessinerPlan {
 	public void setSizeCanvas(double sizeCanvas) {
 		this.sizeCanvas = sizeCanvas;
 	}
+	
+	public static <T, E> T getKeyByValue(HashMap<T, E> map, E value) {
+        for (Entry<T, E> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
     
+	public void actualiserCouleurPoints(Tournee tournee) {
+	
+		for (int i = 0; i<tournee.getItineraire().size()-1; i++){
+			//retrouver lintersection correspondant a la livraison interLiv
+			Livraison liv = tournee.getListeLivraison().get(i);
+	        
+			int[] valeursPH = tournee.VerifierPlagesHorairesTournee();
+			
+				if (valeursPH[i] == 0) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.BLUE);
+					cercleActuel.setStroke(Color.BLUE);
+				}
+				if (valeursPH[i] == 1) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.ORANGE);
+					cercleActuel.setStroke(Color.ORANGE);
+				}
+				if (valeursPH[i] == 2) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.PURPLE);
+					cercleActuel.setStroke(Color.PURPLE);
+				}
+				if (valeursPH[i] == 3) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.RED);
+					cercleActuel.setStroke(Color.RED);
+				}
+				if (valeursPH[i] == 4) {
+					Circle cercleActuel = dessine.get(liv.getDestination().getId());
+					cercleActuel.setFill(Color.BLUEVIOLET);
+					cercleActuel.setStroke(Color.BLUEVIOLET);
+				}
+		
+		}
+	}
    
 }
