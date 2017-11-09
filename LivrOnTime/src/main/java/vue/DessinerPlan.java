@@ -137,7 +137,8 @@ public class DessinerPlan {
     }
 
     public Group Dessiner(Plan plan) {
-    	
+    	dessine = new HashMap<Long,Circle>();
+    	canvas = new PannableCanvas();
     	Group groupe = new Group();
         	
     	int minX,minY,maxX=0,maxY=0;
