@@ -295,6 +295,7 @@ public class DessinerPlan {
 	    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
         canvas.getChildren().add(ligne);
         cercle1.toFront();
+        cercle2.toFront();
     }
     
     public void actualiserCouleurPoints(Tournee tournee) {
