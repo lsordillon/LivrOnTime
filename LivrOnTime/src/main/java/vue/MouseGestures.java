@@ -104,6 +104,7 @@ public class MouseGestures {
                 }
                 Intersection intersectionClicked = plan.getIntersections().get(key);
                 System.out.println("Intersection ID "+intersectionClicked.getId());
+                accueilController.getdController().setSurlignage(intersectionClicked);
             }
           }
       };

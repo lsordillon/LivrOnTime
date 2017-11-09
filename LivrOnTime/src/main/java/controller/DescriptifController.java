@@ -3,6 +3,7 @@ package controller;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javafx.beans.value.ChangeListener;
@@ -95,7 +96,7 @@ public class DescriptifController {
 							VBox vBox = new VBox(new Text(getAdresse(livr.getDestination())), new Text(plageHoraire));
 							
 							//vBox.setStyle("-fx-background-color: #457E31");
-							//vBox.setId(arg0);
+							
 							
 							//Affichage des temps de passage
 							if (tournee!=null) {
@@ -107,24 +108,24 @@ public class DescriptifController {
 								String heureArrivee="";
 								String attente="";
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(livr)];
-						    	heureArrivee="Arrivee a "+dureeHm.format(tmp[0]);
-						    	attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHm.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
+						    		heureArrivee="Arrivee a "+dureeHm.format(tmp[0]);
+						    		attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHm.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
 
-						    	Text txtHeureArrivee;
+						    		Text txtHeureArrivee;
 						    	
-						    	int valeurPH = tournee.VerifierPlagesHorairesUneLiv(livr);
+						    		int valeurPH = tournee.VerifierPlagesHorairesUneLiv(livr);
 						    	
-						    	if (livr.getFinPlageHoraire()==null) {
-						    		txtHeureArrivee = new Text(heureArrivee);
-						    		txtHeureArrivee.setFill(Color.BLACK);
-						    	}
-						    	else {			
-						    		txtHeureArrivee = new Text(heureArrivee+ attente);
-						    		txtHeureArrivee.setFill(Color.GREEN);
+						    		if (livr.getFinPlageHoraire()==null) {
+						    			txtHeureArrivee = new Text(heureArrivee);
+						    			txtHeureArrivee.setFill(Color.BLACK);
+						    		}
+						    		else {			
+						    			txtHeureArrivee = new Text(heureArrivee+ attente);
+						    			txtHeureArrivee.setFill(Color.GREEN);
 						    		
-							    	if (valeurPH == 0) { // pas dattente et pas tendu 
-							    		txtHeureArrivee.setFill(Color.GREEN);
-							    	}
+						    			if (valeurPH == 0) { // pas dattente et pas tendu 
+						    				txtHeureArrivee.setFill(Color.GREEN);
+						    			}
 									if (valeurPH == 1) { //pas d'attente et tendu
 										txtHeureArrivee.setFill(Color.ORANGE);		    		
 									}
@@ -137,36 +138,40 @@ public class DescriptifController {
 									if (valeurPH == 4) { //erreur
 										txtHeureArrivee.setFill(Color.BLUEVIOLET);
 									}
-						    	}
+						    		}
 						    	
 
 						    	
-						    	//2e vBox qui affiche la dur�e et l'heure d'arriv�e
-
-						    	Text txtDureeTrajet;
-						    	Text spaceTxt = new Text("|");
-						    	Text spaceTxt2 = new Text("|");
+						    		//2e vBox qui affiche la dur�e et l'heure d'arriv�e
+						    		
+						    		Text txtDureeTrajet;
+						    		Text spaceTxt = new Text("|");
+						    		Text spaceTxt2 = new Text("|");
 						    	
-						    	int index = tournee.getListeLivraison().indexOf(livr);
-						    	if (index ==0) {
-						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
-						    	}
-						    	else {
-						    		long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
-						    		txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
+						    		int index = tournee.getListeLivraison().indexOf(livr);
+						    		if (index ==0) {
+						    			txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
+						    		}
+						    		else {
+						    			long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
+						    			txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
 							    	
-						    	}
-						    	txtDureeTrajet.setFill(Color.BLUE);
-						    	spaceTxt.setFill(Color.BLUE);
-						    	spaceTxt2.setFill(Color.BLUE);
-						    	VBox vBox2 = new VBox(new VBox(spaceTxt,txtDureeTrajet,spaceTxt2),vBox,new VBox(txtHeureArrivee));
-						    	//vBox2.setSpacing(10); (????)
-						    	setGraphic(vBox2);
+						    		}
+						    		txtDureeTrajet.setFill(Color.BLUE);
+						    		spaceTxt.setFill(Color.BLUE);
+						    		spaceTxt2.setFill(Color.BLUE);
+						    		VBox vBox2 = new VBox(new VBox(spaceTxt,txtDureeTrajet,spaceTxt2),vBox,new VBox(txtHeureArrivee));
+						    		vBox2.setId(""+livr.getDestination().getId());
+						    		//	vBox2.setStyle("-fx-background-color: #457E31");
+						    		//vBox2.setSpacing(10); (????)
+						    		setGraphic(vBox2);
 							}
 
 							// HBox hBox = new HBox(new ImageView, vBox);
 							// hBox.setSpacing(10);
-							else setGraphic(vBox);
+							else {
+								setGraphic(vBox);
+							}
 							setOnDragDetected(new EventHandler<MouseEvent>(){
 		                        @Override
 		                        public void handle(MouseEvent event) {
@@ -319,10 +324,28 @@ public class DescriptifController {
 		
 	}
 	
-// @lsordillon -- mise en place du surlignage
-	public interface IntersectionSurligneListener{
-		void intersectionSurligneChanged(Intersection ancienne,Intersection nouvelle);
+	public void setSurlignage (Intersection inter) {
+		Node v=listView.lookup(""+inter.getId()); // renvoie null ?
+		//getSelectionModel
+		System.out.println(v);
+		//Node v2=v.lookup(""+inter.getId());
+		//v2.setStyle("-fx-background-color: #457E31");
+		Iterator<Livraison> it=data.iterator();
+		while (it.hasNext()) {
+			Livraison courante = it.next();
+			if(courante.getDestination()==inter) {
+				
+				listView.getSelectionModel().select(data.indexOf(courante));
+				//listView.get
+				
+			}
+		}
+			
+		
+	
+		
 	}
+
 	
 
   
