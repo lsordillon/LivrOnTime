@@ -134,11 +134,10 @@ public class LivraisonController implements Initializable {
 			int idx = paire.getKey();
 			Tournee nouvelleTournee = paire.getValue();
 			aController.setTournee(nouvelleTournee);
-			System.out.println("index suppresion"+ idx);
 			listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
 			aController.setListeDeCdes(listeDeCdes);
-			aController.update();
 		}
+		aController.update();
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
 	}
@@ -153,12 +152,12 @@ public class LivraisonController implements Initializable {
 		Date fin = new java.util.Date();
 		fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
 		fin.setMinutes(comboAMinute.getSelectionModel().getSelectedItem());
-		livraison = new Livraison(0, intersection, debut, fin);
+	
+		livraison = new Livraison(Integer.parseInt(dureeField.getText()) * 60, intersection, debut, fin);
 		}else{
-			livraison = new Livraison(0,intersection);
+			livraison = new Livraison(Integer.parseInt(dureeField.getText()) * 60,intersection);
 		}
-		
-		
+
 		plan = aController.getPlan();
 		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
@@ -166,11 +165,10 @@ public class LivraisonController implements Initializable {
 		    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex()+1;
 		    	System.out.println("index ajout"+ idx);
 				aController.setTournee(aController.getTournee().AjouterLivraison(plan,intersection,livraison, idx));
-				aController.update();
 				listeDeCdes.ajoute(new CdeAjout(plan,intersection,aController.getTournee(),livraison,idx));
-				aController.setListeDeCdes(listeDeCdes);
-				
+				aController.setListeDeCdes(listeDeCdes);	
 		}
+		aController.update();
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();
 	}

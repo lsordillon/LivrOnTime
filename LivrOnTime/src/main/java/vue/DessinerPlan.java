@@ -189,7 +189,7 @@ public class DessinerPlan {
     }
     
 
-    public Group Dessiner(DemandeLivraison dl, Plan plan) {
+    public Group Dessiner(DemandeLivraison dl, Plan plan) { 
     		ArrayList<Livraison> livraisons = dl.getLivraisons();
     		Group groupe = new Group();
     		

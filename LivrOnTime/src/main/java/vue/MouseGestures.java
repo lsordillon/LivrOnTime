@@ -60,7 +60,7 @@ public class MouseGestures {
 	        			adresse = troncon.getNomRue();
 	        		} 		
 	        }
-	        Tooltip tronconSurvole = new Tooltip(adresse);
+	        tronconSurvole = new Tooltip(adresse);
 	        
 	        noeud.setOnMouseEntered(lineOnMouseEnteredEventHandler);
 			noeud.setOnMouseExited(lineOnMouseExitedEventHandler);

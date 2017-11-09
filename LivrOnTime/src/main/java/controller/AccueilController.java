@@ -209,6 +209,7 @@ public class AccueilController{
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
+		CalculTournee.setDisable(true);
 	}
 	
 	
