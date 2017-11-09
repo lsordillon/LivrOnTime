@@ -163,7 +163,7 @@ public class AccueilController{
 					LivraisonController.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
 				    sceneGestures.rendreCanvasZoomable(this);			    
-				    //ListerLivraisons(dl.getLivraisons());
+				    
 				     
 		
 				    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
@@ -209,7 +209,10 @@ public class AccueilController{
 							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
 		vBox3.setSpacing(10);
 		
-		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan, tournee));
+		ArrayList <Livraison> listeDestinations=tournee.getListeLivraison();
+		Livraison retourEntrepot=new Livraison(0,tournee.getItineraire().get(0).getOrigine());
+		listeDestinations.add(retourEntrepot);
+		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(listeDestinations, plan, tournee));
 	
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);

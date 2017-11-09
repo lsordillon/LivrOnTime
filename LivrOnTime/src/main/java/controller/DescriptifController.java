@@ -97,9 +97,11 @@ public class DescriptifController {
 							}else {
 								plageHoraire="";
 							}
-							
-							plageHoraire+= "Duree livraison : "+livr.getDuree()/60+" min";
-							
+							if(livr.getDuree()!=0) {
+								plageHoraire+= "Duree livraison : "+livr.getDuree()/60+" min";
+							}else {
+								plageHoraire+= "Retour entrepot";
+							}
 							
 							
 							super.updateItem(livr, bln);
