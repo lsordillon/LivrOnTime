@@ -57,7 +57,6 @@ public class MouseGestures {
 	        for(Troncon troncon : accueilController.getPlan().getTroncons()){
 	        		if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
 	        			adresse = troncon.getNomRue();
-	        			System.out.println(D.getId() + " " + O.getId()+ " " + adresse);
 	        		} 		
 	        }
 	        Tooltip tronconSurvole = new Tooltip(adresse);
