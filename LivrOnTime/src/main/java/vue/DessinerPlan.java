@@ -268,7 +268,7 @@ public class DessinerPlan {
     	        chiffreOrigine.setBoundsType(TextBoundsType.VISUAL); 
     	    	
     	        chiffreOrigine.setX(dessine.get(c.getOrigine().getId()).getLayoutX() + largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
-    	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREX);
+    	        chiffreOrigine.setY(dessine.get(c.getOrigine().getId()).getLayoutY() - largeurTrait * MODIFICATEURPOSITIONCHIFFREY);
     	    	canvas.getChildren().add(chiffreOrigine);
     	    	
     	    	indice++;
