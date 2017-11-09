@@ -54,11 +54,14 @@ public class LivraisonController implements Initializable {
 			comboDeHeur.getItems().add(i);
 			comboAHeur.getItems().add(i);
 		}
-		
+		comboAHeur.getItems().add(null);
+		comboDeHeur.getItems().add(null);
 		for(int i=0;i<60;i++){
 			comboDeMinute.getItems().add(i);
 			comboAMinute.getItems().add(i);
 		}
+		comboDeMinute.getItems().add(null);
+		comboAMinute.getItems().add(null);
 		boolean exist = false;
 		if(intersection!=null){
 			adresseField.setText(AccueilController.getAdresse(intersection));
@@ -90,7 +93,7 @@ public class LivraisonController implements Initializable {
 		Date debut = new Date();
 		Date fin = new Date();
 		
-		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){			
+		if(!comboAHeur.getSelectionModel().isEmpty() && comboAHeur.getSelectionModel().getSelectedItem()!=null && !comboAMinute.getSelectionModel().isEmpty() && comboAMinute.getSelectionModel().getSelectedItem()!=null  && !comboDeHeur.getSelectionModel().isEmpty() && comboDeHeur.getSelectionModel().getSelectedItem()!=null  && !comboDeMinute.getSelectionModel().isEmpty() && comboDeMinute.getSelectionModel().getSelectedItem()!=null){			
 			debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
 			debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());			
 			fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
@@ -131,13 +134,15 @@ public class LivraisonController implements Initializable {
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
 		if (aController.getTournee()!=null){
 			Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
-			int idx = paire.getKey();
-			Tournee nouvelleTournee = paire.getValue();
-			aController.setTournee(nouvelleTournee);
-			listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
-			aController.setListeDeCdes(listeDeCdes);
+			if (paire != null) {
+				int idx = paire.getKey();
+				Tournee nouvelleTournee = paire.getValue();
+				aController.setTournee(nouvelleTournee);
+				listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
+				aController.setListeDeCdes(listeDeCdes);
+				aController.update();
+			}
 		}
-		aController.update();
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
 	}
@@ -145,7 +150,7 @@ public class LivraisonController implements Initializable {
 	
 	public void AjouterLivraison(){
 		
-		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().isEmpty()){
+		if(!comboAHeur.getSelectionModel().isEmpty() && comboAHeur.getSelectionModel().getSelectedItem()!=null && !comboAMinute.getSelectionModel().isEmpty() && comboAMinute.getSelectionModel().getSelectedItem()!=null  && !comboDeHeur.getSelectionModel().isEmpty() && comboDeHeur.getSelectionModel().getSelectedItem()!=null  && !comboDeMinute.getSelectionModel().isEmpty() && comboDeMinute.getSelectionModel().getSelectedItem()!=null){	
 		Date debut = new java.util.Date();
 		debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
 		debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());

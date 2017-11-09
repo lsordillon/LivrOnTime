@@ -20,12 +20,13 @@ public class SceneGestures {
         this.controleur = controleur;
     }
     
-    public void rendreCanvasZoomable(Scene scene, AccueilController controleur) {
-    	
-        scene.addEventFilter( MouseEvent.MOUSE_PRESSED, onMousePressedEventHandler);
-        scene.addEventFilter( MouseEvent.MOUSE_DRAGGED, onMouseDraggedEventHandler);
-        scene.addEventFilter( ScrollEvent.ANY, onScrollEventHandler);
-		
+    public void rendreCanvasZoomable(AccueilController controleur) {
+    	if(canvas !=null) {
+    		canvas.addEventFilter( MouseEvent.MOUSE_PRESSED, onMousePressedEventHandler);
+        	canvas.addEventFilter( MouseEvent.MOUSE_DRAGGED, onMouseDraggedEventHandler);
+            canvas.addEventFilter( MouseEvent.MOUSE_ENTERED, onMouseEnteredEventHandler);
+            canvas.addEventFilter( MouseEvent.MOUSE_EXITED, onMouseExitedEventHandler);
+    	}
 	}
 
     private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
@@ -56,7 +57,24 @@ public class SceneGestures {
             }
         }
     };
-
+    
+    private EventHandler<MouseEvent> onMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
+    	public void handle(MouseEvent event) {
+    		canvas.addEventFilter( ScrollEvent.ANY, onScrollEventHandler);	
+    	}
+    };
+    
+    private EventHandler<MouseEvent> onMouseExitedEventHandler = new EventHandler<MouseEvent>() {
+    	public void handle(MouseEvent event) {
+    		canvas.addEventFilter( ScrollEvent.ANY, new EventHandler<ScrollEvent>(){
+    			public void handle(ScrollEvent event){
+    				
+    			}
+    		});	
+    	}
+    };
+    
+    
     /**
      * Mouse wheel handler: zoom to pivot point
      */
