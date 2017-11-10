@@ -38,7 +38,7 @@ public class DessinerPlan {
 	
 	//Taille supposee du canvas, a ne pas laisser en dur
 	private double tailleCanvas=400.0;
-	private double largeurTrait=1;
+	private double largeurTrait=0.5;
 	
 	private Pane overlay = new Pane();
 	private PannableCanvas canvas;
@@ -50,10 +50,10 @@ public class DessinerPlan {
 	private MouseGestures mg;
 	private SceneGestures sg;
 	
-	final static double MULTIPLICATEURTRAITCERCLE = 1;
-	final static double MULTIPLICATEURTRAITENTREPOT = 6;
-	final static double MULTIPLICATEURTRAITLIVRAISON = 4;
-	final static double MULTIPLICATEURTRAITITINERAIRE = 4;
+	final static double TRAITCERCLE = 0.4;
+	final static double TRAITENTREPOT = 6;
+	final static double TRAITLIVRAISON = 4;
+	final static double TRAITITINERAIRE = 4;
 	final static double MODIFICATEURPOSITIONCHIFFREX = 7;
 	final static double MODIFICATEURPOSITIONCHIFFREY = 8;
 	final static Paint COULEURPLAN = Color.GREY;
@@ -85,7 +85,7 @@ public class DessinerPlan {
          //Mise a l'echelle
          x= (int)((D.getX() - minusX)*tailleCanvas / divX);
          y=(int)((D.getY() - minusY) *tailleCanvas/ divY);
-         cercle1.setRadius(MULTIPLICATEURTRAITCERCLE);
+         cercle1.setRadius(TRAITCERCLE);
          
          //Centrage
          cercle1.relocate(y + tailleCanvas/2, -x+tailleCanvas);
@@ -95,7 +95,7 @@ public class DessinerPlan {
          y=(int)((O.getY() - minusY)*tailleCanvas/ divY );
 
          Circle cercle2 = new Circle(1);
-    	 cercle2.setRadius(MULTIPLICATEURTRAITCERCLE);
+    	 cercle2.setRadius(TRAITCERCLE);
          cercle2.setStroke(COULEURPLAN);
          cercle2.setFill(COULEURPLAN);
 
@@ -201,7 +201,7 @@ public class DessinerPlan {
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(Color.BLACK);
     		cercle.setFill(COULEURENTREPOT);
-    		cercle.setRadius(MULTIPLICATEURTRAITENTREPOT);
+    		cercle.setRadius(TRAITENTREPOT);
     		canvas.getChildren().add(cercle);
   
         for (Livraison livraison : livraisons){
@@ -209,7 +209,7 @@ public class DessinerPlan {
     		canvas.getChildren().remove(cercle);
     		cercle.setStroke(COULEURLIVRAISON);
     		cercle.setFill(COULEURLIVRAISON);
-    		cercle.setRadius(MULTIPLICATEURTRAITLIVRAISON);
+    		cercle.setRadius(TRAITLIVRAISON);
             canvas.getChildren().add(cercle);
 
         }
@@ -236,7 +236,7 @@ public class DessinerPlan {
     		        
     			ligne.setStroke(COULEURITINERAIRE);
     			ligne.setFill(COULEURITINERAIRE);
-    		    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
+    		    ligne.setStrokeWidth(largeurTrait*TRAITITINERAIRE);
     		    mg.rendreLigneSurvolable(ligne, t.getDestination(), t.getOrigine()); 
 		        canvas.getChildren().add(ligne);
 		        cercle1.toFront();  
@@ -292,7 +292,7 @@ public class DessinerPlan {
 	        
 		ligne.setStroke(Couleur);
 		ligne.setFill(Couleur);
-	    ligne.setStrokeWidth(largeurTrait*MULTIPLICATEURTRAITITINERAIRE);
+	    ligne.setStrokeWidth(largeurTrait*TRAITITINERAIRE);
         canvas.getChildren().add(ligne);
         cercle1.toFront();
         cercle2.toFront();

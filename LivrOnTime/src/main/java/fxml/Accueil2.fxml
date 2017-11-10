@@ -13,7 +13,7 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
-            <SplitPane dividerPositions="0.6862416107382551" layoutX="530.0" layoutY="359.0" orientation="VERTICAL" prefHeight="598.0" prefWidth="794.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <SplitPane dividerPositions="0.74" layoutX="530.0" layoutY="359.0" orientation="VERTICAL" prefHeight="598.0" prefWidth="794.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
                 <AnchorPane fx:id="VuePlan" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
@@ -80,7 +80,7 @@
                 	<items>
 		                <AnchorPane fx:id="VueControl" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
 		                     <children>
-		                        <Button fx:id="ChargerButoon" layoutX="35.0" layoutY="73.0" mnemonicParsing="false" onAction="#ChargerFichier" text="Charger un plan" >
+		                        <Button fx:id="ChargerButoon" layoutX="35.0" layoutY="90.0" mnemonicParsing="false" onAction="#ChargerFichier" text="Charger un plan" >
 		                        	<graphic>
               							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
               								<image>       
@@ -89,7 +89,7 @@
               							</ImageView>
            							</graphic>
 		                        </Button>
-		                        <Button fx:id="ChargerLivraison" disable="true" layoutX="323.0" layoutY="73.0" mnemonicParsing="false" onAction="#ChargerLivraison" text="Charger une livraison" >
+		                        <Button fx:id="ChargerLivraison" disable="true" layoutX="200.0" layoutY="90.0" mnemonicParsing="false" onAction="#ChargerLivraison" text="Charger une livraison" >
 		                        	<graphic>
               							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
               								<image>       
@@ -98,7 +98,7 @@
               							</ImageView>
            							</graphic>
 		                        </Button>
-		                        <Button fx:id="CalculTournee" disable="true" layoutX="614.0" layoutY="73.0" mnemonicParsing="false" onAction="#CalculTournee" text="Calcul de tournee" >
+		                        <Button fx:id="CalculTournee" disable="true" layoutX="394.0" layoutY="90.0" mnemonicParsing="false" onAction="#CalculTournee" text="Calcul de tournee" >
 		                        	<graphic>
               							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
               								<image>       
@@ -115,7 +115,7 @@
               							</ImageView>
            							</graphic>
            						</Button>
-		                        <Button fx:id="GenererFeuille" disable="true" layoutX="305.0" layoutY="130.0" mnemonicParsing="false" onAction="#GenererFeuille" text="Générer la feuille de route" >
+		                        <Button fx:id="GenererFeuille" disable="true" layoutX="565.0" layoutY="90.0" mnemonicParsing="false" onAction="#GenererFeuille" text="Générer la feuille de route" >
 		                        	<graphic>
               							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
               								<image>       
