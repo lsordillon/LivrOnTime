@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import controleur.AccueilControleur;
-import controleur.LivraisonController;
+import controleur.LivraisonControleur;
 
 import java.util.Objects;
 
@@ -138,8 +138,8 @@ public class MouseGestures {
 	                
 	            	Intersection intersectionClicked = plan.getIntersections().get(cle);
 
-	            	LivraisonController.setIntersection(intersectionClicked);
-	            	if(LivraisonController.getDemandeL()!=null && accueilControleur.getTournee()!=null){
+	            	LivraisonControleur.setIntersection(intersectionClicked);
+	            	if(LivraisonControleur.getDemandeL()!=null && accueilControleur.getTournee()!=null){
 		            	Parent root;
 				        try {
 				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
