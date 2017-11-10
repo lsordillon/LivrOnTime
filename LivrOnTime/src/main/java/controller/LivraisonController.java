@@ -90,7 +90,7 @@ public class LivraisonController implements Initializable {
 				if(l.getDestination().getId() == intersection.getId()){
 					livraison = l;
 					exist = true;
-					
+					ajoutBtn.setDisable(true);
 					dureeField.setText( String.valueOf(livraison.getDuree() / 60));
 					if(l.getDebutPlageHoraire()!=null){
 					comboDeHeur.getSelectionModel().select(String.valueOf(l.getDebutPlageHoraire().getHours()));
@@ -189,7 +189,7 @@ public class LivraisonController implements Initializable {
 		}else{
 			livraison = new Livraison(Integer.parseInt(dureeField.getText()) * 60,intersection);
 		}
-		if(!aController.getTournee().getListeLivraison().contains(livraison)){
+	
 		plan = aController.getPlan();
 		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
@@ -204,7 +204,7 @@ public class LivraisonController implements Initializable {
 		
 		
 		aController.update();
-		}}catch(Exception e){
+	}catch(Exception e){
 			 Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 			 stage.close();
 			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
