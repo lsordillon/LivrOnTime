@@ -28,8 +28,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -64,7 +65,7 @@ public class AccueilController{
 	public Button GenererFeuille; 
 	public Button undoButton;
 	public Button redoButton;
-	public HBox legendeText;
+	public VBox legendeText;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
@@ -198,8 +199,11 @@ public class AccueilController{
 			tournee=plan.calculerLaTournee(demandeLiv);
 		
 		tournee.initTempsPassage();
+		//AnchorPane.bottomAnchor="0.0"
 		VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
+		//legendeText.
 		VuePlan.getChildren().add(vBoxPlan);
+
 
 		sceneGestures.rendreCanvasZoomable(this);
 	    
@@ -320,7 +324,9 @@ public class AccueilController{
 	    VueDescriptif.getChildren().clear();
 	    VBox vBox3;
 		if(tournee != null){
-			VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+			VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
+			legendeText.setLayoutY(0);
+			VuePlan.getChildren().add(vBoxPlan);
 			dessinerPlan.actualiserCouleurPoints(tournee);
 			
 		    livraisons = tournee.getListeLivraison();
