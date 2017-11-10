@@ -322,7 +322,7 @@ public class DescriptifController {
 			                        	if (event.getClickCount() == 2) {
 			                        	Livraison livraison = listView.getSelectionModel().getSelectedItem();
 			                        	LivraisonController.setIntersection(livraison.getDestination());
-			                           	if(livraison != null){
+			                           	if(livraison != null && accueilController.getTournee()!=null){
 			        		            	Parent root;
 			        				        try {
 			        				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
