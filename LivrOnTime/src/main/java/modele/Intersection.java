@@ -1,6 +1,5 @@
 package modele;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -14,7 +13,7 @@ import java.util.ArrayList;
  * @author Matthieu
  *
  */
-public class Intersection implements Serializable{
+public class Intersection{
 	private long id;
 	private int x;
 	private int y;

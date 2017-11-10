@@ -28,7 +28,13 @@ import modele.Plan;
 import modele.Tournee;
 import modele.Troncon;
 
-
+/**
+ * La classe DessinerPlan implemente tous les comportements
+ * graphiques lies au plan et a l affichage des demandes de livraison
+ * et des tournee.
+ * @author Matthieu
+ *
+ */
 public class DessinerPlan {
 	
 	//Variables de mise a l'echelle
@@ -43,8 +49,6 @@ public class DessinerPlan {
 	private PannableCanvas canvas;
 	private HashMap<Long,Circle> dessine;
 	private ArrayList<Text> chiffres;
-
-
 
 	private MouseGestures mg;
 	private SceneGestures sg;
@@ -64,6 +68,11 @@ public class DessinerPlan {
 	final static Paint COULEURATTENTE = Color.PURPLE;
 	final static Paint COULEURVIOLEE = Color.RED;
 	
+	/**
+	 * Constructeur de la classe DessinerPlan
+	 * @param mouseGestures
+	 * @param sceneGestures
+	 */
 	public DessinerPlan (MouseGestures mouseGestures, SceneGestures sceneGestures) {
 
 		chiffres = new ArrayList<Text>();
