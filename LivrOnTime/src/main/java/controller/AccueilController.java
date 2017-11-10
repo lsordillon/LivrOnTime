@@ -112,7 +112,7 @@ public class AccueilController{
 					ChargerLivraison.setDisable(false);
 					
 			    }catch(Exception e){
-			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : L'echec du chargement du plan a �t� provoqu� car certaines rues ne possedent pas d'intersection"+ "\n");
+			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : certaines rues  ou intersections sont invalides"+ "\n");
 	                   alert.showAndWait();
 		    	 }
 		    	 
