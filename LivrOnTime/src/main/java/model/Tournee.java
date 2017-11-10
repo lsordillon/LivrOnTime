@@ -88,7 +88,7 @@ public class Tournee {
 	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l) throws Exception{
 		
 		
-		if(listeLivraisons.size()>1) {
+		if(listeLivraisons.size()>-1) {
 			int index=-1;
 			int indiceListeLivraison = 0;
 			Intersection origine=null;
@@ -119,11 +119,12 @@ public class Tournee {
 	
 				index=listeLivraisons.indexOf(l);
 				listeLivraisons.remove(l);
-	
+				setItineraire(nouvelItineraire);
 				initTempsPassage();
 			}
 			
 			Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
+			System.out.println(listeLivraisons.size());
 			return paire;
 		
 		}

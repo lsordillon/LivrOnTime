@@ -154,14 +154,12 @@ public class LivraisonController implements Initializable {
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
 		if (aController.getTournee()!=null){
 			Pair <Integer,Tournee> paire = aController.getTournee().SupprimerLivraison(plan,intersection, livraison);
-			if (paire != null) {
 				int idx = paire.getKey();
 				Tournee nouvelleTournee = paire.getValue();
 				aController.setTournee(nouvelleTournee);
 				listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
 				aController.setListeDeCdes(listeDeCdes);
-				
-			}
+			
 		}
 		aController.update();
 		}catch(Exception e){
@@ -190,7 +188,7 @@ public class LivraisonController implements Initializable {
 		}else{
 			livraison = new Livraison(Integer.parseInt(dureeField.getText()) * 60,intersection);
 		}
-		if(!aController.getTournee().getListeLivraison().contains(livraison)){
+		
 		plan = aController.getPlan();
 		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
@@ -202,8 +200,10 @@ public class LivraisonController implements Initializable {
 				listeDeCdes.ajoute(new CdeAjout(plan,intersection,aController.getTournee(),livraison,idx));
 				aController.setListeDeCdes(listeDeCdes);	
 		}
+		
+		
 		aController.update();
-		}}catch(Exception e){
+		}catch(Exception e){
 			 Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 			 stage.close();
 			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
