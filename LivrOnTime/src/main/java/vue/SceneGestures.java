@@ -1,6 +1,6 @@
 package vue;
 
-import controller.AccueilController;
+import controller.AccueilControleur;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -14,13 +14,13 @@ public class SceneGestures {
     private DragContext sceneDragContext = new DragContext();
 
     private PannableCanvas canvas;
-    private AccueilController controleur;
+    private AccueilControleur controleur;
 
-    public SceneGestures(AccueilController controleur) {
+    public SceneGestures(AccueilControleur controleur) {
         this.controleur = controleur;
     }
     
-    public void rendreCanvasZoomable(AccueilController controleur) {
+    public void rendreCanvasZoomable(AccueilControleur controleur) {
     	if(canvas !=null) {
     		canvas.addEventFilter( MouseEvent.MOUSE_PRESSED, onMousePressedEventHandler);
         	canvas.addEventFilter( MouseEvent.MOUSE_DRAGGED, onMouseDraggedEventHandler);

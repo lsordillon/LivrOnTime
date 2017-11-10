@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import controller.AccueilController;
+import controller.AccueilControleur;
 import controller.LivraisonController;
 
 import java.util.Objects;
@@ -36,12 +36,12 @@ public class MouseGestures {
     private Paint couleurSelectionne;
 	private Circle cercleSelectionne;
 	private PannableCanvas canvas;
-	private AccueilController accueilController;
+	private AccueilControleur AccueilControleur;
 	
 	final static Paint COULEURPOINTSELECTIONNE = Color.CYAN;
 
-    public MouseGestures (AccueilController accueilController) {
-    	this.accueilController = accueilController;
+    public MouseGestures (AccueilControleur AccueilControleur) {
+    	this.AccueilControleur = AccueilControleur;
     }
 
 	public void makeClickable(Node node) {
@@ -55,7 +55,7 @@ public class MouseGestures {
 	public void rendreLigneSurvolable(Node noeud, Intersection D, Intersection O) {
 		if (noeud instanceof Line) {
 			String adresse = "";
-	        for(Troncon troncon : accueilController.getPlan().getTroncons()){
+	        for(Troncon troncon : AccueilControleur.getPlan().getTroncons()){
 	        		if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
 	        			adresse = troncon.getNomRue();
 	        		} 		
@@ -93,13 +93,13 @@ public class MouseGestures {
                 double orgTranslateX = p.getCenterX();
                 double orgTranslateY = p.getCenterY();
                 long key=0;
-                for(Circle circle : accueilController.getDessinerPlan().getDessine().values()){	
+                for(Circle circle : AccueilControleur.getDessinerPlan().getDessine().values()){	
             			if(circle.equals(p)){
-            				key = getKeyByValue(accueilController.getDessinerPlan().getDessine(), circle);
+            				key = getKeyByValue(AccueilControleur.getDessinerPlan().getDessine(), circle);
             			}
                 }
                 Intersection intersectionClicked = plan.getIntersections().get(key);
-                accueilController.getdController().setSelection(intersectionClicked);
+                AccueilControleur.getdController().setSelection(intersectionClicked);
             }
           }
       };
@@ -134,12 +134,12 @@ public class MouseGestures {
 	                p.setFill(COULEURPOINTSELECTIONNE);
 	                p.setStroke(COULEURPOINTSELECTIONNE);
 	                
-	                cle = getKeyByValue(accueilController.getDessinerPlan().getDessine(), p );
+	                cle = getKeyByValue(AccueilControleur.getDessinerPlan().getDessine(), p );
 	                
 	            	Intersection intersectionClicked = plan.getIntersections().get(cle);
 
 	            	LivraisonController.setIntersection(intersectionClicked);
-	            	if(LivraisonController.getDemandeL()!=null && accueilController.getTournee()!=null){
+	            	if(LivraisonController.getDemandeL()!=null && AccueilControleur.getTournee()!=null){
 		            	Parent root;
 				        try {
 				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));

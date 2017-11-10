@@ -30,7 +30,7 @@ import model.Plan;
 import model.Tournee;
 
 public class LivraisonController implements Initializable {
-	AccueilController aController = Main.aController;
+	AccueilControleur aController = Main.aController;
 	public Label adresseField;
 	public TextField dureeField;
 	public ComboBox<String> comboDeHeur;
@@ -85,7 +85,7 @@ public class LivraisonController implements Initializable {
 		comboAMinute.getItems().add("--");
 		boolean exist = false;
 		if(intersection!=null){
-			adresseField.setText(AccueilController.getAdresse(intersection));
+			adresseField.setText(aController.getAdresse(intersection));
 			for(Livraison l : demandeL.getLivraisons()){
 				if(l.getDestination().getId() == intersection.getId()){
 					livraison = l;
@@ -130,7 +130,7 @@ public class LivraisonController implements Initializable {
 				livraison.setFinPlageHoraire(fin);
 				livraison.setDuree(Integer.parseInt(dureeField.getText()) * 60);
 				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
-				aController.update();
+				aController.mettreAJour();
 			}else{
 				int idx = aController.getDemandeLiv().getLivraisons().indexOf(livraison);
 				int duree=Integer.parseInt(dureeField.getText()) * 60;
@@ -141,7 +141,7 @@ public class LivraisonController implements Initializable {
 				aController.getTournee().ModifierLivraison(plan, livraison, duree);
 				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
 				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,dureeA,DPH_A,FPH_A));
-				aController.update();
+				aController.mettreAJour();
 				
 			}
 			Stage stage = (Stage) modifBtn.getScene().getWindow();
@@ -162,7 +162,7 @@ public class LivraisonController implements Initializable {
 				aController.setListeDeCdes(listeDeCdes);
 			
 		}
-		aController.update();
+		aController.mettreAJour();
 		}catch(Exception e){
 		     Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 		     stage.close();
@@ -203,7 +203,7 @@ public class LivraisonController implements Initializable {
 		}
 		
 		
-		aController.update();
+		aController.mettreAJour();
 	}catch(Exception e){
 			 Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 			 stage.close();

@@ -1,14 +1,19 @@
 package controller;
 
 import LivrOnTime.Main;
-import javafx.util.Pair;
 import model.Intersection;
 import model.Livraison;
 import model.Plan;
 import model.Tournee;
 
 
-
+/**
+ * La classe CdeAjout implemente l interface Commande
+ * pour l ajout d une livraison dans la tournee.
+ * Elle stocke la livraison ajoutee et sa position.
+ * @author Matthieu
+ *
+ */
 public class CdeAjout implements Commande {
 	private Plan plan;
 	private Intersection intersection;
@@ -16,10 +21,14 @@ public class CdeAjout implements Commande {
 	private Livraison livraison;
 	private int index;
 	
-	
-	
-	
-
+	/**
+	 * Constructeur de la classe CDeAjout
+	 * @param plan
+	 * @param intersection
+	 * @param tournee
+	 * @param livraison
+	 * @param index
+	 */
 	public CdeAjout(Plan plan, Intersection intersection, Tournee tournee,Livraison livraison, int index) {
 		super();
 		this.plan = plan;

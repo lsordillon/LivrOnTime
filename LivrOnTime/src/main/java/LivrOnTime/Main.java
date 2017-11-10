@@ -4,7 +4,7 @@ package LivrOnTime;
 
 import java.io.FileInputStream;
 
-import controller.AccueilController;
+import controller.AccueilControleur;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-	public static AccueilController aController;
+	public static AccueilControleur aController;
     @Override
     public void start(Stage primaryStage) throws Exception{
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Accueil2.fxml"));

@@ -58,16 +58,16 @@ public class DescriptifController {
 	public static DataFormat dataFormat =  new DataFormat("model.Livraison");
 	private DessinerPlan dessinerPlan;
 	private Chemin cheminSelectionne;
-	private AccueilController accueilController;
+	private AccueilControleur AccueilControleur;
 	 
 	ObservableList<Livraison> data = FXCollections.observableArrayList();
 	final ListView<Livraison> listView;
 	   
 	   
-	public DescriptifController(DessinerPlan dessinerPlan, AccueilController accueilController) {
+	public DescriptifController(DessinerPlan dessinerPlan, AccueilControleur AccueilControleur) {
 		   this.dessinerPlan = dessinerPlan;
 		   listView = new ListView<Livraison>(data);
-		   this.accueilController = accueilController;
+		   this.AccueilControleur = AccueilControleur;
 	}
 	
 	
@@ -308,7 +308,7 @@ public class DescriptifController {
 				                    	
 				                    	//Main.aController.getTournee().SupprimerLivraison(plan,aSupprimer.getDestination(),aSupprimer);
 				                    	//Main.aController.getTournee().AjouterLivraison(plan,aSupprimer.getDestination(),aSupprimer, draggedIdx);
-				                    	Main.aController.update();
+				                    	Main.aController.mettreAJour();
 				                    	
 					                    
 					                   
@@ -322,7 +322,7 @@ public class DescriptifController {
 			                        	if (event.getClickCount() == 2) {
 			                        	Livraison livraison = listView.getSelectionModel().getSelectedItem();
 			                        	LivraisonController.setIntersection(livraison.getDestination());
-			                           	if(livraison != null && accueilController.getTournee()!=null){
+			                           	if(livraison != null && AccueilControleur.getTournee()!=null){
 			        		            	Parent root;
 			        				        try {
 			        				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
@@ -371,7 +371,7 @@ public class DescriptifController {
 	
 	//Methode pour retourner l'adresse d'une intersection
 	public String getAdresse(Intersection item){
-		for(Troncon troncon : accueilController.getPlan().getTroncons()){
+		for(Troncon troncon : AccueilControleur.getPlan().getTroncons()){
         	if(troncon.getDestination().getId() == item.getId() || troncon.getOrigine().getId() == item.getId()){
           		return troncon.getNomRue();
            	}
@@ -382,13 +382,13 @@ public class DescriptifController {
 	
 	public void interaction(final ListView<Livraison> listView) {
 		
-		if (accueilController.getTournee()!=null) {
+		if (AccueilControleur.getTournee()!=null) {
 			listView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Livraison>() {
 				
 				public void changed(ObservableValue<? extends Livraison> observable, Livraison oldValue,Livraison newValue) {				
 					if (listView.getSelectionModel().getSelectedItem() != null) {
 						if (oldValue != null){
-							dessinerPlan.actualiserCouleurPoints(accueilController.getTournee());					
+							dessinerPlan.actualiserCouleurPoints(AccueilControleur.getTournee());					
 							
 							for(Troncon t: cheminSelectionne.getTroncons()){
 								dessinerPlan.surlignerTroncon(t,Color.GREEN);
@@ -398,7 +398,7 @@ public class DescriptifController {
 						
 						
 						long id = newValue.getDestination().getId();
-						for ( Chemin c : accueilController.getTournee().getItineraire()) {
+						for ( Chemin c : AccueilControleur.getTournee().getItineraire()) {
 							if (c.getDestination().getId()==id){
 								cheminSelectionne = c;
 								
@@ -408,8 +408,8 @@ public class DescriptifController {
 							}
 						}
 						
-						((Circle) accueilController.getDessinerPlan().getDessine().get(id)).setFill(Color.YELLOW);
-						((Circle) accueilController.getDessinerPlan().getDessine().get(id)).setStroke(Color.YELLOW);
+						((Circle) AccueilControleur.getDessinerPlan().getDessine().get(id)).setFill(Color.YELLOW);
+						((Circle) AccueilControleur.getDessinerPlan().getDessine().get(id)).setStroke(Color.YELLOW);
 					}
 				
 					dessinerPlan.passerChiffresDevant();

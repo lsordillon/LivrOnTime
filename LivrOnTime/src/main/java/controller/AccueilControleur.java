@@ -1,7 +1,6 @@
 package controller;
 
 
-import java.awt.Paint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,17 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import org.w3c.dom.Element;
 
-import com.sun.javafx.runtime.VersionInfo;
-
 import javafx.event.ActionEvent;
-
 import javafx.scene.Group;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -51,8 +44,12 @@ import vue.MouseGestures;
 import vue.SceneGestures;
 
 
-
-public class AccueilController{
+/**
+ * Controleur principal de l application.
+ * @author Matthieu
+ *
+ */
+public class AccueilControleur{
 	
 	//Etape 1 : Redefinir tout les composants existants dans le fichier fxml comme des attributs public du controller
 	public AnchorPane VuePlan;
@@ -69,17 +66,20 @@ public class AccueilController{
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCommandes = new ListeDeCdes();
-	private static Plan plan;
-	private static Tournee tournee;
+    private ListeDeCdes listeDeCommandes = new ListeDeCdes();
+	private Plan plan;
+	private Tournee tournee;
 	private DessinerPlan dessinerPlan;
 	private DemandeLivraison demandeLiv;
 	private Intersection intersectionSelectionnee;
-    private static DescriptifController dController;
+    private DescriptifController dController;
     private MouseGestures mouseGestures;
     private SceneGestures sceneGestures;
     
-    public AccueilController() {
+    /**
+     * Constructeur de la classe AccueilControleur
+     */
+    public AccueilControleur() {
     	listeDeCommandes=new ListeDeCdes();
     	mouseGestures = new MouseGestures(this);
     	sceneGestures = new SceneGestures(this);	
@@ -88,72 +88,72 @@ public class AccueilController{
     	
     }
     
-    
+    /**
+     * La methode ChargerFichier permet de charger dans l application
+     * un fichier de plan.
+     * @param actionEvent
+     * @throws FileNotFoundException
+     */
 	public void ChargerFichier (ActionEvent actionEvent) throws FileNotFoundException {
 		
-
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML Files", "*.xml"));
-		File selectedFile = fileChooser.showOpenDialog(null);
+		File fichierSelectionne = fileChooser.showOpenDialog(null);
 		XmlParserPlan parserPlan = new XmlParserPlan();
-		if (selectedFile != null) {
+		if (fichierSelectionne != null) {
 		
 		    InputStream xsd = new FileInputStream("src/main/resources/ValidationPlan.xsd");
-	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
+	    	InputStream xml = new FileInputStream(fichierSelectionne.getAbsolutePath());
 	        
 		    if (parserPlan.validationXSD(xml, xsd)){
-		    	 plan = CreerPlan(selectedFile.getAbsolutePath());
+		    	 plan = CreerPlan(fichierSelectionne.getAbsolutePath());
 		    	 try{
 					Group group = dessinerPlan.Dessiner(plan);
 					VuePlan.getChildren().clear();
 					VuePlan.getChildren().add(group);
-					// VuePlan.setStyle("-fx-background-color: #f7f7d4");
 					sceneGestures.rendreCanvasZoomable(this);
 					ChargerLivraison.setDisable(false);
 					
 			    }catch(Exception e){
 			    	 Alert alert = new Alert(AlertType.ERROR, "Plan corrompu : certaines rues  ou intersections sont invalides"+ "\n");
-	                   alert.showAndWait();
+	                 alert.showAndWait();
 		    	 }
-		    	 
-		    	
-				    
-				    
-		    }else{
+	    
+		    }
+		    
+		    else{
 		    		Alert alert = new Alert(AlertType.ERROR, "Format fichier non valide" +"\n" + parserPlan.getMessageErreur());
 		    		alert.showAndWait();
-		    }
-		   
-		 
-		   
+		    }   
 		}
-		else {
-		    System.err.println("Error");
-		}	
-
 	}
+	
+	/**
+     * La methode ChargerFichier permet de charger dans l application
+     * un fichier de demande de livraison.
+     * @param actionEvent
+     * @throws FileNotFoundException
+     */
 	public void ChargerLivraison(ActionEvent actionEvent) throws FileNotFoundException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("XML Files", "*.xml"));
-		File selectedFile = fileChooser.showOpenDialog(null);
+		File fichierSelectionne = fileChooser.showOpenDialog(null);
 		boolean invalide=false;
 		String fautive="";
-		if (selectedFile != null) {
+		if (fichierSelectionne != null) {
 			InputStream xsd = new FileInputStream("src/main/resources/ValidationDL.xsd");
-	    	InputStream xml = new FileInputStream(selectedFile.getAbsolutePath());
+	    	InputStream xml = new FileInputStream(fichierSelectionne.getAbsolutePath());
 	    	XmlParserLivraison parserLivraison = new XmlParserLivraison();
 	    	if(parserLivraison.validationXSD(xml, xsd))
 	    	{
-	    		parserLivraison.lecteur(selectedFile.getAbsolutePath());
+	    		parserLivraison.lecteur(fichierSelectionne.getAbsolutePath());
 				if(!plan.getIntersections().containsKey((Long.parseLong((String)((Element)XmlParserLivraison.entrepot.item(0)).getAttribute("adresse")))))
 				{
-					System.out.println("entrepot merde "+plan.getIntersections().size()+" "+Long.parseLong(((Element)XmlParserLivraison.entrepot.item(0)).getAttribute("adresse")));
 					fautive=((Element)XmlParserLivraison.entrepot.item(0)).getAttribute("adresse");
 					invalide=true;
 				}
 				for(int i = 0; i<XmlParserLivraison.livraisons.getLength(); i++) {
 					if(!plan.getIntersections().containsKey(Long.parseLong((String)((Element)XmlParserLivraison.livraisons.item(i)).getAttribute("adresse")))){
-						System.out.println("merde");
 						fautive=((Element)XmlParserLivraison.livraisons.item(i)).getAttribute("adresse");
 						invalide=true;
 					}
@@ -164,9 +164,7 @@ public class AccueilController{
 					LivraisonController.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
 				    sceneGestures.rendreCanvasZoomable(this);			    
-				    
-				     
-		
+	
 				    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
 				    					  new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
 				    					  new Label ("Heure de Retour :      "));
@@ -181,11 +179,15 @@ public class AccueilController{
 				    ChargerButoon.setDisable(true);
 				    ChargerLivraison.setDisable(true);
 				    listeDeCommandes.reset();
-				} else{
+				} 
+				
+				else{
                     Alert alerte = new Alert(AlertType.ERROR, "Demande de livraison corrompue : L'adresse '"+fautive+"' n'existe pas "+ "\n");
                     alerte.showAndWait();
 				}
-	    	}else{
+	    	}
+	    	
+	    	else{
 	    		Alert alerte = new Alert(AlertType.ERROR, "Format fichier non valide"+ "\n" + parserLivraison.getMessageErreur());
 	    		alerte.showAndWait();
 	    	}	
@@ -193,47 +195,55 @@ public class AccueilController{
 		
 	}
 
-	
+	/**
+	 * La methode CalculTournee calcule la tournee
+	 * et l affiche sur le plan.
+	 * @param actionEvent
+	 */
 	public void CalculTournee(ActionEvent actionEvent) {
+		
 		try {
 			tournee=plan.calculerLaTournee(demandeLiv);
 		
-		tournee.initTempsPassage();
-		//AnchorPane.bottomAnchor="0.0"
-		VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
-		//legendeText.
-		VuePlan.getChildren().add(vBoxPlan);
-
-
-		sceneGestures.rendreCanvasZoomable(this);
-	    
-	    GenererFeuille.setDisable(false);
-	    VueDescriptif.getChildren().clear();
-	    
-		VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
-							  new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
-							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
-		vBox3.setSpacing(10);
-		
-		ArrayList <Livraison> listeDestinations=tournee.getListeLivraison();
-		Livraison retourEntrepot=new Livraison(0,tournee.getItineraire().get(0).getOrigine());
-		listeDestinations.add(retourEntrepot);
-		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(listeDestinations, plan, tournee));
+			tournee.initTempsPassage();
+			VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
+			VuePlan.getChildren().add(vBoxPlan);
 	
-		vBox2.setSpacing(40);
-		vBox2.setLayoutX(30);
-		vBox2.setLayoutY(50);
-		VueDescriptif.getChildren().add(vBox2); 
-		CalculTournee.setDisable(true);
-		legendeText.setVisible(true);
-		//legendeText.setBackground(new Background(new BackgroundFill(Paint.OPAQUE, CornerRadii.EMPTY, Ins)));
-		} catch (Exception e) {
+			sceneGestures.rendreCanvasZoomable(this);
+		    
+		    GenererFeuille.setDisable(false);
+		    VueDescriptif.getChildren().clear();
+		    
+			VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
+								  new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
+								  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
+			vBox3.setSpacing(10);
+			
+			ArrayList <Livraison> listeDestinations=tournee.getListeLivraison();
+			Livraison retourEntrepot=new Livraison(0,tournee.getItineraire().get(0).getOrigine());
+			listeDestinations.add(retourEntrepot);
+			VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(listeDestinations, plan, tournee));
+		
+			vBox2.setSpacing(40);
+			vBox2.setLayoutX(30);
+			vBox2.setLayoutY(50);
+			VueDescriptif.getChildren().add(vBox2); 
+			CalculTournee.setDisable(true);
+			legendeText.setVisible(true);
+			
+		} 
+		
+		catch (Exception e) {
 			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
              alert.showAndWait();
 		}
 	}
 	
-	
+	/**
+	 * La methode GenererFeuille genere la feuille de route
+	 * une fois la tournee calculee et l ouvre.
+	 * @param actionEvent
+	 */
 	public void GenererFeuille(ActionEvent actionEvent) {
 		FileWriter fichierGenere;
 		
@@ -241,12 +251,10 @@ public class AccueilController{
 			fichierGenere = new FileWriter("src/main/resources/FeuilleDeRoute.txt");
 			fichierGenere.write(feuilleDeRouteTxt.genererFeuilleDeRoute(tournee));
 			fichierGenere.close();	
-			//System.out.println("Chemin absolu de la feuille de route generee : src/main/resources/FeuilleDeRoute.txt ");
 			feuilleDeRouteTxt.Open();
 			Alert alerte = new Alert(AlertType.INFORMATION, "Feuille de route generee dans src/main/resources/ ");
     		alerte.showAndWait();
-			
-    		
+				
         }catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -256,7 +264,12 @@ public class AccueilController{
 
 	}
 	
-	
+	/**
+	 * La methode retourAccueil permet de remettre l application dans
+	 * l etat d origine pour recharger un nouveau plan et une nouvelle 
+	 * demande de livraison.
+	 * @param actionEvent
+	 */
 	public void retourAccueil(ActionEvent actionEvent) {
 		VuePlan.getChildren().clear();
 		VueDescriptif.getChildren().clear();
@@ -276,7 +289,13 @@ public class AccueilController{
 	    listeDeCommandes = new ListeDeCdes();
 	}
 	
-	
+	/**
+	 * La methode CreerPlan parse le fichier xml du plan
+	 * et genere les objets correspondants.
+	 * @param chemin
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public Plan CreerPlan(String chemin) throws FileNotFoundException{
 		XmlParserPlan parser = new XmlParserPlan();
 		Plan plan = new Plan();
@@ -287,33 +306,12 @@ public class AccueilController{
 		plan.TronconsVoisins();
 		return plan;
 	}   
-
-
-	//mettre seconde en format heure minutes secondes
-	public static String convertSecondsToHMmSs(long seconds) {
-	    long s = seconds % 60;
-	    long m = (seconds / 60) % 60;
-	    long h = (seconds / (60 * 60)) % 24;
-	    return String.format("%d:%02d:%02d", h,m,s);
-	}
 	
-	
-	//Methode pour retourner l'adresse d'une intersection
-	public static String getAdresse(Intersection intersec){
-		  for(Troncon troncon : plan.getTroncons()){
-          	if(troncon.getDestination().getId() == intersec.getId() || troncon.getOrigine().getId() == intersec.getId()){
-          		if(troncon.getNomRue().equals("")){
-          			return "Rue sans nom";
-          		}else{
-          			return troncon.getNomRue();
-          		}
-                  }
-          }  
-		  return "";
-	}
-	
-
-	public void update(){
+	/**
+	 * La methode mettreAJour synchronise la vue textuelle et le plan
+	 * apres une modificatio, quelconque de la tournee.
+	 */
+	public void mettreAJour(){
 		ArrayList<Livraison> livraisons = new ArrayList<>();
 		
 		Group groupe = dessinerPlan.Dessiner(plan);
@@ -353,6 +351,42 @@ public class AccueilController{
 		sceneGestures.rendreCanvasZoomable(this);
 	}
 	
+	/**
+	 * Implemente le design pattern undo
+	 */
+	public void Undo(){
+		listeDeCommandes.undo();
+		System.out.println("Undo");
+		mettreAJour();
+	}
+	
+	/**
+	 * Implemente le design pattern redo
+	 */
+	public void Redo(){
+		listeDeCommandes.redo();
+		mettreAJour();
+	}
+	
+	public String getAdresse(Intersection intersec){
+		  for(Troncon troncon : plan.getTroncons()){
+        	if(troncon.getDestination().getId() == intersec.getId() || troncon.getOrigine().getId() == intersec.getId()){
+        		if(troncon.getNomRue().equals("")){
+        			return "Rue sans nom";
+        		}else{
+        			return troncon.getNomRue();
+        		}
+                }
+        }  
+		  return "";
+	}
+	
+	public static String convertSecondsToHMmSs(long seconds) {
+	    long s = seconds % 60;
+	    long m = (seconds / 60) % 60;
+	    long h = (seconds / (60 * 60)) % 24;
+	    return String.format("%d:%02d:%02d", h,m,s);
+	}
 	
 	public Intersection getIntersectionSelectionnee() {
 		return intersectionSelectionnee;
@@ -364,13 +398,13 @@ public class AccueilController{
 	}
 	
 	
-	public static Plan getPlan() {
+	public Plan getPlan() {
 		return plan;
 	}
 	
 	
-	public static void setPlan(Plan plan) {
-		AccueilController.plan = plan;
+	public void setPlan(Plan plan) {
+		this.plan = plan;
 	}
 	
 	
@@ -380,17 +414,17 @@ public class AccueilController{
 	
 	
 	public void setTournee(Tournee tournee) {
-		AccueilController.tournee = tournee;
+		this.tournee = tournee;
 	}
 	
 	
-	public static DescriptifController getdController() {
+	public DescriptifController getdController() {
 		return dController;
 	}
 	
 	
-	public static void setdController(DescriptifController dController) {
-		AccueilController.dController = dController;
+	public void setdController(DescriptifController dController) {
+		this.dController = dController;
 	}
 	
 	
@@ -411,23 +445,9 @@ public class AccueilController{
 	}
 	
 	
-	public static void setListeDeCdes(ListeDeCdes listeDeCommandes) {
-		AccueilController.listeDeCommandes = listeDeCommandes;
+	public void setListeDeCdes(ListeDeCdes listeDeCommandes) {
+		this.listeDeCommandes = listeDeCommandes;
 	}
-	
-	
-	public void Undo(){
-		listeDeCommandes.undo();
-		System.out.println("Undo");
-		update();
-	}
-	
-	
-	public void Redo(){
-		listeDeCommandes.redo();
-		update();
-	}
-
 
 	public DessinerPlan getDessinerPlan() {
 		return dessinerPlan;
