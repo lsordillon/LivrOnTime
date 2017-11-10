@@ -199,7 +199,7 @@ public class DessinerPlan {
     		
     		Circle cercle = dessine.get(dl.getAdresseEntrepot().getId());
     		canvas.getChildren().remove(cercle);
-    		cercle.setStroke(COULEURENTREPOT);
+    		cercle.setStroke(Color.BLACK);
     		cercle.setFill(COULEURENTREPOT);
     		cercle.setRadius(MULTIPLICATEURTRAITENTREPOT);
     		canvas.getChildren().add(cercle);
