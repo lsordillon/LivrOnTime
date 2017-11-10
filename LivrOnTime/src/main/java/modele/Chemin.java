@@ -7,10 +7,9 @@ import modele.Intersection;
 import java.util.ArrayList;
 
 /**
- * La classe Chemin stocke le trajet
- * d un point a un autre du plan grace a une liste
- * de troncons.
- * Elle stocke aussi les heures de depart et d arrivee.
+ * La classe Chemin stocke le trajet d un point a un autre du plan grace a une
+ * liste de troncons. Elle stocke aussi les heures de depart et d arrivee.
+ * 
  * @author Matthieu
  *
  */
@@ -23,30 +22,31 @@ public class Chemin {
 	private Date heureDepart;
 
 	/**
-	 * Constructeur de la classe Chemin, il cree l objet
-	 * a partir d une intersection de depart, d une intersection 
-	 * d arrivee et d un plan.
+	 * Constructeur de la classe Chemin, il cree l objet a partir d une
+	 * intersection de depart, d une intersection d arrivee et d un plan.
+	 * 
 	 * @param depart
 	 * @param courante
 	 * @param plan
 	 */
-	public Chemin (Intersection depart, Intersection courante, Plan plan) {
+	public Chemin(Intersection depart, Intersection courante, Plan plan) {
 		this.setOrigine(depart);
 		this.setDestination(courante);
-		
-		// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
-		ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-		
-		while (courante!=depart) {
-			Troncon troncon=plan.trouverTroncon(courante.getPredecesseur(),courante);
-			if(troncon!=null) {
+
+		// Grace au predecesseur des intersections, je cree une liste de troncon
+		// qui constituent le chemin total
+		ArrayList<Troncon> troncons = new ArrayList<Troncon>();
+
+		while (courante != depart) {
+			Troncon troncon = plan.trouverTroncon(courante.getPredecesseur(), courante);
+			if (troncon != null) {
 				troncons.add(0, troncon);
 			}
-			courante=courante.getPredecesseur();
+			courante = courante.getPredecesseur();
 		}
 		this.setTroncons(troncons);
 	}
-	
+
 	public Date getHeureDepart() {
 		return heureDepart;
 	}

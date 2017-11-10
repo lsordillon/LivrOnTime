@@ -1,24 +1,24 @@
 package modele;
 
-
 /**
- * La classe Troncon permet de stocker les informations
- * sur la rue reliant 2 intersections adjacentes sur le graphe.
- * Elle memorise l origine et la destination de la rue ainsi que
- * la longueur et le nom de la rue.
+ * La classe Troncon permet de stocker les informations sur la rue reliant 2
+ * intersections adjacentes sur le graphe. Elle memorise l origine et la
+ * destination de la rue ainsi que la longueur et le nom de la rue.
+ * 
  * @author Matthieu
  *
  */
 public class Troncon {
-	
+
 	private Intersection destination;
-	private double longueur ;
+	private double longueur;
 	private String nomRue;
 	private Intersection origine;
-	
+
 	/**
-	 * Constructeur de la classe Troncon, il cree l objet a partir
-	 * d une destination, d une longueur, d'un nom et d une origine.
+	 * Constructeur de la classe Troncon, il cree l objet a partir d une
+	 * destination, d une longueur, d'un nom et d une origine.
+	 * 
 	 * @param destination
 	 * @param longueur
 	 * @param nomRue
@@ -55,11 +55,11 @@ public class Troncon {
 	}
 
 	public String getNomRue() {
-		if(nomRue.equals("")){
+		if (nomRue.equals("")) {
 			return "Rue sans nom";
 		}
-		
-		else{
+
+		else {
 			return nomRue;
 		}
 	}
