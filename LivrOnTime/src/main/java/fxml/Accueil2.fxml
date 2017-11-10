@@ -17,18 +17,18 @@
               <items>
                 <AnchorPane fx:id="VuePlan" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <VBox fx:id="legendeText" prefHeight="88.0" prefWidth="152.0" style="-fx-background-color: GHOSTWHITE; -fx-border-color: LIGHTGREY;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                         <VBox fx:id="legendeText" prefHeight="88.0" prefWidth="152.0" visible="false" style="-fx-background-color: GHOSTWHITE; -fx-border-color: LIGHTGREY;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                            <children>
-                              <Label prefHeight="21.0" prefWidth="39.0" text="Légende :">
+                              <Label prefHeight="21.0" prefWidth="39.0" text="Legende :">
                                  <font>
                                     <Font size="9.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="20.0" prefWidth="105.0" text=" Rien à signaler">
+                              <Label prefHeight="20.0" prefWidth="105.0" text=" Rien a signaler">
                                  <graphic>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="10.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="http://www.shaiyafinal.com/img/mavi_nokta.png" />
+                                          <Image url="http://www.zupimages.net/up/17/45/xcw0.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -38,9 +38,9 @@
                               </Label>
                               <Label prefHeight="21.0" prefWidth="142.0" text=" Attente avant livraison">
                                  <graphic>
-                                    <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="10.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="http://democratsforprogress.com/forum/images/ball_pr.png" />
+                                          <Image url="http://zupimages.net/up/17/45/n3sa.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -50,9 +50,9 @@
                               </Label>
                               <Label prefHeight="20.0" prefWidth="146.0" text=" Plage horaire tendue">
                                  <graphic>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="10.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="https://bostonabcd.org/AbcdCustomModules/SlideCaption/images/point_dim.png" />
+                                          <Image url="http://zupimages.net/up/17/45/v292.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -60,11 +60,35 @@
                                     <Font size="9.0" />
                                  </font>
                               </Label>
-                              <Label prefHeight="18.0" prefWidth="135.0" text=" Plage horaire violée">
+                              <Label prefHeight="18.0" prefWidth="135.0" text=" Plage horaire violee">
                                  <graphic>
-                                    <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="10.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="http://www.clker.com/cliparts/c/7/3/2/12247848622041168088roystonlodge_Simple_Glossy_Circle_Button_Red.svg.thumb.png" />
+                                          <Image url="http://zupimages.net/up/17/45/y59h.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="40.0" prefWidth="212.0" text=" Itineraire selectionne">
+                                 <graphic>
+                                    <ImageView fitHeight="10.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="http://zupimages.net/up/17/45/r0hz.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font size="9.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Entrepot">
+                                 <graphic>
+                                    <ImageView fitHeight="10.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="http://zupimages.net/up/17/45/yrif.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
