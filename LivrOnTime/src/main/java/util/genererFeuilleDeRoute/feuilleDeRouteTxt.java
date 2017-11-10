@@ -196,6 +196,14 @@ public class feuilleDeRouteTxt {
 		return contenu;
 	}
 
+	/**
+	 * La methode combinaisonPointDeLivraison permet de retrouver une livraison
+	 * a partir d une intersection donnee.
+	 * 
+	 * @param livraisons
+	 * @param intersection
+	 * @return
+	 */
 	private static Livraison combinaisonPointDeLivraison(ArrayList<Livraison> livraisons, Intersection intersection) {
 
 		long idInter = intersection.getId();
@@ -210,6 +218,13 @@ public class feuilleDeRouteTxt {
 		return livraisonGagnante;
 	}
 
+	/**
+	 * La methode ruesDelIntersection retourne, pour une intersection donnee le
+	 * nom des rues.
+	 * 
+	 * @param intersection
+	 * @return
+	 */
 	private static String ruesDelIntersection(Intersection intersection) {
 		ArrayList<Troncon> troncons = intersection.getTronconsVersVoisins();
 		String rues = null;
