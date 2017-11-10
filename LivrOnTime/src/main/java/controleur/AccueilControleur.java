@@ -160,7 +160,7 @@ public class AccueilControleur{
 				if(!invalide){
 	    		
 					demandeLiv = new DemandeLivraison(XmlParserLivraison.livraisons,XmlParserLivraison.entrepot,plan);
-					LivraisonController.setDL(demandeLiv);
+					LivraisonControleur.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
 				    sceneGestures.rendreCanvasZoomable(this);			    
 	

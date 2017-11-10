@@ -4,7 +4,6 @@ package controleur;
 
 import java.net.URL;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -12,24 +11,27 @@ import LivrOnTime.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.SplitPane.Divider;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import modele.Chemin;
 import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Livraison;
 import modele.Plan;
 import modele.Tournee;
 
-public class LivraisonController implements Initializable {
+/**
+ * Controleur gerant la modification des livraisons
+ * @author Matthieu
+ *
+ */
+public class LivraisonControleur implements Initializable {
+	
 	AccueilControleur aController = Main.aController;
 	public Label adresseField;
 	public TextField dureeField;
@@ -47,43 +49,48 @@ public class LivraisonController implements Initializable {
 	private Livraison livraison;
 	private Plan plan;
 	private ListeDeCdes listeDeCdes;
+	
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dureeField.setText("10");
 		dureeField.lengthProperty().addListener(new ChangeListener<Number>(){
-	@Override
-	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-		  if (newValue.intValue() > oldValue.intValue()) {
-			  char ch = dureeField.getText().charAt(oldValue.intValue());
-			  if (!(ch >= '0' && ch <= '9' )) {
-				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+			
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+			  if (newValue.intValue() > oldValue.intValue()) {
+				  char ch = dureeField.getText().charAt(oldValue.intValue());
+				  if (!(ch >= '0' && ch <= '9' )) {
+					  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+				  }
+				  if(Integer.parseInt(dureeField.getText())<=0){
+					  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+				  }
 			  }
-			  if(Integer.parseInt(dureeField.getText())<=0){
-				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
-			  }
-		 }
-	}
- 
-});
-		//adresseField.setDisable(true);
+			}
+		});
+		
 		for(int i=0;i<24;i++){
 			comboDeHeur.getItems().add(String.valueOf(i));
 			comboAHeur.getItems().add(String.valueOf(i));
 		}
-		//comboAHeur.getItems().add(null);
+		
 		comboAHeur.valueProperty().set("--");
 		comboAHeur.getItems().add("--");
 		comboDeHeur.valueProperty().set("--");
 		comboDeHeur.getItems().add("--");
+		
 		for(int i=0;i<60;i++){
 			comboDeMinute.getItems().add(String.valueOf(i));
 			comboAMinute.getItems().add(String.valueOf(i));
 		}
+		
 		comboDeMinute.valueProperty().set("--");
 		comboDeMinute.getItems().add("--");
 		comboAMinute.valueProperty().set("--");
 		comboAMinute.getItems().add("--");
 		boolean exist = false;
+		
 		if(intersection!=null){
 			adresseField.setText(aController.getAdresse(intersection));
 			for(Livraison l : demandeL.getLivraisons()){
@@ -108,6 +115,11 @@ public class LivraisonController implements Initializable {
 		}
 	}
 	
+	/**
+	 * La methode ModifierLivraison permet de gerer
+	 * les differents cas de modifications de livraisons
+	 * depuis l'IHM.
+	 */
 	public void ModifierLivraison(){
 		plan = aController.getPlan();
 		listeDeCdes=aController.getListeDeCdes();
@@ -148,6 +160,10 @@ public class LivraisonController implements Initializable {
 		    stage.close();
 	}
 	
+	/**
+	 * La methode SupprimerLivraison permet de gerer
+	 * la suppresion d une livraison depuis l'IHM.
+	 */
 	public void SupprimerLivraison(){
 		try{
 		plan = aController.getPlan();
@@ -173,7 +189,10 @@ public class LivraisonController implements Initializable {
 	    stage.close();
 	}
 	
-	
+	/**
+	 * La methode AjouterLivraison permet de gerer
+	 * la suppresion d une livraison depuis l'IHM.
+	 */
 	public void AjouterLivraison(){
 		
 		try{
@@ -221,15 +240,7 @@ public class LivraisonController implements Initializable {
 	public static void setDL(DemandeLivraison dl){
 		demandeL = dl;
 	}
-
-
 	public static DemandeLivraison getDemandeL() {
 		return demandeL;
 	}
-
-
-
-
-
-	
 }

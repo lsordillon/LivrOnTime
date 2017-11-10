@@ -212,7 +212,7 @@ public class DescriptifControleur {
 	                        public void handle(MouseEvent event) {
 	                        	if (event.getClickCount() == 2) {
 	                        	Livraison livraison = listView.getSelectionModel().getSelectedItem();
-	                        	LivraisonController.setIntersection(livraison.getDestination());
+	                        	LivraisonControleur.setIntersection(livraison.getDestination());
 	                           	if(livraison != null && accueilControleur.getTournee()!=null){
 	        		            	Parent root;
 	        				        try {

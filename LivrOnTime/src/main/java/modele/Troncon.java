@@ -1,6 +1,5 @@
 package modele;
 
-import java.io.Serializable;
 
 /**
  * La classe Troncon permet de stocker les informations
@@ -10,7 +9,7 @@ import java.io.Serializable;
  * @author Matthieu
  *
  */
-public class Troncon implements Serializable {
+public class Troncon {
 	
 	private Intersection destination;
 	private double longueur ;
