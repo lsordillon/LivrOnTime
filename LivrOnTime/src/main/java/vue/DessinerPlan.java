@@ -83,6 +83,14 @@ public class DessinerPlan {
 	}
 
 	// Methode qui dessine les troncons
+	/**
+	 * La methode dessinerTroncon permet de dessiner un troncon
+	 * sur le plan a partir de ses intersections de destination
+	 * et d origine.
+	 * @param D
+	 * @param O
+	 * @param plan
+	 */
     public void dessinerTroncon(Intersection D, Intersection O,Plan plan) {
     		
     	int x,y;
@@ -110,10 +118,10 @@ public class DessinerPlan {
          //Centrage
          cercle2.relocate(y+ tailleCanvas/2 , -x+ tailleCanvas);
          //Rendre les circles clicable
-         mg.makeClickable(cercle1);
-         mg.makeClickable(cercle2);
-         mg.rendreCercleSurvolable(cercle1);
-         mg.rendreCercleSurvolable(cercle2);
+         mg.rendreDoubleCliquable(cercle1);
+         mg.rendreDoubleCliquable(cercle2);
+         mg.rendreCliquable(cercle1);
+         mg.rendreCliquable(cercle2);
         
     	
          Line ligne = new Line(cercle1.getLayoutX(), cercle1.getLayoutY(), cercle2.getLayoutX(), cercle2.getLayoutY());
@@ -146,13 +154,22 @@ public class DessinerPlan {
         }
 
     }
-
+    
+    /**
+     * La methode Dessiner dessine le plan dans un canvas.
+     * @param plan
+     * @return
+     */
     public Group Dessiner(Plan plan) {
     	dessine = new HashMap<Long,Circle>();
     	canvas = new PannableCanvas();
     	Group groupe = new Group();
         	
-    	int minX,minY,maxX=0,maxY=0;
+    	int minX;
+    	int minY;
+    	int maxX=0;
+    	int maxY=0;
+    	
     	//Calcul du minX et du min Y 
 	   	 for (Troncon T: plan.getTroncons()){
 	   		if(T.getDestination().getX()>maxX||T.getOrigine().getX()>maxY)
@@ -200,7 +217,13 @@ public class DessinerPlan {
         return groupe;              
     }
     
-
+    /**
+     * La methode Dessiner permet d ajouter au plan une demande
+     * de livraison chargee ulterieurement.
+     * @param dl
+     * @param plan
+     * @return
+     */
     public Group Dessiner(DemandeLivraison dl, Plan plan) { 
     		ArrayList<Livraison> livraisons = dl.getLivraisons();
     		Group groupe = new Group();
@@ -225,6 +248,12 @@ public class DessinerPlan {
         return groupe;	             
 	}
     
+    /**
+     * La methode afficherChemin permet de dessiner a tournee calculee
+     * sur le plan.
+     * @param tournee
+     * @return
+     */
     public Group afficherChemin(Tournee tournee){
 		Group groupe = new Group();
 		
@@ -256,6 +285,12 @@ public class DessinerPlan {
     	return groupe;
     }
     
+    /**
+     * La methode numeroterSommets ajoute des numeros a cote
+     * des livraisons pour mieux suivre le sens de parcours
+     * de la tournee.
+     * @param tournee
+     */
     public void numeroterSommets(Tournee tournee) {
     	
     	if (!chiffres.isEmpty()) {
@@ -285,12 +320,22 @@ public class DessinerPlan {
     	}
     }
     
+    /**
+     * La methode passerChiffresDevant gere l affichage des numeros
+     * sur le plan.
+     */
     public void passerChiffresDevant() {
     	for ( int i =0; i <chiffres.size(); i++) {
     		chiffres.get(i).toFront();
     	}
     }
     
+    /**
+     * La methode surlignerTroncon permet de passer un troncon en jaune
+     * quand on le selectionne.
+     * @param t
+     * @param Couleur
+     */
     public void surlignerTroncon (Troncon t, Paint Couleur) {
     	
     	Circle cercle1= dessine.get(t.getOrigine().getId());
@@ -306,6 +351,11 @@ public class DessinerPlan {
         cercle2.toFront();
     }
     
+    /**
+     * La methode actualiserCouleurPoints met a jour la couleur des points
+     * selon la legende etablie quand ils respectent ou pas les plages horaires.
+     * @param tournee
+     */
     public void actualiserCouleurPoints(Tournee tournee) {
     	
 		for (int i = 0; i<tournee.getItineraire().size()-1; i++){

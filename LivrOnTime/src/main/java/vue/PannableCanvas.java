@@ -4,10 +4,19 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.Pane;
 
+/**
+ * La classe PannableCanvas gere la creation du 
+ * canvas sur lequel le plan est dessine.
+ * @author Matthieu
+ *
+ */
 public class PannableCanvas extends Pane {
 
     DoubleProperty echelle = new SimpleDoubleProperty(1.0);
 
+    /**
+     * Constructeur de la classe PannableCanvas.
+     */
     public PannableCanvas() {
         setPrefSize(600, 600);
      

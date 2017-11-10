@@ -26,7 +26,12 @@ import modele.Intersection;
 import modele.Plan;
 import modele.Troncon;
 
-
+/**
+ * La classe MouseGestures gere toutes les interactions entre la souris
+ * et l interface, elle implemente tous les Listeners.
+ * @author Matthieu
+ *
+ */
 public class MouseGestures {
 	
     private double orgSceneX, orgSceneY;
@@ -40,18 +45,37 @@ public class MouseGestures {
 	
 	final static Paint COULEURPOINTSELECTIONNE = Color.CYAN;
 
-    public MouseGestures (AccueilControleur AccueilControleur) {
-    	this.accueilControleur = AccueilControleur;
+	/**
+	 * Constructeur de la classe MouseGestures
+	 * @param AccueilControleur
+	 */
+    public MouseGestures (AccueilControleur accueilControleur) {
+    	this.accueilControleur = accueilControleur;
     }
 
-	public void makeClickable(Node node) {
+    /**
+     * La methode rendreDoubleCliquable gere l interaction des points
+     * au double clic : ouvre la pop-up de modifications.
+     * @param node
+     */
+	public void rendreDoubleCliquable(Node node) {
         node.setOnMousePressed(circleOnMousePressedEventHandler);
     }
 	
-	public void rendreCercleSurvolable(Node node) {
+	/**
+     * La methode rendreCliquable gere l interaction des points
+     * au clic : selectionne le point et le trajet qui y mene.
+     * @param node
+     */
+	public void rendreCliquable(Node node) {
 		node.setOnMouseClicked(circleOnMouseClickedEventHandler);
 	}
 	
+	/**
+     * La methode rendreLigneSurvolable gere l interaction des troncons
+     * au passage de la souris : affiche le nom de la rue.
+     * @param node
+     */
 	public void rendreLigneSurvolable(Node noeud, Intersection D, Intersection O) {
 		if (noeud instanceof Line) {
 			String adresse = "";
@@ -81,8 +105,6 @@ public class MouseGestures {
 		}	
 	}
 	
-      
-	//Event handler du survolement du cercle
 	EventHandler<MouseEvent> circleOnMouseClickedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent t) {
@@ -104,9 +126,7 @@ public class MouseGestures {
           }
       };
       
-      
-
-    //Event handler du clique sur un cercle
+     
     EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
         @Override

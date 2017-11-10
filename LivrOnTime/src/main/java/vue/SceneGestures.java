@@ -6,6 +6,12 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
+/**
+ * La classe SceneGestures gere les mouvements du plan
+ * dans le canvas : le zoom et les translations.
+ * @author Matthieu
+ *
+ */
 public class SceneGestures {
 
     private static final double MAX_SCALE = 10.0d;
@@ -16,10 +22,17 @@ public class SceneGestures {
     private PannableCanvas canvas;
     private AccueilControleur controleur;
 
+    /**
+     * Constructeur de la classe SceneGestures
+     * @param controleur
+     */
     public SceneGestures(AccueilControleur controleur) {
         this.controleur = controleur;
     }
     
+    /**
+     * La methode rendreCanvasZoomable gere le zoom sur le plan.
+     */
     public void rendreCanvasZoomable(AccueilControleur controleur) {
     	if(canvas !=null) {
     		canvas.addEventFilter( MouseEvent.MOUSE_PRESSED, onMousePressedEventHandler);
@@ -75,9 +88,6 @@ public class SceneGestures {
     };
     
     
-    /**
-     * Mouse wheel handler: zoom to pivot point
-     */
     private EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
 
         public void handle(ScrollEvent event) {
