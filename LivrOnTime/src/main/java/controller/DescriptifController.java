@@ -126,17 +126,18 @@ public class DescriptifController {
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(livr)];
 						    		heureArrivee="Arrivee a "+dureeHm.format(tmp[0]);
 						    		attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHm.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
-						    	//	if (tournee.getListeLivraison().indexOf(livr).getFinPlageHoraire() != null) { //plage tendue 
-						    			//Date horaireArr = tempsPassage[0];
-
-						    			//if (liv.getDebutPlageHoraire() != null && liv.getFinPlageHoraire() != null ) {
-						    				//Date debutPH = liv.getDebutPlageHoraire();
-						    				//Date finPH = liv.getFinPlageHoraire(); 
-						    				//Date tempsRestantAvantFinPHdate = new Date(finPH.getTime() - horaireArr.getTime());
-						    				//long tempsRestantAvantFinPH = tempsRestantAvantFinPHdate.getTime();
-						    				//tempsRestantAvantFinPH < liv.getDuree()*1000
-						    	//	attente = "    Livraison impossible";	
-								//	}
+						    		if (tournee.getListeLivraison().get(tournee.getListeLivraison().indexOf(livr)).getFinPlageHoraire() != null) { //plage tendue 
+						    			
+						    			Date[] tempsPoint=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(livr)];
+						    			Date horaireArr = tempsPoint[0];
+						    		
+						    			Date finPH = livr.getFinPlageHoraire(); 
+						    			Date tempsRestantAvantFinPHdate = new Date(finPH.getTime() - horaireArr.getTime());
+						    			long tempsRestantAvantFinPH = tempsRestantAvantFinPHdate.getTime();
+						    			if (tempsRestantAvantFinPH < livr.getDuree()*1000) {
+						    				attente = "    Livraison impossible";
+						    			}
+									}
 						    		
 						    		Text txtHeureArrivee;
 						    	
