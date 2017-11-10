@@ -30,17 +30,25 @@ public class CdeAjout implements Commande {
 	}
 
 	@Override
-	public void redoCde() {
+	public void redoCde()  {
 		Main.aController.getDemandeLiv().getLivraisons().add(livraison);
+		try{
 		tournee.AjouterLivraison(plan,intersection,livraison,index);
+		} catch(Exception e){
+			System.err.println("Le redo de l'ajout bug!");
+		}
 	}
 
 	@Override
 	public void undoCde() {
 		Main.aController.getDemandeLiv().getLivraisons().remove(livraison);
+		try{
 		index = (tournee.SupprimerLivraison(plan,intersection,livraison)).getKey();
+		}catch(Exception e){
+			System.err.println("Le undo de l'ajout bug!");
+		}
 		
-		//return tournee;
+		
 	}
 
 }

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<SplitPane dividerPositions="0.6655518394648829" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AccueilController">
+<SplitPane dividerPositions="0.6655518394648829" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" stylesheets="List.css" fx:controller="controller.AccueilController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
@@ -20,8 +20,8 @@
 		                        <Button fx:id="CalculTournee" disable="true" layoutX="629.0" layoutY="80.0" mnemonicParsing="false" onAction="#CalculTournee" prefHeight="0.0" prefWidth="110.0" text="Calcul de tournee" />
 		                        <Button fx:id="AccueilBouton" layoutX="369.0" layoutY="14.0" mnemonicParsing="false" onAction="#retourAccueil" text="Accueil" />
 		                        <Button fx:id="GenererFeuille" disable="true" layoutX="325.0" layoutY="137.0" mnemonicParsing="false" onAction="#GenererFeuille" text="Generer feuille de route" />
-                              <Button fx:id="undoButton" layoutX="645.0" layoutY="14.0" mnemonicParsing="false" onAction="#Undo" text="Undo" />
-                              <Button fx:id="redoButton" layoutX="695.0" layoutY="14.0" mnemonicParsing="false" onAction="#Redo" text="Redo" />
+                              <Button fx:id="undoButton" disable="true" layoutX="645.0" layoutY="14.0" mnemonicParsing="false" onAction="#Undo" text="Undo" />
+                              <Button fx:id="redoButton" disable="true" layoutX="695.0" layoutY="14.0" mnemonicParsing="false" onAction="#Redo" text="Redo" />
 		                     </children>
 		                  </AnchorPane>
 		                 

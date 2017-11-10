@@ -91,8 +91,9 @@ public class Plan {
 	 * Lance le dijkstra pour chaque point de Livraison + entrepot 
 	 * Trie et stocke les resultats
 	 * @param dl
+	 * @throws Exception 
 	 */
-	public void deroulerLesDijkstra (DemandeLivraison dl) {		
+	public void deroulerLesDijkstra (DemandeLivraison dl) throws Exception {		
 		Dijkstra d = new Dijkstra();
 		
 		//charge la liste des points de livraison + entrepot
@@ -115,26 +116,6 @@ public class Plan {
 		} 	
 	}
 
-	
-	/*public Chemin creerChemin (Intersection depart, Intersection courante) {
-		// Pour chaque trajet reliant deux points de livraison, je cree un chemin
-		Chemin chemin = new Chemin();
-		chemin.setOrigine(depart);
-		chemin.setDestination(courante);
-		
-		// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
-		ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-		
-		while (courante!=depart) {
-			Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
-			if(troncon!=null) {
-				troncons.add(0, troncon);
-			}
-			courante=courante.getPredecesseur();
-		}
-		chemin.setTroncons(troncons);
-		return chemin;
-	}*/
 	
 	/**
 	 * Permet de renvoyer le troncon liant deux intersections
@@ -181,8 +162,9 @@ public class Plan {
 	 * realise le TSP pour calculer l'itineraire le plus court
 	 * @param dl
 	 * @return
+	 * @throws Exception 
 	 */
-	public Tournee calculerLaTournee(DemandeLivraison dl) {
+	public Tournee calculerLaTournee(DemandeLivraison dl) throws Exception {
 		
 		deroulerLesDijkstra(dl);
 		

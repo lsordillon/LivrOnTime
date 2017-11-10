@@ -1,6 +1,7 @@
 package controller;
 
 
+import java.awt.Paint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,10 +24,13 @@ import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-
 import javafx.scene.control.Label;
-
+import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -61,10 +65,11 @@ public class AccueilController{
 	public Button GenererFeuille; 
 	public Button undoButton;
 	public Button redoButton;
+	public VBox legendeText;
 
 	private SimpleDateFormat dureeHms = new SimpleDateFormat("HH:mm:ss");
 	
-    private static ListeDeCdes listeDeCommandes;
+    private static ListeDeCdes listeDeCommandes = new ListeDeCdes();
 	private static Plan plan;
 	private static Tournee tournee;
 	private DessinerPlan dessinerPlan;
@@ -159,7 +164,7 @@ public class AccueilController{
 					LivraisonController.setDL(demandeLiv);
 					VuePlan.getChildren().add(dessinerPlan.Dessiner(demandeLiv,plan));
 				    sceneGestures.rendreCanvasZoomable(this);			    
-				    //ListerLivraisons(dl.getLivraisons());
+				    
 				     
 		
 				    VBox vBox3 = new VBox(new Label ("Adresse Entrepot :     "+ getAdresse(demandeLiv.getAdresseEntrepot())),
@@ -169,7 +174,7 @@ public class AccueilController{
 			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(demandeLiv.getLivraisons(), plan, null));
 			   		
 			   		vBox2.setSpacing(40);
-			   		vBox2.setLayoutX(30);
+			   		vBox2.setLayoutX(70);
 			        vBox2.setLayoutY(50);
 				    VueDescriptif.getChildren().add(vBox2);
 				    CalculTournee.setDisable(false);
@@ -190,11 +195,16 @@ public class AccueilController{
 
 	
 	public void CalculTournee(ActionEvent actionEvent) {
-		tournee=plan.calculerLaTournee(demandeLiv);
-		tournee.initTempsPassage();
-	
+		try {
+			tournee=plan.calculerLaTournee(demandeLiv);
 		
-		VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+		tournee.initTempsPassage();
+		//AnchorPane.bottomAnchor="0.0"
+		VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
+		//legendeText.
+		VuePlan.getChildren().add(vBoxPlan);
+
+
 		sceneGestures.rendreCanvasZoomable(this);
 	    
 	    GenererFeuille.setDisable(false);
@@ -205,13 +215,22 @@ public class AccueilController{
 							  new Label ("Heure de Retour :      "+ dureeHms.format(tournee.getHeureArrive())));
 		vBox3.setSpacing(10);
 		
-		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(tournee.getListeLivraison(), plan, tournee));
+		ArrayList <Livraison> listeDestinations=tournee.getListeLivraison();
+		Livraison retourEntrepot=new Livraison(0,tournee.getItineraire().get(0).getOrigine());
+		listeDestinations.add(retourEntrepot);
+		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(listeDestinations, plan, tournee));
 	
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);
 		vBox2.setLayoutY(50);
 		VueDescriptif.getChildren().add(vBox2); 
 		CalculTournee.setDisable(true);
+		legendeText.setVisible(true);
+		//legendeText.setBackground(new Background(new BackgroundFill(Paint.OPAQUE, CornerRadii.EMPTY, Ins)));
+		} catch (Exception e) {
+			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
+             alert.showAndWait();
+		}
 	}
 	
 	
@@ -246,12 +265,15 @@ public class AccueilController{
 	    ChargerLivraison.setDisable(true);
 	    CalculTournee.setDisable(true);
 	    GenererFeuille.setDisable(true);
+	    legendeText.setVisible(false);
+	    undoButton.setDisable(true);
+	    redoButton.setDisable(true);
 	    
 	    plan=null;
 	    tournee=null;
 	    demandeLiv=null;
 	    intersectionSelectionnee=null;
-	    listeDeCommandes = null;
+	    listeDeCommandes = new ListeDeCdes();
 	}
 	
 	
@@ -302,7 +324,9 @@ public class AccueilController{
 	    VueDescriptif.getChildren().clear();
 	    VBox vBox3;
 		if(tournee != null){
-			VuePlan.getChildren().add(dessinerPlan.afficherChemin(tournee));
+			VBox vBoxPlan = new VBox(dessinerPlan.afficherChemin(tournee), legendeText);
+			legendeText.setLayoutY(0);
+			VuePlan.getChildren().add(vBoxPlan);
 			dessinerPlan.actualiserCouleurPoints(tournee);
 			
 		    livraisons = tournee.getListeLivraison();
@@ -380,7 +404,9 @@ public class AccueilController{
 	}
 	
 	
-	public static ListeDeCdes getListeDeCdes() {
+	public ListeDeCdes getListeDeCdes() {
+		undoButton.setDisable(false);
+		redoButton.setDisable(false);
 		return listeDeCommandes;
 	}
 	

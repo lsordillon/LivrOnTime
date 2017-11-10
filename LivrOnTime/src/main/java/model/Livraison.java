@@ -92,4 +92,17 @@ public class Livraison {
 	public Date getDebutPlageHoraire() {
 		return this.debutPlageHoraire;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if(obj instanceof Livraison){
+			return ((Livraison) obj).getDestination().getId() == this.getDestination().getId();
+		}else{
+			return false ;
+		}
+		
+	}
+	
+	
 }

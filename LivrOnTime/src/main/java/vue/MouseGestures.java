@@ -49,8 +49,7 @@ public class MouseGestures {
     }
 	
 	public void rendreCercleSurvolable(Node node) {
-		node.setOnMouseEntered(circleOnMouseEnteredEventHandler);
-		node.setOnMouseExited(circleOnMouseExitedEventHandler);
+		node.setOnMouseClicked(circleOnMouseClickedEventHandler);
 	}
 	
 	public void rendreLigneSurvolable(Node noeud, Intersection D, Intersection O) {
@@ -67,7 +66,9 @@ public class MouseGestures {
 	             @Override
 	             public void handle(MouseEvent t) {
 	                  Node  node =(Node)t.getSource();
+
 	                  tronconSurvole.show(node, noeud.getLayoutX()+400, 300+noeud.getLayoutY());
+
 	                }
 	            });
 	        noeud.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -82,10 +83,9 @@ public class MouseGestures {
 	
       
 	//Event handler du survolement du cercle
-	EventHandler<MouseEvent> circleOnMouseEnteredEventHandler = new EventHandler<MouseEvent>() {
+	EventHandler<MouseEvent> circleOnMouseClickedEventHandler = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent t) {
-       		System.out.println("enter");
        		double orgSceneX = t.getSceneX();
             double orgSceneY = t.getSceneY();
             if (t.getSource() instanceof Circle) {
@@ -93,26 +93,18 @@ public class MouseGestures {
                 double orgTranslateX = p.getCenterX();
                 double orgTranslateY = p.getCenterY();
                 long key=0;
-                for(Circle circle : accueilController.getDessinerPlan().getDessine().values()){
-                		
-            		if(circle.equals(p)){
-            			key = getKeyByValue(accueilController.getDessinerPlan().getDessine(), circle);
-            		}
+                for(Circle circle : accueilController.getDessinerPlan().getDessine().values()){	
+            			if(circle.equals(p)){
+            				key = getKeyByValue(accueilController.getDessinerPlan().getDessine(), circle);
+            			}
                 }
                 Intersection intersectionClicked = plan.getIntersections().get(key);
-                System.out.println("Intersection ID "+intersectionClicked.getId());
-                accueilController.getdController().setSurlignage(intersectionClicked);
+                accueilController.getdController().setSelection(intersectionClicked);
             }
           }
       };
       
-      EventHandler<MouseEvent> circleOnMouseExitedEventHandler = new EventHandler <MouseEvent>(){
-          @Override
-          public void handle(MouseEvent t) {             
-               //tp.hide();
-       	   		System.out.println("exit");
-             }
-         };
+      
 
     //Event handler du clique sur un cercle
     EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<MouseEvent>() {
@@ -145,7 +137,7 @@ public class MouseGestures {
 	                cle = getKeyByValue(accueilController.getDessinerPlan().getDessine(), p );
 	                
 	            	Intersection intersectionClicked = plan.getIntersections().get(cle);
-	            	System.out.println("Intersection ID "+intersectionClicked.getId());
+
 	            	LivraisonController.setIntersection(intersectionClicked);
 	            	if(LivraisonController.getDemandeL()!=null){
 		            	Parent root;

@@ -13,7 +13,7 @@ public class Main extends Application {
 	public static AccueilController aController;
     @Override
     public void start(Stage primaryStage) throws Exception{
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Accueil.fxml"));
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../fxml/Accueil2.fxml"));
     	Parent root = loader.load();
     	aController = loader.getController();
         primaryStage.setTitle("LivrOnTime");

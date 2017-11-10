@@ -59,11 +59,10 @@ public class Tournee {
 	}
 		
 	
-	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l){
+	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l) throws Exception{
 		
 		
 		if(listeLivraisons.size()>1) {
-			
 			int index=-1;
 			int indiceListeLivraison = 0;
 			Intersection origine=null;
@@ -92,31 +91,25 @@ public class Tournee {
 					nouvelItineraire.add(indiceListeLivraison, nouveauChemin );
 				}
 	
-			
-	
-				this.setItineraire(nouvelItineraire);
+				index=listeLivraisons.indexOf(l);
 				listeLivraisons.remove(l);
 	
 				initTempsPassage();
 			}
 			
-			else {
-				System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-			}
-			
-			
 			Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
 			return paire;
-		}
 		
+		}
 		else {
-			System.err.println("Vous ne pouvez pas supprimer la dernière livraison de la tournée");
+			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
 			return null;
 		}
+
 	}
 	
 	
-	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index){
+	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index) throws Exception{
 		Dijkstra d = new Dijkstra();
 
 		if(!getListeLivraison().contains(l)){
@@ -165,19 +158,13 @@ public class Tournee {
 	
 	// modifier seulement la plage horaire de la livraison
 	// TODO : Permettre de la supprimer 
-	public boolean ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
+	public Livraison ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
 		
 		if(this.getListeLivraison().contains(liv)){
 			int i=this.getListeLivraison().indexOf(liv);
-
-
-			
-			
 			  if(DPH==null || FPH==null){
-				  liv=new Livraison(liv.getDuree(),liv.getDestination());
+				  liv = new Livraison(liv.getDuree(),liv.getDestination());
 			  }else{
-				  
-			  
 	          liv.setDebutPlageHoraire(DPH);
 			  liv.setFinPlageHoraire(FPH);
 			  }
@@ -187,10 +174,10 @@ public class Tournee {
 		}
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
-			return false;
+			return liv;
 		}	
 		this.initTempsPassage();
-		return true;
+		return liv;
 	}
 	
 	

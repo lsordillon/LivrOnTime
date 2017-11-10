@@ -29,13 +29,21 @@ public class CdeSuppression implements Commande {
 	@Override
 	public void undoCde() {
 		Main.aController.getDemandeLiv().getLivraisons().add(livraison);
+		try{
 		tournee.AjouterLivraison(plan,intersection,livraison,index);
+		}catch(Exception e){
+			System.err.println("Le undo de la suppression bug!");	
+		}
 	}
 
 	@Override
 	public void redoCde() {
 		Main.aController.getDemandeLiv().getLivraisons().remove(livraison);
+		try{
 		index =(tournee.SupprimerLivraison(plan,intersection,livraison)).getKey();
+		}catch(Exception e){
+			System.err.println("Le redo de la suppression bug!");
+		}
 	}
 
 }

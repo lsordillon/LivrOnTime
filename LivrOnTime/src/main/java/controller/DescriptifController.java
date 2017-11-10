@@ -1,30 +1,46 @@
 package controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+import javafx.scene.control.Label;
+
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import model.Intersection;
@@ -35,7 +51,7 @@ import model.Troncon;
 import model.Chemin;
 
 import vue.DessinerPlan;
-
+import LivrOnTime.Main;
 
 public class DescriptifController {
 	
@@ -81,9 +97,11 @@ public class DescriptifController {
 							}else {
 								plageHoraire="";
 							}
-							
-							plageHoraire+= "Duree livraison : "+livr.getDuree()/60+" min";
-							
+							if(livr.getDuree()!=0) {
+								plageHoraire+= "Duree livraison : "+livr.getDuree()/60+" min";
+							}else {
+								plageHoraire+= "Retour entrepot";
+							}
 							
 							
 							super.updateItem(livr, bln);
@@ -94,7 +112,6 @@ public class DescriptifController {
 							
 							VBox vBox = new VBox(new Text(getAdresse(livr.getDestination())), new Text(plageHoraire));
 							
-							//vBox.setStyle("-fx-background-color: #457E31");
 							
 							
 							//Affichage des temps de passage
@@ -109,7 +126,19 @@ public class DescriptifController {
 								Date[] tmp=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(livr)];
 						    		heureArrivee="Arrivee a "+dureeHm.format(tmp[0]);
 						    		attente=(tmp[1]==null?"    Pas d'attente":("  Attente "+dureeHm.format(new Date(tmp[1].getTime()-tmp[0].getTime()-3600000))+ " min"));
-
+						    		if (tournee.getListeLivraison().get(tournee.getListeLivraison().indexOf(livr)).getFinPlageHoraire() != null) { //plage tendue 
+						    			
+						    			Date[] tempsPoint=tournee.getTempsPassage()[tournee.getListeLivraison().indexOf(livr)];
+						    			Date horaireArr = tempsPoint[0];
+						    		
+						    			Date finPH = livr.getFinPlageHoraire(); 
+						    			Date tempsRestantAvantFinPHdate = new Date(finPH.getTime() - horaireArr.getTime());
+						    			long tempsRestantAvantFinPH = tempsRestantAvantFinPHdate.getTime();
+						    			if (tempsRestantAvantFinPH < livr.getDuree()*1000) {
+						    				attente = "    Livraison impossible";
+						    			}
+									}
+						    		
 						    		Text txtHeureArrivee;
 						    	
 						    		int valeurPH = tournee.VerifierPlagesHorairesUneLiv(livr);
@@ -144,24 +173,40 @@ public class DescriptifController {
 						    		//2e vBox qui affiche la dur�e et l'heure d'arriv�e
 						    		
 						    		Text txtDureeTrajet;
-						    		Text spaceTxt = new Text("|");
-						    		Text spaceTxt2 = new Text("|");
 						    	
 						    		int index = tournee.getListeLivraison().indexOf(livr);
 						    		if (index ==0) {
-						    			txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000)));
+						    			txtDureeTrajet = new Text("Trajet de "+dureeHm.format(new Date(tmp[0].getTime()-tournee.getHeureDepart().getTime()-3600000))+" min");
 						    		}
 						    		else {
 						    			long dureeTrajet = tmp[0].getTime()-(tournee.getTempsPassage()[index-1][1]==null?tournee.getTempsPassage()[index-1][0].getTime():tournee.getTempsPassage()[index-1][1].getTime())-3600000;
-						    			txtDureeTrajet = new Text("|    Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
+						    			txtDureeTrajet = new Text("Trajet de "+dureeHm.format(new Date(dureeTrajet))+" min");
 							    	
 						    		}
 						    		txtDureeTrajet.setFill(Color.BLUE);
-						    		spaceTxt.setFill(Color.BLUE);
-						    		spaceTxt2.setFill(Color.BLUE);
-						    		VBox vBox2 = new VBox(new VBox(spaceTxt,txtDureeTrajet,spaceTxt2),vBox,new VBox(txtHeureArrivee));
-						    		vBox2.setId(""+livr.getDestination().getId());
-						    		//	vBox2.setStyle("-fx-background-color: #457E31");
+						    		
+						    		//Affichage de la dur�e du trajet avec la fl�che
+						    		
+						    		Image imageFleche=null;
+						    		ImageView vueFleche=null;
+						    		
+									try {
+										imageFleche = new Image(new FileInputStream("src/main/resources/img/down_arrow.png"));
+									} catch (FileNotFoundException e) {
+										e.printStackTrace();
+									}
+									
+									if (imageFleche!=null) {
+										vueFleche = new ImageView(imageFleche);
+										vueFleche.setFitWidth(25);
+										vueFleche.setPreserveRatio(true);
+									}
+						    		
+						    		HBox hBoxTrajet = new HBox(vueFleche,txtDureeTrajet);
+						    		hBoxTrajet.setAlignment(Pos.CENTER_LEFT);
+						    		VBox vBox2 = new VBox(hBoxTrajet,vBox,new VBox(txtHeureArrivee));
+						    		
+						    		
 						    		//vBox2.setSpacing(10); (????)
 						    		setGraphic(vBox2);
 							}
@@ -174,71 +219,127 @@ public class DescriptifController {
 							setOnDragDetected(new EventHandler<MouseEvent>(){
 		                        @Override
 		                        public void handle(MouseEvent event) {
-					            	 if (getItem() == null) {
-					                     return;
-					                 }
-					                System.out.println( "listcell setOnDragDetected" );
-					                Dragboard db = startDragAndDrop( TransferMode.MOVE );
-					                ClipboardContent content = new ClipboardContent();
-					                content.put(dataFormat, getItem());
+		                        	 int draggedIdx = listView.getItems().indexOf(getItem());
+						                if (draggedIdx!=0&&draggedIdx!=  listView.getItems().size()-1)
+						                {
+							                Dragboard db = startDragAndDrop( TransferMode.MOVE );
+							                ClipboardContent content = new ClipboardContent();
+							                content.putString(""+getItem());
+							                
+							                db.setContent( content );
+							                event.consume();
+						                }
 					                
-					                db.setContent( content );
-					                event.consume();
-					                System.out.println( "listcell setOnDragDetected" );
-					            }} );
-					            setOnDragEntered(new EventHandler<DragEvent>(){
-			                        @Override
-			                        public void handle(DragEvent event) {
-					                setStyle( "-fx-background-color: PaleGreen;" );
-					            }} );
-
-					            setOnDragExited( ( DragEvent event ) ->
-					            {
-					                setStyle( "" );
-					            } );
-
-					           setOnDragOver(new EventHandler<DragEvent>(){
-			                        @Override
-			                        public void handle(DragEvent event) {
+					            }
+		                    });
+							 
+							
+					        setOnDragEntered(new EventHandler<DragEvent>(){
+	                        	@Override
+	                        	public void handle(DragEvent event) {
+	                        		setStyle( "-fx-background-color: PaleGreen;" );
+	                        	}
+					        } );
+					        
+				            setOnDragExited( ( DragEvent event ) ->
+				            {
+				                setStyle( "" );
+				            } );
+							
+				           setOnDragOver(new EventHandler<DragEvent>(){
+		                        @Override
+		                        public void handle(DragEvent event) {
 					    
 					                Dragboard db = event.getDragboard();
-					                if ( db.hasContent(dataFormat) )
+					                int draggedIdx = listView.getItems().indexOf(getItem());
+					                if (db.hasString()&&draggedIdx!=0&&draggedIdx!=  listView.getItems().size()-1)
 					                {
+					                	
 					                    event.acceptTransferModes( TransferMode.MOVE );
 					                }
 					                event.consume();
 					            } });
+				           
 					            setOnDragDropped(new EventHandler<DragEvent>(){
 			                        @Override
 			                        public void handle(DragEvent event) {
 					            	 if (getItem() == null) {
 					                     return;
 					                 }
-					                System.out.println( "listCell.setOnDragDropped" );
+					             
 					                Dragboard db = event.getDragboard();
 					                boolean success = false;
-					                if ( db.hasContent(dataFormat))
+					                if ( db.hasString())
 					                {
-					                		System.out.println( "listCell.setOnDragDropped TRUE" );
-					                    ObservableList<Livraison> items = listView.getItems();					               
-					                    //int draggedIdx = items.indexOf(db.getContent(dataFormat));
+					                    ObservableList<Livraison> items = listView.getItems();		
 					                    int draggedIdx = getListView().getSelectionModel().getSelectedIndex();
+					                   
+					                   
 					                    int thisIdx = items.indexOf(getItem());
-					                    System.out.println(draggedIdx+"**"+thisIdx);
-					                    System.out.println(((Livraison) db.getContent(dataFormat)).toString());
-					                    items.remove(draggedIdx);
-					                    items.add(thisIdx,(Livraison) db.getContent(dataFormat) );
 					                    
-					                    //items.set(thisIdx, (Livraison) db.getContent(dataFormat));
-
+					                    Livraison aSupprimer=null;
+					                    for(Livraison etape:items)
+					                    {
+					                    	if(etape.toString().equals(db.getString()))
+					                    	{
+					                    		aSupprimer=etape;
+					                    		 
+					                    	}
+					                    }
+					                    items.remove(draggedIdx);
+					                    items.add(thisIdx, aSupprimer );
+					                    
+					                 
 					                    List<Livraison> itemscopy = new ArrayList<>(items);
 					                    listView.getItems().setAll(itemscopy);
 
 					                    success = true;
+					                    
+					                    //Changement du modele
+					                    LivraisonController lC=new LivraisonController();
+					                   
+				                    	try {
+											Main.aController.getTournee().SupprimerLivraison(plan,getItem().getDestination(),getItem());
+											Main.aController.getTournee().AjouterLivraison(plan,getItem().getDestination(),getItem(), thisIdx);
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+				                    	
+				                    	//Main.aController.getTournee().SupprimerLivraison(plan,aSupprimer.getDestination(),aSupprimer);
+				                    	//Main.aController.getTournee().AjouterLivraison(plan,aSupprimer.getDestination(),aSupprimer, draggedIdx);
+				                    	Main.aController.update();
+				                    	
+					                    
+					                   
 					                }
 					                event.setDropCompleted( success );
 					                event.consume();
 					            }} );
+					            setOnMouseClicked(new EventHandler<MouseEvent>(){
+			                        @Override
+			                        public void handle(MouseEvent event) {
+			                        	if (event.getClickCount() == 2) {
+			                        	Livraison livraison = listView.getSelectionModel().getSelectedItem();
+			                        	LivraisonController.setIntersection(livraison.getDestination());
+			                           	if(livraison != null){
+			        		            	Parent root;
+			        				        try {
+			        				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
+			        				            Stage stage = new Stage();
+			        				            stage.setTitle("Modifier Livraison");
+			        				            stage.setAlwaysOnTop(true);
+			        				            stage.setScene(new Scene(root));
+			        				            
+			        				            stage.show();
+			        				            
+			        				        }
+			        				        catch (IOException e) {
+			        				            e.printStackTrace();
+			        				        }
+			        	                	
+			        	            	} 
+			                        }}});
 						}
 
 
@@ -251,7 +352,7 @@ public class DescriptifController {
 
 
 		});
-
+		
 		interaction(listView);
 		return listView;
 	}
@@ -323,22 +424,17 @@ public class DescriptifController {
 		
 	}
 	
-	public void setSurlignage (Intersection inter) {
-		Node v=listView.lookup(""+inter.getId()); // renvoie null ?
-		//getSelectionModel
-		System.out.println(v);
-		//Node v2=v.lookup(""+inter.getId());
-		//v2.setStyle("-fx-background-color: #457E31");
+	public void setSelection (Intersection inter) {
+		
 		Iterator<Livraison> it=data.iterator();
 		while (it.hasNext()) {
 			Livraison courante = it.next();
 			if(courante.getDestination()==inter) {
+	
 
-				
-				
-				//listView.get
 
 				listView.getSelectionModel().select(data.indexOf(courante));
+
 
 				
 			}

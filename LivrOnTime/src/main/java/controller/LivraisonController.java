@@ -32,10 +32,10 @@ public class LivraisonController implements Initializable {
 	AccueilController aController = Main.aController;
 	public TextField adresseField;
 	public TextField dureeField;
-	public ComboBox<Integer> comboDeHeur;
-	public ComboBox<Integer> comboDeMinute;
-	public ComboBox<Integer> comboAHeur;
-	public ComboBox<Integer> comboAMinute;
+	public ComboBox<String> comboDeHeur;
+	public ComboBox<String> comboDeMinute;
+	public ComboBox<String> comboAHeur;
+	public ComboBox<String> comboAMinute;
 	
 	public Button modifBtn;
 	public Button suppBtn;
@@ -49,19 +49,36 @@ public class LivraisonController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dureeField.setText("10");
+		dureeField.lengthProperty().addListener(new ChangeListener<Number>(){
+	@Override
+	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		  if (newValue.intValue() > oldValue.intValue()) {
+			  char ch = dureeField.getText().charAt(oldValue.intValue());
+			  if (!(ch >= '1' && ch <= '9' )) {
+				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+			  }
+		 }
+	}
+ 
+});
 		adresseField.setDisable(true);
 		for(int i=0;i<24;i++){
-			comboDeHeur.getItems().add(i);
-			comboAHeur.getItems().add(i);
+			comboDeHeur.getItems().add(String.valueOf(i));
+			comboAHeur.getItems().add(String.valueOf(i));
 		}
-		comboAHeur.getItems().add(null);
-		comboDeHeur.getItems().add(null);
+		//comboAHeur.getItems().add(null);
+		comboAHeur.valueProperty().set("--");
+		comboAHeur.getItems().add("--");
+		comboDeHeur.valueProperty().set("--");
+		comboDeHeur.getItems().add("--");
 		for(int i=0;i<60;i++){
-			comboDeMinute.getItems().add(i);
-			comboAMinute.getItems().add(i);
+			comboDeMinute.getItems().add(String.valueOf(i));
+			comboAMinute.getItems().add(String.valueOf(i));
 		}
-		comboDeMinute.getItems().add(null);
-		comboAMinute.getItems().add(null);
+		comboDeMinute.valueProperty().set("--");
+		comboDeMinute.getItems().add("--");
+		comboAMinute.valueProperty().set("--");
+		comboAMinute.getItems().add("--");
 		boolean exist = false;
 		if(intersection!=null){
 			adresseField.setText(AccueilController.getAdresse(intersection));
@@ -72,10 +89,10 @@ public class LivraisonController implements Initializable {
 					
 					dureeField.setText( String.valueOf(livraison.getDuree() / 60));
 					if(l.getDebutPlageHoraire()!=null){
-					comboDeHeur.getSelectionModel().select(l.getDebutPlageHoraire().getHours());
-					comboDeMinute.getSelectionModel().select(l.getDebutPlageHoraire().getMinutes());
-					comboAHeur.getSelectionModel().select(l.getFinPlageHoraire().getHours());
-					comboAMinute.getSelectionModel().select(l.getFinPlageHoraire().getMinutes());
+					comboDeHeur.getSelectionModel().select(String.valueOf(l.getDebutPlageHoraire().getHours()));
+					comboDeMinute.getSelectionModel().select(String.valueOf(l.getDebutPlageHoraire().getMinutes()));
+					comboAHeur.getSelectionModel().select(String.valueOf(l.getFinPlageHoraire().getHours()));
+					comboAMinute.getSelectionModel().select(String.valueOf(l.getFinPlageHoraire().getMinutes()));
 					}
 				}
 			}
@@ -89,15 +106,15 @@ public class LivraisonController implements Initializable {
 	
 	public void ModifierLivraison(){
 		plan = aController.getPlan();
-		listeDeCdes=AccueilController.getListeDeCdes();
+		listeDeCdes=aController.getListeDeCdes();
 		Date debut = new Date();
 		Date fin = new Date();
 		
-		if(!comboAHeur.getSelectionModel().isEmpty() && comboAHeur.getSelectionModel().getSelectedItem()!=null && !comboAMinute.getSelectionModel().isEmpty() && comboAMinute.getSelectionModel().getSelectedItem()!=null  && !comboDeHeur.getSelectionModel().isEmpty() && comboDeHeur.getSelectionModel().getSelectedItem()!=null  && !comboDeMinute.getSelectionModel().isEmpty() && comboDeMinute.getSelectionModel().getSelectedItem()!=null){			
-			debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
-			debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());			
-			fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
-			fin.setMinutes(comboAMinute.getSelectionModel().getSelectedItem());			
+		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAHeur.getSelectionModel().getSelectedItem().equals("--") && !comboAMinute.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().getSelectedItem().equals("--")  && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().getSelectedItem().equals("--")  && !comboDeMinute.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().getSelectedItem().equals("--")){			
+			debut.setHours(Integer.parseInt(comboDeHeur.getSelectionModel().getSelectedItem()));
+			debut.setMinutes(Integer.parseInt(comboDeMinute.getSelectionModel().getSelectedItem()));			
+			fin.setHours(Integer.parseInt(comboAHeur.getSelectionModel().getSelectedItem()));
+			fin.setMinutes(Integer.parseInt(comboAMinute.getSelectionModel().getSelectedItem()));			
 			}else{
 				debut = null;
 				fin = null;
@@ -115,9 +132,8 @@ public class LivraisonController implements Initializable {
 				int duree=Integer.parseInt(dureeField.getText()) * 60;
 				int dureeA=livraison.getDuree();
 				Date DPH_A=livraison.getDebutPlageHoraire();
-				System.out.println("11111"+DPH_A);
 				Date FPH_A=livraison.getFinPlageHoraire();
-                aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
+                livraison = aController.getTournee().ModifierLivraison(plan, livraison, debut, fin);
 				aController.getTournee().ModifierLivraison(plan, livraison, duree);
 				aController.getDemandeLiv().getLivraisons().set(idx, livraison);
 				listeDeCdes.ajoute(new CdeModificationDuree(plan,aController.getTournee(),livraison,dureeA,DPH_A,FPH_A));
@@ -129,6 +145,7 @@ public class LivraisonController implements Initializable {
 	}
 	
 	public void SupprimerLivraison(){
+		try{
 		plan = aController.getPlan();
 		listeDeCdes=aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().remove(livraison);
@@ -140,8 +157,15 @@ public class LivraisonController implements Initializable {
 				aController.setTournee(nouvelleTournee);
 				listeDeCdes.ajoute(new CdeSuppression(plan,intersection,aController.getTournee(),livraison,idx));
 				aController.setListeDeCdes(listeDeCdes);
-				aController.update();
+				
 			}
+		}
+		aController.update();
+		}catch(Exception e){
+		     Stage stage = (Stage) ajoutBtn.getScene().getWindow();
+		     stage.close();
+			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
+             alert.showAndWait();
 		}
 		Stage stage = (Stage) suppBtn.getScene().getWindow();
 	    stage.close();
@@ -149,14 +173,14 @@ public class LivraisonController implements Initializable {
 	
 	
 	public void AjouterLivraison(){
-		
-		if(!comboAHeur.getSelectionModel().isEmpty() && comboAHeur.getSelectionModel().getSelectedItem()!=null && !comboAMinute.getSelectionModel().isEmpty() && comboAMinute.getSelectionModel().getSelectedItem()!=null  && !comboDeHeur.getSelectionModel().isEmpty() && comboDeHeur.getSelectionModel().getSelectedItem()!=null  && !comboDeMinute.getSelectionModel().isEmpty() && comboDeMinute.getSelectionModel().getSelectedItem()!=null){	
+		try{
+		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAHeur.getSelectionModel().getSelectedItem().equals("--") && !comboAMinute.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().getSelectedItem().equals("--")  && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().getSelectedItem().equals("--")  && !comboDeMinute.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().getSelectedItem().equals("--")){			
 		Date debut = new java.util.Date();
-		debut.setHours(comboDeHeur.getSelectionModel().getSelectedItem());
-		debut.setMinutes(comboDeMinute.getSelectionModel().getSelectedItem());
 		Date fin = new java.util.Date();
-		fin.setHours(comboAHeur.getSelectionModel().getSelectedItem());
-		fin.setMinutes(comboAMinute.getSelectionModel().getSelectedItem());
+		debut.setHours(Integer.parseInt(comboDeHeur.getSelectionModel().getSelectedItem()));
+		debut.setMinutes(Integer.parseInt(comboDeMinute.getSelectionModel().getSelectedItem()));			
+		fin.setHours(Integer.parseInt(comboAHeur.getSelectionModel().getSelectedItem()));
+		fin.setMinutes(Integer.parseInt(comboAMinute.getSelectionModel().getSelectedItem()));	
 	
 		livraison = new Livraison(Integer.parseInt(dureeField.getText()) * 60, intersection, debut, fin);
 		}else{
@@ -169,11 +193,18 @@ public class LivraisonController implements Initializable {
 		if (aController.getTournee()!=null){
 		    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex()+1;
 		    	System.out.println("index ajout"+ idx);
+		    	
 				aController.setTournee(aController.getTournee().AjouterLivraison(plan,intersection,livraison, idx));
 				listeDeCdes.ajoute(new CdeAjout(plan,intersection,aController.getTournee(),livraison,idx));
 				aController.setListeDeCdes(listeDeCdes);	
 		}
 		aController.update();
+		}catch(Exception e){
+			 Stage stage = (Stage) ajoutBtn.getScene().getWindow();
+			 stage.close();
+			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
+             alert.showAndWait();
+		}
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();
 	}
