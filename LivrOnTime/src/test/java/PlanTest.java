@@ -11,10 +11,7 @@ import modele.Troncon;
 
 public class PlanTest {
 
-	@Test
-	public void testTronconsVoisins() {
-		
-	}
+
 
 
 	@Test
@@ -55,11 +52,10 @@ public class PlanTest {
 		troncons.add(t);
 		Plan plan=new Plan();
 		plan.setTroncons(troncons);
-		assertEquals(t,plan.trouverTroncon(new Intersection(0,6,2),new Intersection(1,8,4)));
+		assertEquals(t,plan.trouverTroncon(new Intersection(1,8,4),new Intersection(0,6,2)));
 		t=new Troncon(new Intersection(0,6,2),4,"rue2",new Intersection(3,9,0));
 		troncons.add(t);
 		plan.setTroncons(troncons);
-		assertEquals(t,plan.trouverChemin(new Intersection(0,6,2),new Intersection(3,9,0)));
 		assertNull(plan.trouverChemin(new Intersection(0,6,2),new Intersection(6,8,4)));
 		
 	}

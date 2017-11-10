@@ -98,7 +98,7 @@ public class Chemin {
 	public boolean equals(Object obj) {
 
 	       if(obj instanceof Chemin )
-			return (this.getOrigine()==((Chemin)obj).getOrigine() && this.getDestination()==((Chemin)obj).getDestination());
+			return (this.getOrigine().equals(((Chemin) obj).getOrigine()) && this.getDestination().equals(((Chemin)obj).getDestination()));
 		return false;
 		}
 }

@@ -97,7 +97,7 @@ public class Intersection {
 	}
 	public boolean equals(Object obj) {
 		if(obj instanceof Intersection)
-			return this.id==((Intersection) obj).id;
+			return this.getId()==((Intersection) obj).getId();
 		return false;
 	}
 }
