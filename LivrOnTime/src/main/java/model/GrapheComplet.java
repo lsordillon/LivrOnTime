@@ -12,6 +12,16 @@ public class GrapheComplet {
 	private long [] duree;
 	private long [][] couts;
 
+	/**
+	 * Le constructeur de GrapheComplet, il cree l objet a partir de la liste des points de livraison,
+	 * de la liste des intersections a atteindre ( y compris l entrepot ) et de la liste des chemins
+	 * entre tous ces points.
+	 * Il initialise egalement tableau des duree de chaque livraison et un 
+	 * tableau des couts des trajets entre tous les points de passage de la tournee.
+	 * @param listeLivraisons
+	 * @param listeIntersections
+	 * @param chemins
+	 */
 	public GrapheComplet (ArrayList<Livraison> listeLivraisons,ArrayList<Intersection> listeIntersections,ArrayList<Chemin> chemins) {
 		int taille = listeIntersections.size();
 		duree= new long [taille];

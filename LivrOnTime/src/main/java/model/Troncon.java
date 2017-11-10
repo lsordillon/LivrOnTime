@@ -2,6 +2,14 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * La classe Troncon permet de stocker les informations
+ * sur la rue reliant 2 intersections adjacentes sur le graphe.
+ * Elle memorise l origine et la destination de la rue ainsi que
+ * la longueur et le nom de la rue.
+ * @author Matthieu
+ *
+ */
 public class Troncon implements Serializable {
 	
 	private Intersection destination;
@@ -9,6 +17,14 @@ public class Troncon implements Serializable {
 	private String nomRue;
 	private Intersection origine;
 	
+	/**
+	 * Constructeur de la classe Troncon, il cree l objet a partir
+	 * d une destination, d une longueur, d'un nom et d une origine.
+	 * @param destination
+	 * @param longueur
+	 * @param nomRue
+	 * @param origine
+	 */
 	public Troncon(Intersection destination, double longueur, String nomRue, Intersection origine) {
 		super();
 		this.destination = destination;
