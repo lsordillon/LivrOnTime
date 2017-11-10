@@ -6,6 +6,14 @@ import java.util.Date;
 import javafx.util.Pair;
 import util.tsp.Dijkstra;
 
+/**
+ * La classe Tournee construit et stocke l itineraire
+ * entre tous les points de livraison a atteindre.
+ * Elle stocke egalement l heure de depart et l heure d arrivee
+ * ainsi que les temps de passage aux differentes livraisons.
+ * @author Matthieu
+ *
+ */
 public class Tournee {
 
 
@@ -16,12 +24,18 @@ public class Tournee {
 	private ArrayList <Livraison> listeLivraisons;
 	private Date[][] tempsPassage;
 	
-	public Tournee(ArrayList<Chemin> itineraire2, DemandeLivraison dl) {
+	/**
+	 * Le constructeur de la classe Tournee il cree l objet a partir
+	 * d une liste de chemin et d une demande de livraison
+	 * @param itineraire
+	 * @param dl
+	 */
+	public Tournee(ArrayList<Chemin> itineraire, DemandeLivraison dl) {
 	    this.heureDepart=dl.getHeureDepart();
-		this.itineraire=itineraire2;
+		this.itineraire=itineraire;
 		
 		listeLivraisons = new ArrayList<Livraison>();
-		for (Chemin chemin : itineraire2){
+		for (Chemin chemin : itineraire){
 	    	for(Livraison l : dl.getLivraisons()){
 	    		if(l.getDestination().getId() == chemin.getDestination().getId()){
 	    			listeLivraisons.add(l);
@@ -29,7 +43,11 @@ public class Tournee {
 	    	}
 	    }	
 	}
-		
+	
+	/**
+	 * La methode initTempsPassage initialise
+	 * le tableau des temps de passage.
+	 */
 	public void initTempsPassage() {
 		long dureeTotale=heureDepart.getTime();
 		tempsPassage = new Date[getItineraire().size()][2];
@@ -58,7 +76,15 @@ public class Tournee {
 		heureArrivee=new Date(dureeTotale);
 	}
 		
-	
+	/**
+	 * La methode SupprimerLivraison permet d'enlever une livraison
+	 * donnee de la tournee.
+	 * @param plan
+	 * @param inter
+	 * @param l
+	 * @return
+	 * @throws Exception
+	 */
 	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l) throws Exception{
 		
 		
@@ -108,7 +134,16 @@ public class Tournee {
 
 	}
 	
-	
+	/**
+	 * La methode AjouterLivraison permet d ajouter une livraison dans la tournee
+	 * a un index donnee.
+	 * @param plan
+	 * @param inter
+	 * @param l
+	 * @param index
+	 * @return
+	 * @throws Exception
+	 */
 	public Tournee AjouterLivraison(Plan plan,Intersection inter,Livraison l, int index) throws Exception{
 		Dijkstra d = new Dijkstra();
 
@@ -117,14 +152,10 @@ public class Tournee {
 			Chemin cheminASupprimer = nouvelItineraire.get(index);
 			nouvelItineraire.remove(index);
 			
-			//On cree le premier chemin
 		    d.algoDijkstra(plan, cheminASupprimer.getOrigine());
 		    Chemin nouveauChemin1 = new Chemin(cheminASupprimer.getOrigine(), inter, plan);
-			
-			//On ajoute le chemin � la fin ------> On ajoute le chemin � la bonne place dans la liste
 			nouvelItineraire.add(index,nouveauChemin1);
 
-			// Idem pour le deuxi�me chemin
 		    d.algoDijkstra(plan, inter);
 		    Chemin nouveauChemin2 = new Chemin(inter, cheminASupprimer.getDestination(), plan);
 			nouvelItineraire.add(index+1,nouveauChemin2);
@@ -139,7 +170,15 @@ public class Tournee {
 		return this;
 	}	
 	
-	// modifier seulement la duree de livraison d'un pdl
+	
+	/**
+	 * Cette methode ModifierLivraison permet de modifier
+	 * la duree d'une livraison donnee.
+	 * @param plan
+	 * @param liv
+	 * @param duree
+	 * @return
+	 */
 	public boolean ModifierLivraison(Plan plan, Livraison liv, int duree){
 		
 		if(this.getListeLivraison().contains(liv)){
@@ -156,8 +195,15 @@ public class Tournee {
 	}
 	
 	
-	// modifier seulement la plage horaire de la livraison
-	// TODO : Permettre de la supprimer 
+	/**
+	 * Cette methode ModifierLivraison permet de modifier
+	 * la plage horaire d une livraison donnee.
+	 * @param plan
+	 * @param liv
+	 * @param DPH
+	 * @param FPH
+	 * @return
+	 */
 	public Livraison ModifierLivraison(Plan plan, Livraison liv, Date DPH, Date FPH){
 		
 		if(this.getListeLivraison().contains(liv)){
@@ -181,7 +227,13 @@ public class Tournee {
 	}
 	
 	
-	// verifier si l'heure d'arrive a une livrasion correspond aux plages horaires 
+	/**
+	 * La methode VerifierPlagesHorairesUneLiv permet
+	 * de verifier que l heure d arrivee sur le lieu de la
+	 * livraison respecte bien la plage horaire associee.
+	 * @param liv
+	 * @return
+	 */
 	public int VerifierPlagesHorairesUneLiv(Livraison liv) {
 		// juste checker si l'horaire d'arrivee fait partie de la ph
 		// valeur 0 : pas d'attente et pas tendu --> bleu
@@ -238,6 +290,11 @@ public class Tournee {
 
 	}
 	
+	/**
+	 * La methode VerifierPlagesHorairesTournee permet
+	 * de verifier les plages horaires pour toute la tournee.
+	 * @return
+	 */
 	public int[] VerifierPlagesHorairesTournee() {
 		int nbLivraisons = getListeLivraison().size();
 		int[] tableauPlageHoraire = new int[nbLivraisons]  ;  // initialiser taille a nombre de liv 
