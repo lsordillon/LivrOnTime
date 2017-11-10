@@ -19,6 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.SplitPane.Divider;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import model.Chemin;
@@ -30,7 +31,7 @@ import model.Tournee;
 
 public class LivraisonController implements Initializable {
 	AccueilController aController = Main.aController;
-	public TextField adresseField;
+	public Label adresseField;
 	public TextField dureeField;
 	public ComboBox<String> comboDeHeur;
 	public ComboBox<String> comboDeMinute;
@@ -64,7 +65,7 @@ public class LivraisonController implements Initializable {
 	}
  
 });
-		adresseField.setDisable(true);
+		//adresseField.setDisable(true);
 		for(int i=0;i<24;i++){
 			comboDeHeur.getItems().add(String.valueOf(i));
 			comboAHeur.getItems().add(String.valueOf(i));

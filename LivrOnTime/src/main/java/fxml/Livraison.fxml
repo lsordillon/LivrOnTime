@@ -10,7 +10,7 @@
    <children>
    
       <Label layoutX="3.0" layoutY="40.0" text="Adresse" />
-      <TextField fx:id="adresseField" layoutX="87.0" layoutY="36.0" prefHeight="25.0" prefWidth="189.0" />
+      <Label fx:id="adresseField" layoutX="87.0" layoutY="36.0" prefHeight="25.0" prefWidth="189.0" />
       <Label layoutX="3.0" layoutY="77.0" text="Plage Horaire" />
       <ComboBox fx:id="comboDeHeur" layoutX="107.0" layoutY="73.0" prefHeight="25.0" prefWidth="57.0" />
       <Label layoutX="87.0" layoutY="77.0" text="De" />
