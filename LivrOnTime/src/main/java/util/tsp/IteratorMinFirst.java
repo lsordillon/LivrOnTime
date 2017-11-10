@@ -8,8 +8,9 @@ public class IteratorMinFirst implements Iterator<Integer> {
 	private Integer[] candidats;
 	private int nbCandidats;
 
-	/**Creer un iterateur pour iterer sur les differents sommets triees par odre de cout 
-	 * croissant
+	/**
+	 * Creer un iterateur pour iterer sur les differents sommets triees par odre
+	 * de cout croissant
 	 * 
 	 * @param nonVus
 	 * @param sommetCourant
