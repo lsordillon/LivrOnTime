@@ -51,8 +51,8 @@ public class DessinerPlan {
 	private SceneGestures sg;
 	
 	final static double MULTIPLICATEURTRAITCERCLE = 1;
-	final static double MULTIPLICATEURTRAITENTREPOT = 4;
-	final static double MULTIPLICATEURTRAITLIVRAISON = 2;
+	final static double MULTIPLICATEURTRAITENTREPOT = 6;
+	final static double MULTIPLICATEURTRAITLIVRAISON = 4;
 	final static double MULTIPLICATEURTRAITITINERAIRE = 4;
 	final static double MODIFICATEURPOSITIONCHIFFREX = 7;
 	final static double MODIFICATEURPOSITIONCHIFFREY = 8;

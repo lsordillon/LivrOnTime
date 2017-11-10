@@ -54,7 +54,10 @@ public class LivraisonController implements Initializable {
 	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 		  if (newValue.intValue() > oldValue.intValue()) {
 			  char ch = dureeField.getText().charAt(oldValue.intValue());
-			  if (!(ch >= '1' && ch <= '9' )) {
+			  if (!(ch >= '0' && ch <= '9' )) {
+				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+			  }
+			  if(Integer.parseInt(dureeField.getText())<=0){
 				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
 			  }
 		 }
