@@ -55,7 +55,10 @@ public class LivraisonController implements Initializable {
 	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 		  if (newValue.intValue() > oldValue.intValue()) {
 			  char ch = dureeField.getText().charAt(oldValue.intValue());
-			  if (!(ch >= '1' && ch <= '9' )) {
+			  if (!(ch >= '0' && ch <= '9' )) {
+				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+			  }
+			  if(Integer.parseInt(dureeField.getText())<=0){
 				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
 			  }
 		 }
@@ -174,6 +177,7 @@ public class LivraisonController implements Initializable {
 	
 	
 	public void AjouterLivraison(){
+		
 		try{
 		if(!comboAHeur.getSelectionModel().isEmpty() && !comboAHeur.getSelectionModel().getSelectedItem().equals("--") && !comboAMinute.getSelectionModel().isEmpty() && !comboAMinute.getSelectionModel().getSelectedItem().equals("--")  && !comboDeHeur.getSelectionModel().isEmpty() && !comboDeHeur.getSelectionModel().getSelectedItem().equals("--")  && !comboDeMinute.getSelectionModel().isEmpty() && !comboDeMinute.getSelectionModel().getSelectedItem().equals("--")){			
 		Date debut = new java.util.Date();
@@ -187,7 +191,7 @@ public class LivraisonController implements Initializable {
 		}else{
 			livraison = new Livraison(Integer.parseInt(dureeField.getText()) * 60,intersection);
 		}
-
+		if(!aController.getTournee().getListeLivraison().contains(livraison)){
 		plan = aController.getPlan();
 		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
@@ -200,12 +204,13 @@ public class LivraisonController implements Initializable {
 				aController.setListeDeCdes(listeDeCdes);	
 		}
 		aController.update();
-		}catch(Exception e){
+		}}catch(Exception e){
 			 Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 			 stage.close();
 			 Alert alert = new Alert(AlertType.ERROR, "Une livraison inaccessible sur ce plan ! ");
              alert.showAndWait();
 		}
+		
 		Stage stage = (Stage) ajoutBtn.getScene().getWindow();
 	    stage.close();
 	}
