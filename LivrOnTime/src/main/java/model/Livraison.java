@@ -75,7 +75,7 @@ public class Livraison {
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		if(obj instanceof Livraison){
-			return ((Livraison) obj).getDestination().getId() == this.getDestination().getId();
+			return ((Livraison) obj).toString().equals(this.toString()) ;
 		}else{
 			return false ;
 		}
