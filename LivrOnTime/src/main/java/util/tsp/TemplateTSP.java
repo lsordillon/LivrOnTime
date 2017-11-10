@@ -97,11 +97,7 @@ public abstract class TemplateTSP implements TSP {
 	    				branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCourant][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite,temps);
 	    			}
 	        	}
-
-	        	//Si la plage horaire est respect�e, on fait le branchement.
-	        	//TODO Il faudrait essayer de bypass cette contrainte pour mettre quand m�me un iti avec des plages non respect�es (en fait juste coder le 'else').
-
-	        	
+     	
 	        	vus.remove(prochainSommet);
 	        	nonVus.add(prochainSommet);
 	        }	    
