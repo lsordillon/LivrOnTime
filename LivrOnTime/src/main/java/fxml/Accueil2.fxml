@@ -17,7 +17,7 @@
               <items>
                 <AnchorPane fx:id="VuePlan" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                      <children>
-                        <VBox fx:id="legendeText" prefHeight="88.0" prefWidth="152.0" style="-fx-background-color: lightgrey; -fx-border-color: grey;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                        <VBox fx:id="legendeText" prefHeight="88.0" prefWidth="152.0" style="-fx-background-color: GHOSTWHITE; -fx-border-color: LIGHTGREY;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
                            <children>
                               <Label prefHeight="21.0" prefWidth="39.0" text="Légende :">
                                  <font>
