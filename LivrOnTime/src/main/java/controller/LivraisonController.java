@@ -49,6 +49,18 @@ public class LivraisonController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		dureeField.setText("10");
+		dureeField.lengthProperty().addListener(new ChangeListener<Number>(){
+	@Override
+	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+		  if (newValue.intValue() > oldValue.intValue()) {
+			  char ch = dureeField.getText().charAt(oldValue.intValue());
+			  if (!(ch >= '1' && ch <= '9' )) {
+				  dureeField.setText(dureeField.getText().substring(0,dureeField.getText().length()-1)); 
+			  }
+		 }
+	}
+ 
+});
 		adresseField.setDisable(true);
 		for(int i=0;i<24;i++){
 			comboDeHeur.getItems().add(String.valueOf(i));
