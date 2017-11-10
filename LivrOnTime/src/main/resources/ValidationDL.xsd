@@ -23,7 +23,7 @@
     <xsd:complexType name="livraisonType">
         <xsd:attribute name="adresse" type="xsd:long" />
         <xsd:attribute name="debutPlage" type="typeTime" use="optional"/>
-        <xsd:attribute name="duree" type="xsd:integer" />
+        <xsd:attribute name="duree" type="xsd:positiveInteger" />
         <xsd:attribute name="finPlage" type="typeTime" use="optional"/>
     </xsd:complexType>
     
