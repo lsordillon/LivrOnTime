@@ -3,7 +3,13 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ * La classe Livraison stocke toutes les informations
+ * concernant une livraison a effectuer lors de la tournee :
+ * l adresse, la duree, et eventuellement la plage horaire associee.
+ * @author Matthieu
+ *
+ */
 public class Livraison {
 	 
 	
@@ -12,11 +18,19 @@ public class Livraison {
 	private Date finPlageHoraire;
 	private Intersection destination;
 	
-	
+	/**
+	 * Constructeur par defaut de la classe Livraison
+	 */
 	public Livraison(){
 		
 	}
 	
+	/**
+	 * Constructeur de la classe Livraison, il cree l objet a partir
+	 * d une adresse et d une duree.
+	 * @param duree
+	 * @param destination
+	 */
 	public Livraison (int duree, Intersection destination ) {
 		this.duree = duree;	
 		this.debutPlageHoraire = null;
@@ -24,6 +38,14 @@ public class Livraison {
 		this.destination = destination;
 	}
 	
+	/**
+	 * Constructeur de la classe Livraison, il cree l objet a partir
+	 * d une adresse, d une duree et d une plage horaire.
+	 * @param duree
+	 * @param destination
+	 * @param debut
+	 * @param fin
+	 */
 	public Livraison (int duree, Intersection destination, Date debut, Date fin ) {
 		this.duree = duree;	
 		this.debutPlageHoraire = debut;

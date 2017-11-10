@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 
 import util.tsp.Dijkstra;
 import util.tsp.TSP;
-import util.tsp.TSP2;
 import util.tsp.TSP3;
 
 /**
@@ -25,7 +24,9 @@ public class Plan {
 	private ArrayList<Long> id_intersections;
 	private ArrayList<Troncon> Troncons ;
 	
-	
+	/**
+	 * Constructeur par defaut de la classe Plan
+	 */
 	public Plan() {
 		chemins =new ArrayList<Chemin>();
 		Intersections = new HashMap<Long, Intersection>();
@@ -33,6 +34,12 @@ public class Plan {
 		Troncons = new ArrayList<Troncon>();
 	}
 	
+	/**
+	 * La methode CreerIntersections, prend une liste de noeuds
+	 * provenant du parsage d un fichier xml et cree les objets
+	 * Intersection correspondants.
+	 * @param noeuds
+	 */
 	public void CreerIntersections(NodeList noeuds) {
 		  final int nbNoeuds = noeuds.getLength();
 		  
@@ -47,6 +54,12 @@ public class Plan {
 	      } 
 	}
 
+	/**
+	 * La methode CreerTroncons, prend une liste de noeuds
+	 * provenant du parsage d un fichier et cree les objets
+	 * Troncon correspondants.
+	 * @param noeuds
+	 */
 	public void CreerTroncons(NodeList troncons) {
 	  final int nbTroncons = troncons.getLength();
 	  
@@ -61,7 +74,12 @@ public class Plan {
 	    		  	   troncon.getAttribute("nomRue") , intersectionO));
 	  }
 	}
-
+	
+	/**
+	 * La methode TronconsVoisins rempli la liste des
+	 * troncons partant d une intersection pour chaque
+	 * intersection du plan.
+	 */
 	public void TronconsVoisins() {
 		
 		for(int i =0; i< Troncons.size();i++) {
@@ -92,32 +110,12 @@ public class Plan {
 			destinations.remove(ptDepart);
 			
 			for (int i=0; i<destinations.size();i++) {
-				Chemin chemin = creerChemin(ptDepart,destinations.get(i));
+				Chemin chemin = new Chemin(ptDepart,destinations.get(i),this);
 				chemins.add(chemin);
 			}
 		} 	
 	}
 
-	public Chemin creerChemin (Intersection depart, Intersection courante) throws Exception {
-		// Pour chaque trajet reliant deux points de livraison, je cree un chemin
-		Chemin chemin = new Chemin();
-		chemin.setOrigine(depart);
-		chemin.setDestination(courante);
-		
-		// Grace au predecesseur des intersections, je cree une liste de troncon qui constituent le chemin total
-		ArrayList<Troncon> troncons=new ArrayList<Troncon>();
-		
-		while (courante!=depart) {
-			Troncon troncon=trouverTroncon(courante.getPredecesseur(),courante);
-			if(troncon!=null) {
-				troncons.add(0, troncon);
-			}
-			courante=courante.getPredecesseur();
-		}
-		chemin.setTroncons(troncons);
-		
-		return chemin;
-	}
 	
 	/**
 	 * Permet de renvoyer le troncon liant deux intersections
@@ -229,6 +227,5 @@ public class Plan {
 	public void setTroncons(ArrayList<Troncon> troncons) {
 		Troncons = troncons;
 	}
-
 
 }

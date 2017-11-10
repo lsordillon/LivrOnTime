@@ -61,56 +61,51 @@ public class Tournee {
 	
 	public Pair <Integer, Tournee> SupprimerLivraison(Plan plan,Intersection inter,Livraison l) throws Exception{
 		
-		int index=-1;
-		int indiceListeLivraison = 0;
-		Intersection origine=null;
-		Intersection destination=null;
-		if(getListeLivraison().contains(l)){
-			Dijkstra d = new Dijkstra();
-			ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
-			for(int i=0;i<getItineraire().size();i++){
-				System.out.println("au debut je suis"+ getItineraire().size());
-				Chemin chemin=getItineraire().get(i);
-				System.out.println("Intersection" + inter.getId());
-				System.out.println("Chemin" + chemin.getDestination().getId());
-					if(chemin.getDestination().getId()==inter.getId()){
-						origine=chemin.getOrigine();
-						nouvelItineraire.remove(chemin);
-						indiceListeLivraison = i;
-			     	}
-					if(chemin.getOrigine().getId()==inter.getId()){
-						destination=chemin.getDestination();
-						nouvelItineraire.remove(chemin);
-					}
+		
+		if(listeLivraisons.size()>1) {
+			int index=-1;
+			int indiceListeLivraison = 0;
+			Intersection origine=null;
+			Intersection destination=null;
+			if(listeLivraisons.contains(l)){
+				Dijkstra d = new Dijkstra();
+				ArrayList<Chemin> nouvelItineraire=new ArrayList<Chemin>(itineraire);
+				for(int i=0;i<itineraire.size();i++){
+					Chemin chemin=itineraire.get(i);
+						if(chemin.getDestination().getId()==inter.getId()){
+							origine=chemin.getOrigine();
+							nouvelItineraire.remove(chemin);
+							indiceListeLivraison = i;
+				     	}
+						if(chemin.getOrigine().getId()==inter.getId()){
+							destination=chemin.getDestination();
+							nouvelItineraire.remove(chemin);
+						}
+				}
+				
+				if(origine!=null && destination !=null){
+					d.algoDijkstra(plan, origine);
+	
+					Chemin nouveauChemin = new Chemin(origine, destination, plan);
+	
+					nouvelItineraire.add(indiceListeLivraison, nouveauChemin );
+				}
+	
+				index=listeLivraisons.indexOf(l);
+				listeLivraisons.remove(l);
+	
+				initTempsPassage();
 			}
 			
-			if(origine!=null && destination !=null){
-				//Chemin nouveau_chemin=plan.trouverChemin(origine,destination);
-				d.algoDijkstra(plan, origine);
-
-				Chemin nouveau_chemin=plan.creerChemin(origine,destination);
-
-				nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
-			}
-
+			Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
+			return paire;
 		
-
-			this.setItineraire(nouvelItineraire);
-
-			index=listeLivraisons.indexOf(l);
-			System.out.println("je suis l'index"+index);
-			listeLivraisons.remove(l);
-
-			initTempsPassage();
 		}
-		
 		else {
 			System.err.println("ERREUR ! La livraison ne fait pas partie de la tournee actuelle");
+			return null;
 		}
-		
-		
-		Pair <Integer, Tournee> paire = new Pair<Integer, Tournee>(index,this);
-		return paire;
+
 	}
 	
 	
@@ -124,14 +119,14 @@ public class Tournee {
 			
 			//On cree le premier chemin
 		    d.algoDijkstra(plan, cheminASupprimer.getOrigine());
-		    Chemin nouveauChemin1 = plan.creerChemin(cheminASupprimer.getOrigine(), inter);
+		    Chemin nouveauChemin1 = new Chemin(cheminASupprimer.getOrigine(), inter, plan);
 			
 			//On ajoute le chemin � la fin ------> On ajoute le chemin � la bonne place dans la liste
 			nouvelItineraire.add(index,nouveauChemin1);
 
 			// Idem pour le deuxi�me chemin
 		    d.algoDijkstra(plan, inter);
-		    Chemin nouveauChemin2 = plan.creerChemin(inter, cheminASupprimer.getDestination());
+		    Chemin nouveauChemin2 = new Chemin(inter, cheminASupprimer.getDestination(), plan);
 			nouvelItineraire.add(index+1,nouveauChemin2);
 		    setItineraire(nouvelItineraire);
 		    listeLivraisons.add(index, l);

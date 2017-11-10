@@ -16,15 +16,14 @@
 
     -fx-background-radius: 2;
 
-    -fx-background-color: #000033;
+    -fx-background-color: #7FDBFF;
 
     -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
     -fx-font-size: 10pt;
-    -fx-text-fill: white;
 }
 
 .button:hover{
-    -fx-background-color: #325d81;
+    -fx-background-color: #0074D9;
 }
 
 

@@ -8,12 +8,28 @@ import java.util.HashMap;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+/**
+ * La classe DemandeLivraison permet de construire
+ * un objet qui stocke une liste de livraison, une adresse d'entrepot
+ * et une heure de depart. C est a partir de cet objet qu on pourra
+ * calculer une tournee.
+ * @author Matthieu
+ *
+ */
 public class DemandeLivraison {
 	
 	private Date heureDepart;
 	private Intersection adresseEntrepot;
 	private ArrayList <Livraison> listeLivraisons;
 	
+	/**
+	 * Constructeur de la classe DemandeLivraison, il cree
+	 * l objet a partir d une liste de livraisons, d un entrepot
+	 * et d un plan.
+	 * @param livraisons
+	 * @param entrepot
+	 * @param plan
+	 */
 	public DemandeLivraison(NodeList livraisons, NodeList entrepot,Plan plan) {
 		
 		
