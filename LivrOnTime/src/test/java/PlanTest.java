@@ -14,12 +14,6 @@ public class PlanTest {
 
 
 
-	@Test
-	public void testCreerChemin() {
-	
-	}
-
-		
 	
 	@Test
 	public void testTrouverChemin() {
