@@ -10,9 +10,6 @@ import controleur.LivraisonController;
 
 import java.util.Objects;
 
-import model.Intersection;
-import model.Plan;
-import model.Troncon;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -25,6 +22,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import modele.Intersection;
+import modele.Plan;
+import modele.Troncon;
 
 
 public class MouseGestures {

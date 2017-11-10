@@ -1,10 +1,10 @@
 package controleur;
 
 import LivrOnTime.Main;
-import model.Intersection;
-import model.Livraison;
-import model.Plan;
-import model.Tournee;
+import modele.Intersection;
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
 
 
 /**

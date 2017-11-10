@@ -1,8 +1,10 @@
-package model;
+package modele;
 
 import java.util.Date;
+
+import modele.Intersection;
+
 import java.util.ArrayList;
-import model.Intersection;
 
 /**
  * La classe Chemin stocke le trajet

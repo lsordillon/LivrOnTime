@@ -2,9 +2,9 @@ package controleur;
 
 import java.util.Date;
 
-import model.Livraison;
-import model.Plan;
-import model.Tournee;
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
 
 
 /**

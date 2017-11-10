@@ -7,14 +7,6 @@ import java.util.Objects;
 import java.util.Map.Entry;
 
 import controleur.AccueilControleur;
-import model.Chemin;
-import model.DemandeLivraison;
-import model.Intersection;
-import model.Livraison;
-import model.Plan;
-import model.Tournee;
-import model.Troncon;
-
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -28,6 +20,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
+import modele.Chemin;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
+import modele.Troncon;
 
 
 public class DessinerPlan {

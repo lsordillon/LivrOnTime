@@ -42,14 +42,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
-import model.Intersection;
-import model.Livraison;
-import model.Plan;
-import model.Tournee;
-import model.Troncon;
-import model.Chemin;
-
+import modele.Chemin;
+import modele.Intersection;
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
+import modele.Troncon;
 import vue.DessinerPlan;
 import LivrOnTime.Main;
 

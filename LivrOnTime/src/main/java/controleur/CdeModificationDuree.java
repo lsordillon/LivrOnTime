@@ -3,9 +3,9 @@ package controleur;
 import java.util.Date;
 
 import LivrOnTime.Main;
-import model.Livraison;
-import model.Plan;
-import model.Tournee;
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
 
 /**
  * La classe CdeModificationDuree implemente l interface Commande

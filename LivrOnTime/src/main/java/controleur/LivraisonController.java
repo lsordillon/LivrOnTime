@@ -22,12 +22,12 @@ import javafx.scene.control.SplitPane.Divider;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import model.Chemin;
-import model.DemandeLivraison;
-import model.Intersection;
-import model.Livraison;
-import model.Plan;
-import model.Tournee;
+import modele.Chemin;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.Livraison;
+import modele.Plan;
+import modele.Tournee;
 
 public class LivraisonController implements Initializable {
 	AccueilControleur aController = Main.aController;

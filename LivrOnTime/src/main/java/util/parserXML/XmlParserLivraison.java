@@ -16,7 +16,7 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import model.Livraison;
+import modele.Livraison;
 
 /** Cette classe est une classe utilitaire permettant
  * le parsage du fichier xml de demande de livraison

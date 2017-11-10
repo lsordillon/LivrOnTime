@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import model.*;
+import modele.*;
 
 /**
  * Cette classe est une classe utilitaire implementant
