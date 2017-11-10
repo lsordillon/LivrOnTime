@@ -36,12 +36,12 @@ public class MouseGestures {
     private Paint couleurSelectionne;
 	private Circle cercleSelectionne;
 	private PannableCanvas canvas;
-	private AccueilControleur AccueilControleur;
+	private AccueilControleur accueilControleur;
 	
 	final static Paint COULEURPOINTSELECTIONNE = Color.CYAN;
 
     public MouseGestures (AccueilControleur AccueilControleur) {
-    	this.AccueilControleur = AccueilControleur;
+    	this.accueilControleur = AccueilControleur;
     }
 
 	public void makeClickable(Node node) {
@@ -55,7 +55,7 @@ public class MouseGestures {
 	public void rendreLigneSurvolable(Node noeud, Intersection D, Intersection O) {
 		if (noeud instanceof Line) {
 			String adresse = "";
-	        for(Troncon troncon : AccueilControleur.getPlan().getTroncons()){
+	        for(Troncon troncon : accueilControleur.getPlan().getTroncons()){
 	        		if(troncon.getDestination().getId()== D.getId() && troncon.getOrigine().getId()==O.getId()){
 	        			adresse = troncon.getNomRue();
 	        		} 		
@@ -93,13 +93,13 @@ public class MouseGestures {
                 double orgTranslateX = p.getCenterX();
                 double orgTranslateY = p.getCenterY();
                 long key=0;
-                for(Circle circle : AccueilControleur.getDessinerPlan().getDessine().values()){	
+                for(Circle circle : accueilControleur.getDessinerPlan().getDessine().values()){	
             			if(circle.equals(p)){
-            				key = getKeyByValue(AccueilControleur.getDessinerPlan().getDessine(), circle);
+            				key = getKeyByValue(accueilControleur.getDessinerPlan().getDessine(), circle);
             			}
                 }
                 Intersection intersectionClicked = plan.getIntersections().get(key);
-                AccueilControleur.getdController().setSelection(intersectionClicked);
+                accueilControleur.getdControleur().setSelection(intersectionClicked);
             }
           }
       };
@@ -134,12 +134,12 @@ public class MouseGestures {
 	                p.setFill(COULEURPOINTSELECTIONNE);
 	                p.setStroke(COULEURPOINTSELECTIONNE);
 	                
-	                cle = getKeyByValue(AccueilControleur.getDessinerPlan().getDessine(), p );
+	                cle = getKeyByValue(accueilControleur.getDessinerPlan().getDessine(), p );
 	                
 	            	Intersection intersectionClicked = plan.getIntersections().get(cle);
 
 	            	LivraisonController.setIntersection(intersectionClicked);
-	            	if(LivraisonController.getDemandeL()!=null && AccueilControleur.getTournee()!=null){
+	            	if(LivraisonController.getDemandeL()!=null && accueilControleur.getTournee()!=null){
 		            	Parent root;
 				        try {
 				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));

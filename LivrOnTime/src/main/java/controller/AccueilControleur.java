@@ -72,7 +72,7 @@ public class AccueilControleur{
 	private DessinerPlan dessinerPlan;
 	private DemandeLivraison demandeLiv;
 	private Intersection intersectionSelectionnee;
-    private DescriptifController dController;
+    private DescriptifControleur dControleur;
     private MouseGestures mouseGestures;
     private SceneGestures sceneGestures;
     
@@ -84,7 +84,7 @@ public class AccueilControleur{
     	mouseGestures = new MouseGestures(this);
     	sceneGestures = new SceneGestures(this);	
     	dessinerPlan = new DessinerPlan(mouseGestures, sceneGestures);
-    	dController = new DescriptifController(dessinerPlan,this);
+    	dControleur = new DescriptifControleur(dessinerPlan,this);
     	
     }
     
@@ -169,7 +169,7 @@ public class AccueilControleur{
 				    					  new Label ("Heure de Depart :      "+ dureeHms.format(demandeLiv.getHeureDepart())),
 				    					  new Label ("Heure de Retour :      "));
 			   		vBox3.setSpacing(10);
-			   		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(demandeLiv.getLivraisons(), plan, null));
+			   		VBox vBox2 = new VBox(vBox3,dControleur.ListerLivraisons(demandeLiv.getLivraisons(), plan, null));
 			   		
 			   		vBox2.setSpacing(40);
 			   		vBox2.setLayoutX(70);
@@ -222,7 +222,7 @@ public class AccueilControleur{
 			ArrayList <Livraison> listeDestinations=tournee.getListeLivraison();
 			Livraison retourEntrepot=new Livraison(0,tournee.getItineraire().get(0).getOrigine());
 			listeDestinations.add(retourEntrepot);
-			VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(listeDestinations, plan, tournee));
+			VBox vBox2 = new VBox(vBox3,dControleur.ListerLivraisons(listeDestinations, plan, tournee));
 		
 			vBox2.setSpacing(40);
 			vBox2.setLayoutX(30);
@@ -342,7 +342,7 @@ public class AccueilControleur{
 					  		 new Label ("Heure de Retour :      "));
 		}
 	
-		VBox vBox2 = new VBox(vBox3,dController.ListerLivraisons(livraisons, plan, tournee));
+		VBox vBox2 = new VBox(vBox3,dControleur.ListerLivraisons(livraisons, plan, tournee));
 		
 		vBox2.setSpacing(40);
 		vBox2.setLayoutX(30);
@@ -418,13 +418,13 @@ public class AccueilControleur{
 	}
 	
 	
-	public DescriptifController getdController() {
-		return dController;
+	public DescriptifControleur getdControleur() {
+		return dControleur;
 	}
 	
 	
-	public void setdController(DescriptifController dController) {
-		this.dController = dController;
+	public void setdControleur(DescriptifControleur dControleur) {
+		this.dControleur = dControleur;
 	}
 	
 	

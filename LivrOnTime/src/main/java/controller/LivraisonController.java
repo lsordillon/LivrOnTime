@@ -194,7 +194,7 @@ public class LivraisonController implements Initializable {
 		listeDeCdes= aController.getListeDeCdes();
 		aController.getDemandeLiv().getLivraisons().add(livraison);
 		if (aController.getTournee()!=null){
-		    	int idx = aController.getdController().listView.getSelectionModel().getSelectedIndex()+1;
+		    	int idx = aController.getdControleur().listView.getSelectionModel().getSelectedIndex()+1;
 		    	System.out.println("index ajout"+ idx);
 		    	
 				aController.setTournee(aController.getTournee().AjouterLivraison(plan,intersection,livraison, idx));
