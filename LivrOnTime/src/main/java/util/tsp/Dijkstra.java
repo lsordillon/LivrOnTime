@@ -102,20 +102,6 @@ public class Dijkstra {
 
 			}
 			
-			//Tests d'affichage
-			/*HashMap<Long,Intersection> inters = plan.getIntersections();
-			Collection <Intersection> inters2 = inters.values();
-			ArrayList <Intersection> inters3 = new ArrayList<Intersection> (inters2);
-			
-			Iterator<Intersection> it2 = inters3.iterator();
-			Intersection next2;
-			
-			while(it2.hasNext()){
-				next2 = it2.next();
-				//System.out.println(next2.getDistance());	
-				//System.out.println(next2.getPredecesseur());
-			}*/
-			
 			sommetsGris.clear();
 			sommetsBlancs.clear();
 		}
