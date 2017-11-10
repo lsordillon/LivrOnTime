@@ -80,11 +80,50 @@
                 	<items>
 		                <AnchorPane fx:id="VueControl" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
 		                     <children>
-		                        <Button fx:id="ChargerButoon" layoutX="50.0" layoutY="80.0" mnemonicParsing="false" onAction="#ChargerFichier" prefHeight="25.0" prefWidth="110.0" text="Charger Plan" />
-		                        <Button fx:id="ChargerLivraison" disable="true" layoutX="341.0" layoutY="80.0" mnemonicParsing="false" onAction="#ChargerLivraison" prefHeight="25.0" prefWidth="110.0" text="Charger Livraison" />
-		                        <Button fx:id="CalculTournee" disable="true" layoutX="629.0" layoutY="80.0" mnemonicParsing="false" onAction="#CalculTournee" prefHeight="0.0" prefWidth="110.0" text="Calcul de tournee" />
-		                        <Button fx:id="AccueilBouton" layoutX="369.0" layoutY="14.0" mnemonicParsing="false" onAction="#retourAccueil" text="Accueil" />
-		                        <Button fx:id="GenererFeuille" disable="true" layoutX="325.0" layoutY="137.0" mnemonicParsing="false" onAction="#GenererFeuille" text="Generer feuille de route" />
+		                        <Button fx:id="ChargerButoon" layoutX="35.0" layoutY="73.0" mnemonicParsing="false" onAction="#ChargerFichier" text="Charger un plan" >
+		                        	<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="https://icon-icons.com/icons2/619/PNG/512/map-grid-with-placeholder-interface-symbol_icon-icons.com_56711.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic>
+		                        </Button>
+		                        <Button fx:id="ChargerLivraison" disable="true" layoutX="323.0" layoutY="73.0" mnemonicParsing="false" onAction="#ChargerLivraison" text="Charger une livraison" >
+		                        	<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="https://icon-icons.com/icons2/936/PNG/512/delivery-truck-silhouette_icon-icons.com_73600.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic>
+		                        </Button>
+		                        <Button fx:id="CalculTournee" disable="true" layoutX="614.0" layoutY="73.0" mnemonicParsing="false" onAction="#CalculTournee" text="Calcul de tournee" >
+		                        	<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="http://www.icone-png.com/png/43/42502.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic></Button>
+		                        <Button fx:id="AccueilBouton" layoutX="354.0" layoutY="14.0" mnemonicParsing="false" onAction="#retourAccueil" text="Accueil " >
+		                        	<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="https://cdn.pixabay.com/photo/2014/04/03/00/38/house-308936_960_720.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic>
+           						</Button>
+		                        <Button fx:id="GenererFeuille" disable="true" layoutX="305.0" layoutY="130.0" mnemonicParsing="false" onAction="#GenererFeuille" text="Générer la feuille de route" >
+		                        	<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="https://www.lesflechesdephebus.com/themes/phebus16/img/icon-delivery.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic>
+		                        </Button>
                               	<Button fx:id="undoButton" disable="true" layoutX="645.0" layoutY="14.0" mnemonicParsing="false" onAction="#Undo" >
                               		<graphic>
               							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
