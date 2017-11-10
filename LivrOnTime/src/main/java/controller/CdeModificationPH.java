@@ -6,6 +6,14 @@ import model.Livraison;
 import model.Plan;
 import model.Tournee;
 
+
+/**
+ * La classe CdeModificationPH implemente l interface Commande
+ * pour la modification de la plage horaire d une livraison dans la tournee.
+ * Elle stocke la livraison modifie et sa plage horaire.
+ * @author Matthieu
+ *
+ */
 public class CdeModificationPH implements Commande{
 	
 	private Plan plan;
@@ -16,10 +24,14 @@ public class CdeModificationPH implements Commande{
 
     private Date DPH_A,FPH_A;
     
-
-    
-    
-    
+    /**
+     * Constructeur de la classe CdeModificationPH
+     * @param plan
+     * @param tournee
+     * @param livraison
+     * @param DPH_A
+     * @param FPH_A
+     */
 	public CdeModificationPH(Plan plan, Tournee tournee, Livraison livraison,Date DPH_A,Date FPH_A) {
 		super();
 		this.plan = plan;

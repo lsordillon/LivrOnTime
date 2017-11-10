@@ -6,6 +6,14 @@ import model.Livraison;
 import model.Plan;
 import model.Tournee;
 
+
+/**
+ * La classe CdeSuppression implemente l interface Commande
+ * pour la suppression d une livraison dans la tournee.
+ * Elle stocke la livraison supprimee et sa position.
+ * @author Matthieu
+ *
+ */
 public class CdeSuppression implements Commande {
 	
 	private Plan plan;
@@ -16,7 +24,14 @@ public class CdeSuppression implements Commande {
 	
 	
 	
-
+	/**
+	 * Constructeur de la classe CdeSuppression
+	 * @param plan
+	 * @param intersection
+	 * @param tournee
+	 * @param livraison
+	 * @param index
+	 */
 	public CdeSuppression(Plan plan, Intersection intersection, Tournee tournee,Livraison livraison,int index) {
 		super();
 		this.plan = plan;

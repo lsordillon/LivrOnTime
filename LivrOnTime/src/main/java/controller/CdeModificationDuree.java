@@ -3,11 +3,17 @@ package controller;
 import java.util.Date;
 
 import LivrOnTime.Main;
-import model.Intersection;
 import model.Livraison;
 import model.Plan;
 import model.Tournee;
 
+/**
+ * La classe CdeModificationDuree implemente l interface Commande
+ * pour la modification de la duree d une livraison dans la tournee.
+ * Elle stocke la livraison modifie et sa duree.
+ * @author Matthieu
+ *
+ */
 public class CdeModificationDuree implements Commande{
 	private Plan plan;
 	private int duree;
@@ -18,6 +24,15 @@ public class CdeModificationDuree implements Commande{
 	private int dureeA;
 	private Date DPH_A,FPH_A;
     
+	/**
+	 * Constructeur de la classe CdeModificationDuree
+	 * @param plan
+	 * @param tournee
+	 * @param livraison
+	 * @param dureeA
+	 * @param DPH_A
+	 * @param FPH_A
+	 */
 	public CdeModificationDuree(Plan plan, Tournee tournee, Livraison livraison, int dureeA,Date DPH_A,Date FPH_A) {
 		this.plan = plan;
 		this.duree = livraison.getDuree();
