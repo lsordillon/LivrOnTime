@@ -23,11 +23,19 @@ import model.*;
 
 public class feuilleDeRouteTxt {
 
-    
+    /**
+     * Constructeur par defaut de la classe feuilleDeRouteTxt
+     */
 	public feuilleDeRouteTxt(){
-	// Constructeur vide
 	}
 	
+	/**
+	 * La methode genererFeuilleDeRoute genere le
+	 * contenu de la future feuille de route a partir
+	 * de la tournee calculee precedemment.
+	 * @param tournee
+	 * @return
+	 */
 	public static String genererFeuilleDeRoute(Tournee tournee){
 		String contenu = "";
 		
@@ -40,7 +48,6 @@ public class feuilleDeRouteTxt {
 		
 		//Premiere ligne de depart 
 		contenu = contenu + "Depart de l'entrepot "+ ruesDelIntersection(entrepotAd) +" a " + heureDep+ "\r\n\r\n";
-		
 
 		//Pour tous les chemins, on recup adress dep adress arr
 		//ainsi que heure arrivee au depart et heure de depart apres livraison
@@ -51,8 +58,14 @@ public class feuilleDeRouteTxt {
 	    return contenu;
 	}
 	
-	
-	private static boolean testIdentique(Troncon premierT, Troncon deuxiemeT) {
+	/**
+	 * La methode testRueIdentique permet de savoir si 2 troncons
+	 * consecutifs font partie de la même rue.
+	 * @param premierT
+	 * @param deuxiemeT
+	 * @return
+	 */
+	private static boolean testRueIdentique(Troncon premierT, Troncon deuxiemeT) {
 		boolean identique = false;
 		if (premierT.getNomRue().equals(deuxiemeT.getNomRue())) {
 			identique = true;
@@ -60,6 +73,14 @@ public class feuilleDeRouteTxt {
 		return identique;
 	}
 
+	/**
+	 * La methode retranscriptionDunChemin permet d obtenir la description
+	 * de l itineraire a suivre (tous les troncons) pour aller de l'origine du chemin
+	 * a la destination du chemin.
+	 * @param tourneeEnCours
+	 * @param index
+	 * @return
+	 */
 	private static String retranscriptionDunChemin (Tournee tourneeEnCours, int index) {
 		
 		Chemin cheminActuel = tourneeEnCours.getItineraire().get(index);
@@ -80,13 +101,6 @@ public class feuilleDeRouteTxt {
 			tempsAttente= heureDebutLiv.getTime() - heureDarriveePDL.getTime()-3600000;
 		}
 		
-		//tmp[1] == null si 0 plage horaire
-		
-		//On recupere chaque troncon (nom de rue et longueur du troncon) SAUF LE DERNIER
-		//et le temps de la livraison d'arrivee de l'it
-		
-		
-		//si 1 troncon tout va bien 
 		if (nbTroncons ==1) {
 			Troncon tronconActuel = cheminActuel.getTroncons().get(0);
 			String rueAPrendre = tronconActuel.getNomRue();
@@ -94,11 +108,10 @@ public class feuilleDeRouteTxt {
 			contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
 		}
 		
-		//si 2 troncons petit test
 		if (nbTroncons ==2) {
 			Troncon tronconActuel = cheminActuel.getTroncons().get(0);
 			Troncon tronconSuivant = cheminActuel.getTroncons().get(1);
-			if (testIdentique(tronconActuel, tronconSuivant)) {
+			if (testRueIdentique(tronconActuel, tronconSuivant)) {
 				String rueAPrendre = tronconActuel.getNomRue();
 				double distanceTroncon = tronconActuel.getLongueur() + tronconSuivant.getLongueur();;
 				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres\r\n";
@@ -116,40 +129,39 @@ public class feuilleDeRouteTxt {
 			}
 		}
 
-		
-		//pour le grand test il faut au moins 3 troncons 
 		if (nbTroncons > 2) {
-		for (int numTroncon = 0; numTroncon < nbTroncons-1; numTroncon++) {
-			Troncon tronconActuel = cheminActuel.getTroncons().get(numTroncon);
-			Troncon tronconSuivant = cheminActuel.getTroncons().get(numTroncon+1);
+			for (int numTroncon = 0; numTroncon < nbTroncons-1; numTroncon++) {
+				Troncon tronconActuel = cheminActuel.getTroncons().get(numTroncon);
+				Troncon tronconSuivant = cheminActuel.getTroncons().get(numTroncon+1);
+				
+				//si c'est deux troncons de la meme rue, on les assemble en 1 troncon
+				if (testRueIdentique(tronconActuel, tronconSuivant) == true) {
+					tronconSuivant.setLongueur(tronconActuel.getLongueur() + tronconSuivant.getLongueur());
+				}
+				else {
+					String rueAPrendre = tronconActuel.getNomRue();
+					double distanceTroncon = tronconActuel.getLongueur();
+					contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
+				}
 			
-			//si c'est deux troncons de la meme rue, on les assemble en 1 troncon
-			if (testIdentique(tronconActuel, tronconSuivant) == true) {
-				tronconSuivant.setLongueur(tronconActuel.getLongueur() + tronconSuivant.getLongueur());
 			}
+			
+			// Pour le dernier troncon, test avec le troncon PRECEDENT
+			Troncon lastTroncon = (cheminActuel.getTroncons().get(nbTroncons-1));
+			Troncon preLastTroncon = (cheminActuel.getTroncons().get(nbTroncons-2));
+			if (testRueIdentique(lastTroncon, preLastTroncon) == true) {
+				lastTroncon.setLongueur(preLastTroncon.getLongueur() + lastTroncon.getLongueur());
+				double LastDistanceTroncon = lastTroncon.getLongueur();
+				String LastRueAPrendre = lastTroncon.getNomRue();
+				contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres \r\n";
+			
+			}
+			
 			else {
-				String rueAPrendre = tronconActuel.getNomRue();
-				double distanceTroncon = tronconActuel.getLongueur();
-				contenu = contenu + "Prendre "+ rueAPrendre + " sur " + (int)distanceTroncon+ " metres \r\n";
+				double LastDistanceTroncon = lastTroncon.getLongueur();
+				String LastRueAPrendre = lastTroncon.getNomRue();
+				contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres\r\n";
 			}
-		
-		}
-		
-		// Pour le dernier troncon, test avec le troncon PRECEDENT
-		Troncon lastTroncon = (cheminActuel.getTroncons().get(nbTroncons-1));
-		Troncon preLastTroncon = (cheminActuel.getTroncons().get(nbTroncons-2));
-		if (testIdentique(lastTroncon, preLastTroncon) == true) {
-			lastTroncon.setLongueur(preLastTroncon.getLongueur() + lastTroncon.getLongueur());
-			double LastDistanceTroncon = lastTroncon.getLongueur();
-			String LastRueAPrendre = lastTroncon.getNomRue();
-			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres \r\n";
-		
-		}
-		else {
-			double LastDistanceTroncon = lastTroncon.getLongueur();
-			String LastRueAPrendre = lastTroncon.getNomRue();
-			contenu = contenu + "Prendre "+ LastRueAPrendre + " sur " + (int)LastDistanceTroncon+ " metres\r\n";
-		}
 		}
 		
 
@@ -161,23 +173,23 @@ public class feuilleDeRouteTxt {
 		}
 		
 		else {
-		Livraison livraisonActuelle = combinaisonPointDeLivraison(tourneeEnCours.getListeLivraison(), destinationCheminActuel);
-		String adresse = ruesDelIntersection(destinationCheminActuel);
-		SimpleDateFormat dureeHm = new SimpleDateFormat("HH:mm");
-		String heureFinCheminActuelFormat = dureeHm.format(heureFinCheminActuel);
-		contenu = contenu + "\r"+"Arrivee au point de livraison "+ adresse + " a " + heureFinCheminActuelFormat + "\r\n";
-		
-		if (heureDebutLiv!=null) {
-
-			SimpleDateFormat dureeM = new SimpleDateFormat("HH'h 'mm");
-			contenu = contenu + "Attente pendant "+ dureeM.format(tempsAttente) + " minutes \r\n";
-		}
-		
-			contenu = contenu + "Livraison pendant "+ livraisonActuelle.getDuree()/60 + " minutes \r\n";
-			//heureDepartPoint = heureFinCheminActuel + livraisonActuelle.getDuree();
-			//contenu = contenu + "Depart du point de livraison "+ destinationCheminActuel + " a " + heureDepartPoint+ "\r\n";
-			contenu = contenu + "Depart du point de livraison "+ adresse + "\r\n\r\n";	
+			Livraison livraisonActuelle = combinaisonPointDeLivraison(tourneeEnCours.getListeLivraison(), destinationCheminActuel);
+			String adresse = ruesDelIntersection(destinationCheminActuel);
+			SimpleDateFormat dureeHm = new SimpleDateFormat("HH:mm");
+			String heureFinCheminActuelFormat = dureeHm.format(heureFinCheminActuel);
+			contenu = contenu + "\r"+"Arrivee au point de livraison "+ adresse + " a " + heureFinCheminActuelFormat + "\r\n";
+			
+			if (heureDebutLiv!=null) {
+	
+				SimpleDateFormat dureeM = new SimpleDateFormat("HH'h 'mm");
+				contenu = contenu + "Attente pendant "+ dureeM.format(tempsAttente) + " minutes \r\n";
 			}
+			
+				contenu = contenu + "Livraison pendant "+ livraisonActuelle.getDuree()/60 + " minutes \r\n";
+				//heureDepartPoint = heureFinCheminActuel + livraisonActuelle.getDuree();
+				//contenu = contenu + "Depart du point de livraison "+ destinationCheminActuel + " a " + heureDepartPoint+ "\r\n";
+				contenu = contenu + "Depart du point de livraison "+ adresse + "\r\n\r\n";	
+		}
 		
 		return contenu;
 	}
@@ -213,6 +225,11 @@ public class feuilleDeRouteTxt {
 
 		return rues;
 	}
+	
+	/**
+	 * La methode Open, ouvre la feuille de route generee.
+	 * @throws IOException
+	 */
     public static void Open() throws IOException {
         Desktop desktop = Desktop.getDesktop();
         if (desktop.isSupported(Desktop.Action.OPEN)) {
@@ -220,7 +237,6 @@ public class feuilleDeRouteTxt {
         } else {
             System.out.println("Open is not supported");
         }
-}
-
+    }
 
 }
