@@ -139,7 +139,7 @@ public class MouseGestures {
 	            	Intersection intersectionClicked = plan.getIntersections().get(cle);
 
 	            	LivraisonController.setIntersection(intersectionClicked);
-	            	if(LivraisonController.getDemandeL()!=null){
+	            	if(LivraisonController.getDemandeL()!=null && accueilController.getTournee()!=null){
 		            	Parent root;
 				        try {
 				        	root = FXMLLoader.load(getClass().getResource("../fxml/Livraison.fxml"));
