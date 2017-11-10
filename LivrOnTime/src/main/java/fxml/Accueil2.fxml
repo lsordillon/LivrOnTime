@@ -85,9 +85,25 @@
 		                        <Button fx:id="CalculTournee" disable="true" layoutX="629.0" layoutY="80.0" mnemonicParsing="false" onAction="#CalculTournee" prefHeight="0.0" prefWidth="110.0" text="Calcul de tournee" />
 		                        <Button fx:id="AccueilBouton" layoutX="369.0" layoutY="14.0" mnemonicParsing="false" onAction="#retourAccueil" text="Accueil" />
 		                        <Button fx:id="GenererFeuille" disable="true" layoutX="325.0" layoutY="137.0" mnemonicParsing="false" onAction="#GenererFeuille" text="Generer feuille de route" />
-                              <Button fx:id="undoButton" disable="true" layoutX="645.0" layoutY="14.0" mnemonicParsing="false" onAction="#Undo" text="Undo" />
-                              <Button fx:id="redoButton" disable="true" layoutX="695.0" layoutY="14.0" mnemonicParsing="false" onAction="#Redo" text="Redo" />
-		                     </children>
+                              	<Button fx:id="undoButton" disable="true" layoutX="645.0" layoutY="14.0" mnemonicParsing="false" onAction="#Undo" >
+                              		<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="http://www.newdesignfile.com/postpic/2015/05/undo-button_301919.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic>
+                              	</Button>
+                              	<Button fx:id="redoButton" disable="true" layoutX="695.0" layoutY="14.0" mnemonicParsing="false" onAction="#Redo" >
+                              		<graphic>
+              							<ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+              								<image>       
+                								<Image url="https://cdn4.iconfinder.com/data/icons/vectory-bonus-3/40/button_redo-512.png" preserveRatio="false" smooth="false" />          
+              								</image>
+              							</ImageView>
+           							</graphic>
+                              	</Button>
+		                     	</children>
 		                  </AnchorPane>
 		                 
 		             </items>
