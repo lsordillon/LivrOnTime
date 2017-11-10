@@ -46,6 +46,9 @@ public class Chemin {
 		}
 		this.setTroncons(troncons);
 	}
+	public Chemin(){
+		
+	}
 
 	public Date getHeureDepart() {
 		return heureDepart;
@@ -92,4 +95,10 @@ public class Chemin {
 		return "Chemin [heureArrivee=" + heureArrivee + ", origine=" + origine + ", destination=" + destination
 				+ ", troncons=" + troncons + ", heureDepart=" + heureDepart + "]";
 	}
+	public boolean equals(Object obj) {
+
+	       if(obj instanceof Chemin )
+			return (this.getOrigine()==((Chemin)obj).getOrigine() && this.getDestination()==((Chemin)obj).getDestination());
+		return false;
+		}
 }

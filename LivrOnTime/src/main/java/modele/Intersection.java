@@ -95,4 +95,9 @@ public class Intersection {
 	public void setY(int y) {
 		this.y = y;
 	}
+	public boolean equals(Object obj) {
+		if(obj instanceof Intersection)
+			return this.id==((Intersection) obj).id;
+		return false;
+	}
 }

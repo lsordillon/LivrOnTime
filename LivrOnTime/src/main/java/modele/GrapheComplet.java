@@ -52,7 +52,7 @@ public class GrapheComplet {
 					for (int k = 0; k < courant.getTroncons().size(); k++) {
 						cout = cout + courant.getTroncons().get(k).getLongueur();
 					}
-					// Conversion d'une distance en durée
+					// Conversion d'une distance en durï¿½e
 					couts[i][j] = (long) (cout * 1000 / Tournee.VITESSE);
 				}
 			}
@@ -71,7 +71,7 @@ public class GrapheComplet {
 	public Chemin trouverChemin(Intersection origine, Intersection destination, ArrayList<Chemin> chemins) {
 		Chemin result = null;
 		for (int i = 0; i < chemins.size(); i++) {
-			if (chemins.get(i).getDestination() == destination && chemins.get(i).getOrigine() == origine) {
+			if(chemins.get(i).getDestination().equals(destination) && chemins.get(i).getOrigine().equals(origine) ){
 				result = chemins.get(i);
 				break;
 			}

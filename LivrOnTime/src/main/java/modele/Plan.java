@@ -130,7 +130,7 @@ public class Plan {
 		Troncon resultat = null;
 
 		for (int i = 0; i < Troncons.size(); i++) {
-			if (Troncons.get(i).getDestination() == destination && Troncons.get(i).getOrigine() == origine) {
+			if ((Troncons.get(i).getDestination()).equals(destination) && Troncons.get(i).getOrigine().equals(origine)) {
 				resultat = Troncons.get(i);
 				break;
 			}
@@ -149,7 +149,7 @@ public class Plan {
 		Chemin resultat = null;
 
 		for (int i = 0; i < chemins.size(); i++) {
-			if (chemins.get(i).getDestination() == destination && chemins.get(i).getOrigine() == origine) {
+			if (chemins.get(i).getDestination().equals(destination) && chemins.get(i).getOrigine().equals(origine)) {
 				resultat = chemins.get(i);
 				break;
 			}
@@ -231,6 +231,14 @@ public class Plan {
 
 	public void setTroncons(ArrayList<Troncon> troncons) {
 		Troncons = troncons;
+	}
+
+	public ArrayList<Chemin> getChemins() {
+		return chemins;
+	}
+
+	public void setChemins(ArrayList<Chemin> chemins) {
+		this.chemins = chemins;
 	}
 
 }

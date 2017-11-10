@@ -1,45 +1,66 @@
-
-
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 
-import org.junit.Before;
 import org.junit.Test;
 
-
+import modele.Chemin;
+import modele.Intersection;
+import modele.Plan;
+import modele.Troncon;
 
 public class PlanTest {
-	Plan plan;
-	HashMap<Long,Intersection> intersections = new HashMap<Long,Intersection>();
-	ArrayList<Troncon> troncons = new ArrayList<>();
-	
-	@Before
-	public void setUp(){
-		Intersection int1 = new Intersection(1,0,0);
-		Intersection int2 = new Intersection(2,0,1);
-		Intersection int3 = new Intersection(3,0,3);
-		intersections.put(new Long(1),int1);
-		intersections.put(new Long(2),int2);
-		intersections.put(new Long(3),int3);
-		Troncon tr1 = new Troncon(int1, 10, "nomRue1", int2);
-		Troncon tr2 = new Troncon(int1, 10, "nomRue2", int3);
-		Troncon tr3 = new Troncon(int2, 10, "nomRue3", int3);
-		troncons.add(tr1);
-		troncons.add(tr2);
-		troncons.add(tr3);
-		plan = new Plan();
-		plan.setIntersections(intersections);
-	}
-	
+
 	@Test
-	public void trouverCheminTest() {
-		Troncon tronconCherché = new Troncon(intersections.get(new Long(1)), 10, "nomRue1", intersections.get(new Long(2)));		
-		assertEquals(plan.trouverTroncon(intersections.get(new Long(1)), intersections.get(new Long(2))), tronconCherché );
+	public void testTronconsVoisins() {
 		
 	}
 
+
+	@Test
+	public void testCreerChemin() {
+	
+	}
+
+		
+	
+	@Test
+	public void testTrouverChemin() {
+		ArrayList<Chemin> chemins=new ArrayList();
+		Chemin c=new Chemin();
+		c.setOrigine(new Intersection(0,6,2));
+		c.setDestination(new Intersection(1,8,4));
+		chemins.add(c);
+		Plan plan=new Plan();
+		plan.setChemins(chemins);
+		assertEquals(c,plan.trouverChemin(new Intersection(0,6,2),new Intersection(1,8,4)));
+		 c=new Chemin();
+		 c.setOrigine(new Intersection(0,6,2));
+		 c.setDestination(new Intersection(3,9,0));
+		 chemins.add(c);
+		 plan.setChemins(chemins);
+		 assertEquals(c,plan.trouverChemin(new Intersection(0,6,2),new Intersection(3,9,0)));
+		 assertNull(plan.trouverChemin(new Intersection(0,6,2),new Intersection(6,8,4)));
+	}
+
+	
+	
+	
+	@Test
+	public void testTrouverTroncon()  {
+		
+		
+		ArrayList<Troncon> troncons=new ArrayList();
+		Troncon t=new Troncon(new Intersection(0,6,2),3,"rue1",new Intersection(1,8,4));
+		troncons.add(t);
+		Plan plan=new Plan();
+		plan.setTroncons(troncons);
+		assertEquals(t,plan.trouverTroncon(new Intersection(0,6,2),new Intersection(1,8,4)));
+		t=new Troncon(new Intersection(0,6,2),4,"rue2",new Intersection(3,9,0));
+		troncons.add(t);
+		plan.setTroncons(troncons);
+		assertEquals(t,plan.trouverChemin(new Intersection(0,6,2),new Intersection(3,9,0)));
+		assertNull(plan.trouverChemin(new Intersection(0,6,2),new Intersection(6,8,4)));
+		
+	}
 }
