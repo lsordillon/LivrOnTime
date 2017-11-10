@@ -16,6 +16,13 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+
+/** Cette classe est une classe utilitaire permettant
+ * le parsage du fichier xml de demande de plan
+ * et sa conversion en objets intersections et troncons.
+ * @author Matthieu
+ *
+ */
 public class XmlParserPlan {
 	
 	static Document doc;
@@ -23,6 +30,14 @@ public class XmlParserPlan {
 	public static NodeList troncons;
 	private String messageErreur;
 	
+	/**
+	 * Methode parcourant un fichier xml pour en tirer les 
+	 * informations necessaires a la creation de l'objet
+	 * demande de livraison
+	 * @param nomFichier, le nom du fichier a parser
+	 * @return doc, un document contenant les informations utiles extraites du xml
+	 * @throws FileNotFoundException
+	 */
 	public Document lecteur(String nomFichier) throws FileNotFoundException{
 	    	
 	    	Document document= null;
@@ -50,7 +65,14 @@ public class XmlParserPlan {
 	
 	    	 return doc;
 	}
-	    
+	   
+	 /**
+     * La methode validationXSD permet de verifier la validite
+     * du format du fichier charge.
+     * @param xml
+     * @param xsd
+     * @return
+     */
 	public boolean validationXSD(InputStream xml, InputStream xsd)
 	    {
 	        try
