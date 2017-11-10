@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="204.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/fxml/Style.css" fx:controller="controller.LivraisonController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="204.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" stylesheets="/fxml/Style.css" fx:controller="controleur.LivraisonControleur">
    <children>
    
       <Label layoutX="3.0" layoutY="40.0" text="Adresse" />
@@ -24,7 +24,7 @@
       <Button fx:id="ajoutBtn" layoutX="142.0" layoutY="161.0" mnemonicParsing="false" onAction="#AjouterLivraison" prefHeight="25.0" prefWidth="121.0" text="Ajouter Livraison" />
       <Label layoutX="319.0" layoutY="77.0" text=":" />
       <TextField fx:id="dureeField" layoutX="330.0" layoutY="36.0" prefHeight="25.0" prefWidth="32.0" />
-      <Label layoutX="284.0" layoutY="40.0" text="Durée" />
+      <Label layoutX="284.0" layoutY="40.0" text="Duree" />
       <Label layoutX="367.0" layoutY="40.0" prefHeight="17.0" prefWidth="23.0" text="min" />
    </children>
 </AnchorPane>
