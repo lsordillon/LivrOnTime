@@ -87,9 +87,9 @@ public class Tournee {
 				if(origine!=null && destination !=null){
 					d.algoDijkstra(plan, origine);
 	
-					Chemin nouveau_chemin=plan.creerChemin(origine,destination);
+					Chemin nouveauChemin = new Chemin(origine, destination, plan);
 	
-					nouvelItineraire.add(indiceListeLivraison, nouveau_chemin );
+					nouvelItineraire.add(indiceListeLivraison, nouveauChemin );
 				}
 	
 			
@@ -126,14 +126,14 @@ public class Tournee {
 			
 			//On cree le premier chemin
 		    d.algoDijkstra(plan, cheminASupprimer.getOrigine());
-		    Chemin nouveauChemin1 = plan.creerChemin(cheminASupprimer.getOrigine(), inter);
+		    Chemin nouveauChemin1 = new Chemin(cheminASupprimer.getOrigine(), inter, plan);
 			
 			//On ajoute le chemin � la fin ------> On ajoute le chemin � la bonne place dans la liste
 			nouvelItineraire.add(index,nouveauChemin1);
 
 			// Idem pour le deuxi�me chemin
 		    d.algoDijkstra(plan, inter);
-		    Chemin nouveauChemin2 = plan.creerChemin(inter, cheminASupprimer.getDestination());
+		    Chemin nouveauChemin2 = new Chemin(inter, cheminASupprimer.getDestination(), plan);
 			nouvelItineraire.add(index+1,nouveauChemin2);
 		    setItineraire(nouvelItineraire);
 		    listeLivraisons.add(index, l);

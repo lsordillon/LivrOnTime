@@ -42,7 +42,14 @@ public class GrapheComplet {
 		}
 	}
 	
-	
+	/**
+	 * La methode trouverChemin renvoie le chemin entre 2 intersections donnees
+	 * dans une liste de chemins
+	 * @param origine
+	 * @param destination
+	 * @param chemins
+	 * @return
+	 */
 	public Chemin trouverChemin (Intersection origine, Intersection destination, ArrayList<Chemin> chemins) {
 		Chemin result=null;
 		for(int i=0; i<chemins.size(); i++) {
