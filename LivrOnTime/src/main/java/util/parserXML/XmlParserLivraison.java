@@ -86,7 +86,7 @@ public class XmlParserLivraison {
         }
         catch(SAXParseException ex)
         {
-        	messageErreur = "Erreur a la ligne "+ ex.getLineNumber()+" : " + ex.getMessage();
+        	messageErreur = "Erreur a la ligne "+ ex.getLineNumber() ;
             return false;
         }
         catch(Exception ex)
